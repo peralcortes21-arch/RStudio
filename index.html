@@ -329,6 +329,45 @@ body:has(button:hover) .cd{background:var(--c1);transform:scale(1.3)}
 #cal-subtab-studio::after,#cal-subtab-list::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--v1),var(--v2));transform:scaleX(0);transition:transform .2s var(--ease)}
 #cal-subtab-studio.act::after,#cal-subtab-list.act::after{transform:scaleX(1)}
 
+/* ─── AGENTE GPT-IMAGE ─── */
+.agente-wrap{display:flex;gap:1rem;height:100%;overflow:hidden;padding:1rem}
+.agente-left{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:.75rem;overflow-y:auto}
+.agente-right{flex:1;display:flex;flex-direction:column;gap:.75rem;overflow-y:auto}
+.ag-card{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:.85rem}
+.ag-card-ttl{font-size:9px;font-weight:700;color:var(--mt);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.65rem;font-family:var(--m)}
+.ag-refs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:.5rem}
+.ag-ref-thumb{position:relative;aspect-ratio:1;border-radius:6px;overflow:hidden;border:2px solid transparent;cursor:none;transition:border-color .15s}
+.ag-ref-thumb img{width:100%;height:100%;object-fit:cover}
+.ag-ref-thumb.loaded{border-color:var(--v1)}
+.ag-ref-del{position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:rgba(255,82,82,.8);border:none;color:#fff;font-size:9px;cursor:none;display:flex;align-items:center;justify-content:center;line-height:1}
+.ag-ul{border:1px dashed var(--bd);border-radius:8px;padding:.75rem;text-align:center;cursor:none;transition:border-color .15s;position:relative}
+.ag-ul:hover,.ag-ul.drag{border-color:var(--v2)}
+.ag-ul input{position:absolute;inset:0;opacity:0;cursor:none}
+.ag-ul-t{font-size:9px;color:var(--mt);font-family:var(--m)}
+.ag-chips{display:flex;flex-wrap:wrap;gap:5px}
+.ag-chip{padding:4px 10px;border-radius:20px;font-size:8.5px;font-weight:700;border:1px solid var(--bd);background:transparent;color:var(--mt);cursor:none;transition:all .15s;font-family:var(--f)}
+.ag-chip:hover{border-color:var(--bdh);color:var(--tx)}.ag-chip.act{border-color:var(--v1);color:var(--v3);background:rgba(105,82,212,.12)}
+.ag-chip.act-c{border-color:var(--c1);color:var(--c1);background:rgba(0,229,255,.07)}
+.ag-input{width:100%;background:var(--s3);border:1px solid var(--bd);border-radius:6px;padding:7px 10px;font-size:9px;color:var(--tx);font-family:var(--m);resize:none;outline:none;transition:border-color .15s}
+.ag-input:focus{border-color:var(--bdh)}
+.ag-btn-gen{width:100%;padding:10px;border-radius:8px;background:linear-gradient(135deg,var(--v1),var(--v2));border:none;color:#fff;font-size:10px;font-weight:700;cursor:none;transition:opacity .2s;font-family:var(--f);letter-spacing:.04em}
+.ag-btn-gen:hover{opacity:.85}.ag-btn-gen:disabled{opacity:.4}
+.ag-result-card{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:1rem;position:relative;transition:border-color .2s}
+.ag-result-card:hover{border-color:var(--bdh)}
+.ag-result-num{font-size:8px;font-weight:700;color:var(--v3);font-family:var(--m);letter-spacing:.06em;margin-bottom:.4rem}
+.ag-result-label{font-size:9.5px;font-weight:700;color:var(--tx);margin-bottom:.5rem}
+.ag-result-txt{font-size:8.5px;color:var(--mt);line-height:1.7;font-family:var(--m);white-space:pre-wrap;word-break:break-word}
+.ag-copy-btn{position:absolute;top:10px;right:10px;padding:4px 10px;border-radius:20px;font-size:8px;font-weight:700;border:1px solid var(--bd);background:var(--s3);color:var(--mt);cursor:none;transition:all .15s;font-family:var(--m)}
+.ag-copy-btn:hover{border-color:var(--v2);color:var(--v3)}
+.ag-style-analysis{font-size:8px;color:var(--mt);font-family:var(--m);line-height:1.6;background:var(--s3);border-radius:6px;padding:.6rem;border-left:2px solid var(--v1)}
+.ag-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:.75rem;opacity:.5}
+.ag-empty-ico{font-size:2.5rem}
+.ag-empty-ttl{font-size:11px;font-weight:700;color:var(--tx)}
+.ag-empty-sub{font-size:9px;color:var(--mt);text-align:center;max-width:280px;line-height:1.6}
+.ag-progress{background:var(--s3);border-radius:6px;padding:.75rem;font-size:9px;font-family:var(--m);color:var(--mt);line-height:1.8}
+.ag-step{display:flex;align-items:center;gap:.5rem;transition:color .2s}
+.ag-step.done{color:var(--ok)}.ag-step.active{color:var(--c1)}.ag-step.pending{color:var(--bd)}
+
 /* ─── TOAST ─── */
 .toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%) translateY(10px);z-index:9999;padding:8px 16px;border-radius:20px;font-size:9.5px;font-weight:700;opacity:0;transition:all .2s var(--ease);pointer-events:none;font-family:var(--f);white-space:nowrap;backdrop-filter:blur(20px)}
 .tok{background:rgba(0,230,118,.14);color:var(--ok);border:1px solid rgba(0,230,118,.28)}
@@ -351,6 +390,7 @@ body:has(button:hover) .cd{background:var(--c1);transform:scale(1.3)}
     <button class="nt" data-p="clientes" onclick="tab('clientes',this)">Clientes</button>
     <button class="nt" data-p="refs" onclick="tab('refs',this)">Referencias</button>
     <button class="nt" data-p="cals" onclick="tab('cals',this)">Calendarios</button>
+    <button class="nt" data-p="agente" onclick="tab('agente',this)">✦ Agente GPT-Image</button>
   </div>
   <div class="tst">
     <div class="ts">Posts <b id="stv">0</b></div>
@@ -637,6 +677,77 @@ body:has(button:hover) .cd{background:var(--c1);transform:scale(1.3)}
     </div>
   </div>
 
+</div>
+
+<!-- ══ PANEL: AGENTE GPT-IMAGE ══ -->
+<div id="panel-agente" class="panel" style="flex-direction:column;overflow:hidden;padding:0">
+  <div class="agente-wrap">
+    <!-- LEFT: Controls -->
+    <div class="agente-left">
+
+      <!-- Reference images -->
+      <div class="ag-card">
+        <div class="ag-card-ttl">Imágenes de referencia</div>
+        <div class="ag-refs-grid" id="ag-refs-grid"></div>
+        <div class="ag-ul" id="ag-ul" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="agHandleDrop(event)">
+          <input type="file" accept="image/*" multiple onchange="agHandleFiles(this.files)">
+          <div style="font-size:1.2rem;margin-bottom:4px">🖼</div>
+          <div class="ag-ul-t">Arrastra imágenes o haz clic · máx. 3</div>
+        </div>
+      </div>
+
+      <!-- Brand -->
+      <div class="ag-card">
+        <div class="ag-card-ttl">Marca / Cliente</div>
+        <div class="ag-chips" id="ag-brand-chips">
+          <button class="ag-chip act" data-brand="cliender" onclick="agSelBrand(this)">CLIENDER</button>
+        </div>
+      </div>
+
+      <!-- Post type -->
+      <div class="ag-card">
+        <div class="ag-card-ttl">Tipo de post</div>
+        <div class="ag-chips">
+          <button class="ag-chip act" data-pt="hero" onclick="agSelType(this)">Hero / Brand</button>
+          <button class="ag-chip" data-pt="automatizacion" onclick="agSelType(this)">Automatización</button>
+          <button class="ag-chip" data-pt="contenido" onclick="agSelType(this)">Contenido</button>
+          <button class="ag-chip" data-pt="software" onclick="agSelType(this)">Software</button>
+          <button class="ag-chip" data-pt="resultados" onclick="agSelType(this)">Resultados</button>
+          <button class="ag-chip" data-pt="oferta" onclick="agSelType(this)">Oferta / CTA</button>
+          <button class="ag-chip" data-pt="custom" onclick="agSelType(this)">Libre</button>
+        </div>
+      </div>
+
+      <!-- Format -->
+      <div class="ag-card">
+        <div class="ag-card-ttl">Formato</div>
+        <div class="ag-chips">
+          <button class="ag-chip act-c act" data-fmt="4:5 vertical Instagram portrait" onclick="agSelFmt(this)">4:5 Instagram</button>
+          <button class="ag-chip act-c" data-fmt="1:1 square Instagram feed" onclick="agSelFmt(this)">1:1 Cuadrado</button>
+          <button class="ag-chip act-c" data-fmt="9:16 vertical Instagram Stories" onclick="agSelFmt(this)">9:16 Stories</button>
+        </div>
+      </div>
+
+      <!-- Optional context -->
+      <div class="ag-card">
+        <div class="ag-card-ttl">Contexto adicional <span style="color:var(--bd)">(opcional)</span></div>
+        <textarea id="ag-context" class="ag-input" rows="3" placeholder="Ej: post para anunciar nuestro nuevo servicio de automatización con IA, tono premium y directo…"></textarea>
+      </div>
+
+      <!-- Generate -->
+      <button class="ag-btn-gen" id="ag-btn-gen" onclick="agGenerate()">✦ GENERAR PROMPTS</button>
+
+    </div>
+
+    <!-- RIGHT: Output -->
+    <div class="agente-right" id="ag-output">
+      <div class="ag-empty">
+        <div class="ag-empty-ico">✦</div>
+        <div class="ag-empty-ttl">Agente GPT-Image-2</div>
+        <div class="ag-empty-sub">Sube imágenes de referencia, elige el tipo de post y genera prompts optimizados para ChatGPT listos para copiar y pegar.</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 </div></div></div><!-- /col /main /app -->
@@ -936,6 +1047,7 @@ function tab(p,btn){
   if(p==='clientes')renderClients();
   if(p==='refs'){renderRefs();updateStudioRefs();}
   if(p==='cals'){renderStudio();}
+  if(p==='agente'){agRenderBrands();}
 }
 
 /* ══ FORMAT + MODEL ══ */
@@ -2093,9 +2205,180 @@ dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');}
 dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
 dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if(e.dataTransfer.files.length&&activeClient){const inp=dz.querySelector('input');const dt=new DataTransfer();[...e.dataTransfer.files].forEach(f=>dt.items.add(f));inp.files=dt.files;handleDocs({target:inp});}});
 
+/* ══ AGENTE GPT-IMAGE-2 ══ */
+const AG={refs:[],brand:'cliender',type:'hero',fmt:'4:5 vertical Instagram portrait'};
+
+const AG_BRANDS={
+  cliender:{
+    name:'CLIENDER',
+    desc:'Consultora creativa de ventas y marketing. También creamos software a medida y servicios de automatización con IA. Nuestros posts de Instagram son 4:5, estilo editorial de oficina oscuro, tipografía grande y muy visual, premium y directa.',
+    palette:'negro profundo, morado/violeta (#6952d4), blanco y cian eléctrico (#00e5ff)',
+    vibe:'editorial oscuro, tipografía bold oversized, ambiente de oficina moderna, iluminación cinematográfica, premium agency look'
+  }
+};
+
+const AG_TYPES={
+  hero:'Post hero de marca: impacto máximo, statement poderoso, la marca protagonista',
+  automatizacion:'Post de automatización con IA: tech, futurista, "tu negocio trabaja solo"',
+  contenido:'Post de creación de contenido: creatividad, estudio, producción, redes sociales',
+  software:'Post de desarrollo de software: código, tech, modernidad, soluciones digitales',
+  resultados:'Post de resultados/prueba social: números grandes, ROI, éxito de clientes',
+  oferta:'Post de oferta o llamada a la acción: urgencia, valor, CTA directo',
+  custom:'Post libre: genera prompts versátiles y potentes para cualquier contenido'
+};
+
+function agSelBrand(btn){
+  document.querySelectorAll('#ag-brand-chips .ag-chip').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  AG.brand=btn.dataset.brand;
+}
+function agSelType(btn){
+  document.querySelectorAll('.ag-card .ag-chip[data-pt]').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  AG.type=btn.dataset.pt;
+}
+function agSelFmt(btn){
+  document.querySelectorAll('.ag-chip[data-fmt]').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  AG.fmt=btn.dataset.fmt;
+}
+
+function agRenderBrands(){
+  const chips=document.getElementById('ag-brand-chips');
+  const clients=getClients();
+  chips.innerHTML='<button class="ag-chip act" data-brand="cliender" onclick="agSelBrand(this)">CLIENDER</button>';
+  clients.forEach(c=>{
+    const b=document.createElement('button');
+    b.className='ag-chip';b.dataset.brand='client_'+c.id;b.textContent=c.name||'Cliente';
+    b.onclick=function(){agSelBrand(this);};
+    AG_BRANDS['client_'+c.id]={name:c.name,desc:(c.brand||'')+(c.industry?' Industria: '+c.industry:'')+(c.audience?' Audiencia: '+c.audience:''),palette:c.colors||'no especificada',vibe:c.brand||'profesional y moderno'};
+    chips.appendChild(b);
+  });
+}
+
+async function agHandleFiles(files){
+  const arr=[...files];
+  for(const f of arr){
+    if(AG.refs.length>=3){toast('Máx. 3 imágenes de referencia','twrn');break;}
+    if(!f.type.startsWith('image/')){toast('Solo imágenes','terr');continue;}
+    const b64=await toB64(f);
+    AG.refs.push({name:f.name,b64,mimeType:f.type});
+  }
+  agRenderRefThumbs();
+}
+function agHandleDrop(e){
+  e.preventDefault();document.getElementById('ag-ul').classList.remove('drag');
+  if(e.dataTransfer.files.length)agHandleFiles(e.dataTransfer.files);
+}
+function agDelRef(i){
+  AG.refs.splice(i,1);agRenderRefThumbs();
+}
+function agRenderRefThumbs(){
+  const grid=document.getElementById('ag-refs-grid');
+  grid.innerHTML=AG.refs.map((r,i)=>`<div class="ag-ref-thumb loaded"><img src="${r.b64}" alt=""><button class="ag-ref-del" onclick="agDelRef(${i})">×</button></div>`).join('');
+}
+
+async function agGenerate(){
+  const btn=document.getElementById('ag-btn-gen');
+  btn.disabled=true;btn.textContent='Generando…';
+  const out=document.getElementById('ag-output');
+  const brand=AG_BRANDS[AG.brand]||AG_BRANDS.cliender;
+  const typeDesc=AG_TYPES[AG.type]||AG_TYPES.hero;
+  const ctx=document.getElementById('ag-context').value.trim();
+
+  out.innerHTML=`<div class="ag-progress">
+<div class="ag-step active" id="ag-s1">⏳ Analizando imágenes de referencia…</div>
+<div class="ag-step pending" id="ag-s2">○ Construyendo contexto de marca…</div>
+<div class="ag-step pending" id="ag-s3">○ Generando prompts GPT-Image-2…</div>
+</div>`;
+
+  try{
+    // Step 1: analyze reference images
+    let styleAnalysis='Sin imágenes de referencia — usando estilo por defecto de la marca.';
+    if(AG.refs.length>0){
+      const imgContent=AG.refs.map(r=>({type:'image',source:{type:'base64',media_type:r.mimeType,data:r.b64.split(',')[1]}}));
+      imgContent.push({type:'text',text:`Analiza estas ${AG.refs.length} imagen(es) de referencia visual. Extrae en 3-4 frases concretas: paleta de colores exacta, tipo de iluminación, estilo fotográfico o ilustrativo, tipografía si hay, composición, mood y estética general. Sé muy específico con valores y términos técnicos que sirvan para un prompt de generación de imagen.`});
+      const r1=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:400,messages:[{role:'user',content:imgContent}]})});
+      const d1=await r1.json();
+      styleAnalysis=d1.content?.[0]?.text?.trim()||styleAnalysis;
+    }
+    document.getElementById('ag-s1').className='ag-step done';document.getElementById('ag-s1').textContent='✓ Análisis de imágenes completado';
+    document.getElementById('ag-s2').className='ag-step active';document.getElementById('ag-s2').textContent='⏳ Construyendo contexto de marca…';
+    await W(300);
+
+    // Step 2+3: generate prompts
+    document.getElementById('ag-s2').className='ag-step done';document.getElementById('ag-s2').textContent='✓ Contexto de marca construido';
+    document.getElementById('ag-s3').className='ag-step active';document.getElementById('ag-s3').textContent='⏳ Generando 4 prompts GPT-Image-2…';
+
+    const sys=`Eres un experto en prompt engineering para GPT-Image-2. Generas prompts en INGLÉS, ultra-detallados, que producen imágenes impactantes para Instagram.
+
+REGLAS:
+- Cada prompt debe ser autosuficiente (no necesita contexto externo)
+- Incluye siempre: sujeto principal, iluminación específica, paleta de colores, composición, estilo fotográfico/artístico, mood, formato y detalle técnico
+- Para posts con texto: especifica el texto EXACTO entre comillas, fuente (bold/condensed/serif/sans), tamaño relativo y posición
+- Los prompts deben adaptarse al estilo de referencia analizado
+- Formato de respuesta: JSON con array "prompts", cada uno con "label" (nombre corto en español) y "prompt" (el prompt en inglés)`;
+
+    const userMsg=`MARCA: ${brand.name}
+DESCRIPCIÓN: ${brand.desc}
+PALETA DE MARCA: ${brand.palette}
+VIBE DE MARCA: ${brand.vibe}
+TIPO DE POST: ${typeDesc}
+FORMATO: ${AG.fmt}
+${ctx?'CONTEXTO ADICIONAL: '+ctx:''}
+
+ESTILO VISUAL ANALIZADO DE LAS REFERENCIAS:
+${styleAnalysis}
+
+Genera 4 prompts GPT-Image-2 diferentes en inglés para este post de Instagram. Varía la composición y el enfoque en cada uno, manteniendo siempre la identidad visual de la marca. Los prompts deben ser muy detallados (mínimo 80 palabras cada uno).
+
+Responde SOLO con JSON válido, sin markdown:
+{"prompts":[{"label":"nombre corto","prompt":"el prompt completo en inglés"}]}`;
+
+    const r2=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-5',max_tokens:2500,system:sys,messages:[{role:'user',content:userMsg}]})});
+    const d2=await r2.json();
+    let txt=d2.content?.[0]?.text?.trim()||'';
+    txt=txt.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+    const fb=txt.indexOf('{');const lb=txt.lastIndexOf('}');if(fb>=0&&lb>fb)txt=txt.slice(fb,lb+1);
+    const parsed=JSON.parse(txt);
+
+    document.getElementById('ag-s3').className='ag-step done';document.getElementById('ag-s3').textContent='✓ Prompts generados';
+    await W(400);
+
+    // Render results
+    let html='';
+    if(AG.refs.length>0){
+      html+=`<div class="ag-card" style="padding:.75rem"><div class="ag-card-ttl">Estilo analizado de tus referencias</div><div class="ag-style-analysis">${esc(styleAnalysis)}</div></div>`;
+    }
+    (parsed.prompts||[]).forEach((p,i)=>{
+      html+=`<div class="ag-result-card">
+<button class="ag-copy-btn" onclick="agCopy('agp-${i}',this)">Copiar</button>
+<div class="ag-result-num">PROMPT ${i+1} / ${(parsed.prompts||[]).length}</div>
+<div class="ag-result-label">${esc(p.label||'')}</div>
+<div class="ag-result-txt" id="agp-${i}">${esc(p.prompt||'')}</div>
+</div>`;
+    });
+    out.innerHTML=html;
+
+  }catch(e){
+    out.innerHTML=`<div class="ag-card"><div style="color:var(--er);font-size:9px;font-family:var(--m)">Error al generar: ${esc(e.message)}</div></div>`;
+    toast('Error al generar prompts','terr');
+  }
+  btn.disabled=false;btn.textContent='✦ GENERAR PROMPTS';
+}
+
+function agCopy(id,btn){
+  const el=document.getElementById(id);
+  if(!el)return;
+  navigator.clipboard.writeText(el.textContent).then(()=>{
+    btn.textContent='Copiado ✓';btn.style.color='var(--ok)';btn.style.borderColor='var(--ok)';
+    setTimeout(()=>{btn.textContent='Copiar';btn.style.color='';btn.style.borderColor='';},2000);
+  });
+}
+
 /* ══ INIT ══ */
 function init(){
-  ensureDefault();renderFmtBar();renderCalBar();
+  ensureDefault();renderFmtBar();renderCalBar();agRenderBrands();
   const cals=getCals();if(cals.length>0){activeCal=cals[0].id;openCal(activeCal);}
 }
 init();
