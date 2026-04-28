@@ -130,10 +130,10 @@ RStudio/
 
 ## Privacy & Data
 
-- 🔒 All data stays in your browser (localStorage)
-- 🔐 API calls go directly to Freepik & Anthropic
-- 🌐 No data sent to third-party servers
-- ✓ No analytics or tracking
+- All data stays in your browser (localStorage)
+- API calls go directly to Freepik & Anthropic
+- No data sent to third-party servers
+- No analytics or tracking
 
 ## Troubleshooting
 
