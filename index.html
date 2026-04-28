@@ -797,6 +797,15 @@ body:has(button:hover) .cd{background:var(--c1);transform:scale(1.3)}
   </div>
 </div>
 
+<!-- MODAL: CONFIRMATION -->
+<div class="modal-bg" id="m-confirm">
+  <div class="modal">
+    <div class="mh"><div class="mttl" id="confirm-title">¿Confirmar acción?</div><button class="mcls" onclick="closeM('m-confirm')">×</button></div>
+    <div style="font-size:10px;color:var(--mt);line-height:1.6;margin-bottom:1rem" id="confirm-msg">¿Estás seguro?</div>
+    <div class="mbtns"><button class="mbtn-c" onclick="closeM('m-confirm')">Cancelar</button><button class="mbtn-ok" id="confirm-btn" style="background:linear-gradient(135deg,var(--er),#ff6b6b);box-shadow:0 0 12px rgba(255,82,82,.22)" onclick="executeConfirm()">Eliminar</button></div>
+  </div>
+</div>
+
 <!-- MODAL: API KEYS CONFIG -->
 <div class="modal-bg" id="m-config">
   <div class="modal">
@@ -1335,11 +1344,12 @@ function saveCal(){
 }
 function delCal(){
   if(!activeCal||activeCal===DC.id){toast('No se puede eliminar el calendario base','terr');return;}
-  if(!confirm('¿Eliminar este calendario?'))return;
-  const data=getD();data.cals=data.cals.filter(c=>c.id!==activeCal);setD(data);
-  const cals=getCals();activeCal=cals.length>0?cals[0].id:null;
-  renderCalBar();if(activeCal)openCal(activeCal);else{document.getElementById('chdr').style.display='none';document.getElementById('filtrow').style.display='none';document.getElementById('pgrid').style.display='none';document.getElementById('grid-empty').style.display='flex';}
-  renderCalsAll();toast('Eliminado','twrn');
+  showConfirm('Eliminar calendario','Se eliminará este calendario y todos sus posts.','Eliminar',()=>{
+    const data=getD();data.cals=data.cals.filter(c=>c.id!==activeCal);setD(data);
+    const cals=getCals();activeCal=cals.length>0?cals[0].id:null;
+    renderCalBar();if(activeCal)openCal(activeCal);else{document.getElementById('chdr').style.display='none';document.getElementById('filtrow').style.display='none';document.getElementById('pgrid').style.display='none';document.getElementById('grid-empty').style.display='flex';}
+    renderCalsAll();toast('Eliminado','twrn');
+  });
 }
 function openAddPost(){
   editPId=null;
@@ -1377,7 +1387,7 @@ function savePost(){
   if(editPId){const pi=data.cals[ci].posts.findIndex(p=>p.id===editPId);if(pi>=0)data.cals[ci].posts[pi]=np;}else data.cals[ci].posts.push(np);
   setD(data);closeM('m-post');openCal(activeCal);toast(editPId?'Actualizado ✓':'Post creado ✓','tok');
 }
-function delPost(id){if(!confirm('¿Eliminar post?'))return;const data=getD();const ci=data.cals.findIndex(c=>c.id===activeCal);if(ci<0)return;data.cals[ci].posts=data.cals[ci].posts.filter(p=>p.id!==id);setD(data);openCal(activeCal);toast('Eliminado','twrn');}
+function delPost(id){showConfirm('Eliminar post','Este post se eliminará del calendario.','Eliminar',()=>{const data=getD();const ci=data.cals.findIndex(c=>c.id===activeCal);if(ci<0)return;data.cals[ci].posts=data.cals[ci].posts.filter(p=>p.id!==id);setD(data);openCal(activeCal);toast('Eliminado','twrn');});}
 
 /* ══ CLIENTS ══ */
 function renderClients(){
@@ -1413,7 +1423,7 @@ function saveClient(){
   if(editClId){const i=data.clients.findIndex(c=>c.id===editClId);if(i>=0){nc.docs=data.clients[i].docs||[];data.clients[i]=nc;}else data.clients.push(nc);}else data.clients.push(nc);
   setD(data);closeM('m-client');renderClients();if(editClId&&activeClient===editClId)renderClientDetail(editClId);toast(editClId?'Cliente actualizado ✓':'Cliente creado ✓','tok');
 }
-function delClient(id){if(!confirm('¿Eliminar cliente?'))return;const data=getD();data.clients=data.clients.filter(c=>c.id!==id);setD(data);renderClients();toast('Eliminado','twrn');}
+function delClient(id){showConfirm('Eliminar cliente','Este cliente y su información se eliminarán.','Eliminar',()=>{const data=getD();data.clients=data.clients.filter(c=>c.id!==id);setD(data);renderClients();toast('Eliminado','twrn');});}
 function openClientDetail(id){
   activeClient=id;renderClientDetail(id);
   document.querySelectorAll('.nt').forEach(b=>b.classList.remove('act'));
@@ -1494,7 +1504,7 @@ function toggleRef(id){
 function updateRefBar(){const bar=document.getElementById('ref-bar');bar.style.display=selRefs.size>0?'flex':'none';document.getElementById('rb-cnt').textContent=selRefs.size+' imagen'+(selRefs.size!==1?'es':'');}
 function clearSelRefs(){selRefs.clear();document.querySelectorAll('.rcard').forEach(c=>c.classList.remove('sel'));updateRefBar();document.getElementById('str').textContent=0;document.getElementById('btn-rcnt').textContent=0;}
 function applyRefs(){tab('gen',document.querySelector('[data-p=gen]'));toast(selRefs.size+' referencias activas en generador','tinfo');}
-function delRef(e,id){e.stopPropagation();if(!confirm('¿Eliminar?'))return;selRefs.delete(id);const data=getD();data.refs=data.refs.filter(r=>r.id!==id);setD(data);renderRefs();}
+function delRef(e,id){e.stopPropagation();showConfirm('Eliminar referencia','Esta imagen de referencia se eliminará.','Eliminar',()=>{selRefs.delete(id);const data=getD();data.refs=data.refs.filter(r=>r.id!==id);setD(data);renderRefs();});}
 
 /* ══ ALL CALS ══ */
 function renderCalsAll(){
@@ -1854,6 +1864,19 @@ function W(ms){return new Promise(r=>setTimeout(r,ms));}
 function toast(msg,cls){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+cls+' show';setTimeout(()=>t.classList.remove('show'),2700);}
 function openM(id){document.getElementById(id).classList.add('open');}
 function closeM(id){document.getElementById(id).classList.remove('open');}
+let confirmCallback=null;
+function showConfirm(title,msg,btn,onConfirm){
+  confirmCallback=onConfirm;
+  document.getElementById('confirm-title').textContent=title;
+  document.getElementById('confirm-msg').textContent=msg;
+  document.getElementById('confirm-btn').textContent=btn;
+  openM('m-confirm');
+}
+function executeConfirm(){
+  closeM('m-confirm');
+  if(confirmCallback)confirmCallback();
+  confirmCallback=null;
+}
 function openConfigModal(){
   const m=document.getElementById('m-config');
   if(!m)return;
