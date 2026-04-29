@@ -1055,31 +1055,35 @@ const imgSrcs={};
 let selRefs=new Set();
 let selTipoV=null,editPId=null,editCId=null,editClId=null;
 
-/* ══ AUTH ══ */
-const USERS={'nicolas@cliender.com':'Master123','pablo@cliender.com':'Master123','toni@cliender.com':'Master123','dan@cliender.com':'Master123'};
-const SSK='cliender_session';
-function checkSess(){const s=localStorage.getItem(SSK);if(s){try{const sess=JSON.parse(s);showApp(sess);return true;}catch(e){}}}
-function doLogin(e){e.preventDefault();const em=document.getElementById('l-em').value.trim().toLowerCase(),pw=document.getElementById('l-pw').value;if(USERS[em]&&USERS[em]===pw){const name=em.split('@')[0],sess={email:em,name};localStorage.setItem(SSK,JSON.stringify(sess));showApp(sess);}else{document.getElementById('l-err').textContent='Credenciales incorrectas';}}
+/* ══ AUTH + API ══ */
+const JWT_KEY='cliender_jwt';
+function getToken(){return localStorage.getItem(JWT_KEY)||'';}
+function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()};}
+async function checkSess(){const token=getToken();if(!token)return false;try{const r=await fetch('/api/auth/me',{headers:authHeaders()});if(!r.ok){localStorage.removeItem(JWT_KEY);return false;}const{user}=await r.json();showApp(user);return true;}catch{return false;}}
+async function doLogin(e){e.preventDefault();const em=document.getElementById('l-em').value.trim().toLowerCase(),pw=document.getElementById('l-pw').value;try{const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw})});if(!r.ok){document.getElementById('l-err').textContent='Credenciales incorrectas';return;}const{token,user}=await r.json();localStorage.setItem(JWT_KEY,token);showApp(user);}catch{document.getElementById('l-err').textContent='Error de conexión';}}
 function showApp(s){document.getElementById('lscr').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('user-nm').textContent=s.name;renderFmtPicker();renderCalBar();}
-function logout(){localStorage.removeItem(SSK);location.reload();}
+function logout(){localStorage.removeItem(JWT_KEY);location.reload();}
 
-/* ══ STORAGE ══ */
-const SK='cliender_v4';
-function LS(){try{return JSON.parse(localStorage.getItem(SK))||{clients:[],cals:[],refs:[]};}catch{return{clients:[],cals:[],refs:[]};}}
-function SS(d){localStorage.setItem(SK,JSON.stringify(d));}
-function getD(){return LS();}function setD(d){SS(d);}
-function getClients(){return getD().clients;}
-function getCals(){return getD().cals;}
-function getRefs(){return getD().refs;}
-function getClient(id){return getClients().find(c=>c.id===id);}
-function getCal(id){return getCals().find(c=>c.id===id);}
-function getPost(pid){return getCal(activeCal)?.posts?.find(p=>p.id===pid);}
+/* ══ STORAGE LAYER ══ */
+// Adaptadores para normalizar API response a formato frontend (snake_case → camelCase)
+function normCal(c){return{...c,clientId:c.client_id};}
+function normPost(p){return{...p,sub_title:p.sub_title||'',img_src:p.img_src||'',sub:p.sub_title,imgSrc:p.img_src,h:p.hour,a:p.angle,t:p.type,cta:p.cta,v:p.visual,_prompt:p.prompt};}
+function normPosts(ps){return ps.map(normPost);}
+
+let _cache={clients:null,cals:null,refs:null};
+function _invalidate(key){_cache[key]=null;}
+async function getClients(){if(_cache.clients)return _cache.clients;try{const r=await fetch('/api/clients',{headers:authHeaders()});_cache.clients=await r.json();return _cache.clients;}catch{return[];}}
+async function getCals(){if(_cache.cals)return _cache.cals;try{const r=await fetch('/api/calendars',{headers:authHeaders()});const raw=await r.json();_cache.cals=raw.map(c=>({...normCal(c),desc:c.description,posts:[]}));return _cache.cals;}catch{return[];}}
+async function getRefs(){if(_cache.refs)return _cache.refs;try{const r=await fetch('/api/refs',{headers:authHeaders()});_cache.refs=await r.json();return _cache.refs;}catch{return[];}}
+async function getClient(id){return(await getClients()).find(c=>c.id===id);}
+async function getCal(id){const cal=await getCals().then(cs=>cs.find(c=>c.id===id));if(cal&&!cal.posts?.length){try{const r=await fetch('/api/calendars/'+id+'/posts',{headers:authHeaders()});cal.posts=normPosts(await r.json());}catch{}}return cal;}
+async function getPost(pid){const cal=await getCal(activeCal);return cal?.posts?.find(p=>p.id===pid);}
 
 /* Pre-seed KIE key from build-time config (set once, user can override via settings) */
 if(!localStorage.getItem('cliender_kie_key'))localStorage.setItem('cliender_kie_key','74946423891211d63848c8e8b68b2edc');
 
 /* DEFAULT CAL */
-const DC={id:'default_v4',name:'Cliender — SALES & TECH',desc:'Calendario base completo',clientId:null,posts:[
+const DC={id:'default_v4',name:'Cliender — SALES & TECH',desc:'Calendario base completo',client_id:null,posts:[
   {id:'s01',h:'10:00',a:'SALES 01',t:'Dolor',hook:'Tu equipo cierra\na las 6pm.\nTus clientes, no.',sub:'más leads de los que crees',body:'Un lead que no contactas a tiempo\nempieza a enfriarse.\n\nCLIENDER responde, filtra y agenda.',cta:'Ver cómo automatizamos tu captación',v:''},
   {id:'s02',h:'13:00',a:'SALES 01',t:'Dolor',hook:'Cada noche\npierdes leads\nmientras duermes.',sub:'sin darte cuenta',body:'Tus competidores no duermen.\nTus leads, tampoco esperan.\n\nCLIENDER trabaja 24/7 por ti.',cta:'Descubre el sistema',v:''},
   {id:'s03',h:'18:00',a:'SALES 01',t:'Dolor',hook:'Alguien está\ncerrando tus leads\nahora mismo.',sub:'y no eres tú',body:'Velocidad = ventas.\nTu competencia ya lo sabe.\n\nCLIENDER actúa en segundos.',cta:'Ver cómo evitarlo',v:''},
@@ -1103,21 +1107,19 @@ const DC={id:'default_v4',name:'Cliender — SALES & TECH',desc:'Calendario base
   {id:'d13',h:'15:00',a:'TECH 05',t:'Resultado',hook:'Idea el lunes.\nSoftware el\nviernes.',sub:'no en 6 meses',body:'Sin esperas. Sin presupuestos de agencia.\n\nCLIENDER entrega rápido y funcional.',cta:'Cuéntanos tu idea',v:''},
 ]};
 
-function ensureDefault(){
-  const d=getD();
-  // Default calendar
-  if(!d.cals.find(x=>x.id===DC.id)){d.cals.unshift(DC);}
-  setD(d);
+async function ensureDefault(){
+  const cals=await getCals();
+  if(!cals.find(x=>x.id===DC.id)){try{await fetch('/api/calendars',{method:'POST',headers:authHeaders(),body:JSON.stringify({id:DC.id,name:DC.name,description:DC.desc,client_id:DC.client_id})});_invalidate('cals');}catch{}}
 }
 
 /* ══ NAVIGATION ══ */
-function tab(p,btn){
+async function tab(p,btn){
   document.querySelectorAll('.nt').forEach(b=>b.classList.remove('act'));
   if(btn)btn.classList.add('act');
   document.querySelectorAll('.panel').forEach(x=>x.classList.remove('act'));
   document.getElementById('panel-'+p).classList.add('act');
-  if(p==='clientes')renderClients();
-  if(p==='refs'){renderRefs();updateStudioRefs();}
+  if(p==='clientes')await renderClients();
+  if(p==='refs'){await renderRefs();updateStudioRefs();}
   if(p==='cals'){renderStudio();}
 }
 
@@ -1170,21 +1172,18 @@ document.addEventListener('click',function(e){
 });
 
 /* ══ CALENDAR ══ */
-function renderCalBar(){
-  const cals=getCals();const bar=document.getElementById('calbar');bar.innerHTML='';
+async function renderCalBar(){
+  const cals=await getCals();const bar=document.getElementById('calbar');bar.innerHTML='';
   cals.forEach(c=>{const btn=document.createElement('button');btn.className='ctab'+(activeCal===c.id?' act':'');btn.textContent=c.name;btn.onclick=()=>openCal(c.id);bar.appendChild(btn);});
   const add=document.createElement('button');add.className='ctab add';add.title='Nuevo';add.textContent='＋';add.onclick=openNewCal;bar.appendChild(add);
 }
-function openCal(id){
-  const cals=getCals();const cal=cals.find(c=>c.id===id);if(!cal)return;
-  activeCal=id;renderCalBar();
+async function openCal(id){
+  const cals=await getCals();const cal=cals.find(c=>c.id===id);if(!cal)return;
+  activeCal=id;await renderCalBar();
   document.getElementById('chdr').style.display='flex';document.getElementById('filtrow').style.display='flex';
   document.getElementById('cname').textContent=cal.name;
-  document.getElementById('cdesctxt').textContent=cal.desc||'';
-  document.getElementById('ccnt').textContent=cal.posts.length+' posts';
-  const ct=document.getElementById('ctag');
-  if(cal.clientId){const cl=getClient(cal.clientId);ct.style.display='block';ct.textContent=cl?'🏢 '+cl.name:'sin cliente';}else ct.style.display='none';
-  renderGrid(cal.posts);renderAngleFilter(cal.posts);
+  document.getElementById('cdesctxt').textContent=cal.description||'';
+  try{const pr=await fetch('/api/calendars/'+id+'/posts',{headers:authHeaders()});const posts=await pr.json();document.getElementById('ccnt').textContent=posts.length+' posts';const ct=document.getElementById('ctag');if(cal.client_id){const cl=await getClient(cal.client_id);ct.style.display='block';ct.textContent=cl?'🏢 '+cl.name:'sin cliente';}else ct.style.display='none';renderGrid(posts);renderAngleFilter(posts);}catch{}}
 }
 function renderAngleFilter(posts){
   const angles=[...new Set(posts.map(p=>p.a))];
@@ -1228,8 +1227,8 @@ function getFI(){return FORMATS.find(x=>x.key===AF)||FORMATS[0];}
 
 /* ══ BUILD CONTEXT ══ */
 function buildClientCtx(){
-  if(!activeCal)return'';const cal=getCal(activeCal);if(!cal?.clientId)return'';
-  const cl=getClient(cal.clientId);if(!cl)return'';
+  if(!activeCal)return'';const cal=getCal(activeCal);if(!cal?.client_id)return'';
+  const cl=getClient(cal.client_id);if(!cl)return'';
   let ctx=`CLIENTE: ${cl.name}\n`;
   if(cl.industry)ctx+=`Sector: ${cl.industry}\n`;
   if(cl.desc)ctx+=`Descripción: ${cl.desc}\n`;
@@ -1477,12 +1476,12 @@ function openEditCal(){
   document.getElementById('ai-cal-done-btns').style.display='none';
   // Show client selector in edit mode too
   const sel=document.getElementById('cal-cl-sel');sel.innerHTML='';
-  const none=document.createElement('div');none.className='cs-opt'+((!cal.clientId)?' sel':'');none.dataset.id='';
+  const none=document.createElement('div');none.className='cs-opt'+((!cal.client_id)?' sel':'');none.dataset.id='';
   none.innerHTML='<div><div class="cs-nm">Sin cliente</div><div class="cs-in">Calendario independiente</div></div>';
   none.onclick=function(){document.querySelectorAll('.cs-opt').forEach(o=>o.classList.remove('sel'));this.classList.add('sel');};
   sel.appendChild(none);
   getClients().forEach(cl=>{
-    const opt=document.createElement('div');opt.className='cs-opt'+(cl.id===cal.clientId?' sel':'');opt.dataset.id=cl.id;
+    const opt=document.createElement('div');opt.className='cs-opt'+(cl.id===cal.client_id?' sel':'');opt.dataset.id=cl.id;
     opt.innerHTML=`<div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,${cl.color||'#3a5c9e'},${cl.color2||'#6a8fc8'});display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">${(cl.name||'?')[0]}</div><div><div class="cs-nm">${esc(cl.name)}</div><div class="cs-in">${esc(cl.industry||'')}</div></div>`;
     opt.onclick=function(){document.querySelectorAll('.cs-opt').forEach(o=>o.classList.remove('sel'));this.classList.add('sel');};
     sel.appendChild(opt);
@@ -1491,13 +1490,13 @@ function openEditCal(){
 }
 function saveCal(){
   const name=document.getElementById('cal-nm').value.trim();if(!name){toast('El nombre es obligatorio','terr');return;}
-  const selOpt=document.querySelector('.cs-opt.sel');const clientId=selOpt?.dataset?.id||null;
+  const selOpt=document.querySelector('.cs-opt.sel');const client_id=selOpt?.dataset?.id||null;
   const data=getD();
   if(editCId){
     const i=data.cals.findIndex(c=>c.id===editCId);
-    if(i>=0){data.cals[i].name=name;data.cals[i].desc=document.getElementById('cal-ds').value.trim();data.cals[i].clientId=clientId;}
+    if(i>=0){data.cals[i].name=name;data.cals[i].desc=document.getElementById('cal-ds').value.trim();data.cals[i].client_id=client_id;}
   }else{
-    const nc={id:'cal_'+Date.now(),name,desc:document.getElementById('cal-ds').value.trim(),clientId,posts:[]};
+    const nc={id:'cal_'+Date.now(),name,desc:document.getElementById('cal-ds').value.trim(),client_id,posts:[]};
     data.cals.push(nc);activeCal=nc.id;
   }
   // Reset button text
@@ -1523,7 +1522,7 @@ function openAddPost(){
   document.getElementById('p-h').value='10:00';
   selTipoV=null;document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('sel'));
   // Show AI button only if calendar has a client
-  const cal=getCal(activeCal);const hasClient=!!(cal?.clientId&&getClient(cal.clientId));
+  const cal=getCal(activeCal);const hasClient=!!(cal?.client_id&&getClient(cal.client_id));
   document.getElementById('btn-autofill-post').style.display=hasClient?'inline-flex':'none';
   openM('m-post');
 }
@@ -1539,7 +1538,7 @@ function editPost(id){
   document.getElementById('p-vis').value=p.v||'';
   selTipoV=p.t||null;
   document.querySelectorAll('.type-opt').forEach(o=>o.classList.toggle('sel',o.dataset.t===p.t));
-  const cal=getCal(activeCal);const hasClient=!!(cal?.clientId&&getClient(cal.clientId));
+  const cal=getCal(activeCal);const hasClient=!!(cal?.client_id&&getClient(cal.client_id));
   document.getElementById('btn-autofill-post').style.display=hasClient?'inline-flex':'none';
   openM('m-post');
 }
@@ -1555,12 +1554,12 @@ function savePost(){
 function delPost(id){showConfirm('Eliminar post','Este post se eliminará del calendario.','Eliminar',()=>{const data=getD();const ci=data.cals.findIndex(c=>c.id===activeCal);if(ci<0)return;data.cals[ci].posts=data.cals[ci].posts.filter(p=>p.id!==id);setD(data);openCal(activeCal);toast('Eliminado','twrn');});}
 
 /* ══ CLIENTS ══ */
-function renderClients(){
-  const clients=getClients();const grid=document.getElementById('clients-grid');const empty=document.getElementById('clients-empty');
+async function renderClients(){
+  const clients=await getClients();const cals=await getCals();const grid=document.getElementById('clients-grid');const empty=document.getElementById('clients-empty');
   if(clients.length===0){grid.style.display='none';empty.style.display='flex';return;}
   grid.style.display='grid';empty.style.display='none';
   grid.innerHTML=clients.map((cl,i)=>{
-    const cals=getCals().filter(c=>c.clientId===cl.id);const docs=cl.docs?.length||0;
+    const clCals=cals.filter(c=>c.client_id===cl.id);const docs=cl.docs?.length||0;
     const initials=(cl.name||'?').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
     return`<div class="ccard" style="animation-delay:${i*40}ms">
 <div class="cc-hd"><div class="cc-av" style="background:linear-gradient(135deg,${cl.color||'#3a5c9e'},${cl.color2||'#6a8fc8'})">${initials}</div>
@@ -1575,37 +1574,34 @@ ${cl.desc?`<div class="cc-desc">${esc(cl.desc.slice(0,75))}${cl.desc.length>75?'
   }).join('');
 }
 function openNewClient(){editClId=null;document.getElementById('m-cl-ttl').textContent='Nuevo cliente';['cl-name','cl-ind','cl-desc','cl-aud','cl-style'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});document.getElementById('cl-c1').value='#8F7EE9';document.getElementById('cl-c2').value='#00d9ff';document.getElementById('cl-tone').value='serio-premium';openM('m-client');}
-function openEditClient(id){
-  const cid=id||activeClient;const cl=getClient(cid);if(!cl)return;editClId=cid;
+async function openEditClient(id){
+  const cid=id||activeClient;const cl=await getClient(cid);if(!cl)return;editClId=cid;
   document.getElementById('m-cl-ttl').textContent='Editar cliente';
   document.getElementById('cl-name').value=cl.name||'';document.getElementById('cl-ind').value=cl.industry||'';document.getElementById('cl-desc').value=cl.desc||'';document.getElementById('cl-aud').value=cl.audience||'';document.getElementById('cl-style').value=cl.style||'';document.getElementById('cl-c1').value=cl.color||'#8F7EE9';document.getElementById('cl-c2').value=cl.color2||'#00d9ff';document.getElementById('cl-tone').value=cl.tone||'serio-premium';
   openM('m-client');
 }
-function saveClient(){
+async function saveClient(){
   const name=document.getElementById('cl-name').value.trim();if(!name){toast('El nombre es obligatorio','terr');return;}
-  const data=getD();
-  const nc={id:editClId||('cl_'+Date.now()),name,industry:document.getElementById('cl-ind').value.trim(),desc:document.getElementById('cl-desc').value.trim(),audience:document.getElementById('cl-aud').value.trim(),tone:document.getElementById('cl-tone').value,color:document.getElementById('cl-c1').value,color2:document.getElementById('cl-c2').value,style:document.getElementById('cl-style').value.trim(),docs:[]};
-  if(editClId){const i=data.clients.findIndex(c=>c.id===editClId);if(i>=0){nc.docs=data.clients[i].docs||[];data.clients[i]=nc;}else data.clients.push(nc);}else data.clients.push(nc);
-  setD(data);closeM('m-client');renderClients();if(editClId&&activeClient===editClId)renderClientDetail(editClId);toast(editClId?'Cliente actualizado ✓':'Cliente creado ✓','tok');
-}
-function delClient(id){showConfirm('Eliminar cliente','Este cliente y su información se eliminarán.','Eliminar',()=>{const data=getD();data.clients=data.clients.filter(c=>c.id!==id);setD(data);renderClients();toast('Eliminado','twrn');});}
+  const nc={name,industry:document.getElementById('cl-ind').value.trim(),description:document.getElementById('cl-desc').value.trim(),audience:document.getElementById('cl-aud').value.trim(),tone:document.getElementById('cl-tone').value,color:document.getElementById('cl-c1').value,color2:document.getElementById('cl-c2').value,style:document.getElementById('cl-style').value.trim()};
+  try{const method=editClId?'PUT':'POST',endpoint=editClId?'/api/clients/'+editClId:'/api/clients';const r=await fetch(endpoint,{method,headers:authHeaders(),body:JSON.stringify(nc)});if(!r.ok){toast('Error al guardar','terr');return;}_invalidate('clients');closeM('m-client');await renderClients();if(editClId&&activeClient===editClId){editClId=null;await renderClientDetail(activeClient);}toast(editClId?'Cliente actualizado ✓':'Cliente creado ✓','tok');}catch{toast('Error de conexión','terr');}}
+function delClient(id){showConfirm('Eliminar cliente','Este cliente y su información se eliminarán.','Eliminar',async()=>{try{const r=await fetch('/api/clients/'+id,{method:'DELETE',headers:authHeaders()});if(!r.ok){toast('Error al eliminar','terr');return;}_invalidate('clients');await renderClients();toast('Eliminado','twrn');}catch{toast('Error de conexión','terr');}});}
 function openClientDetail(id){
   activeClient=id;renderClientDetail(id);
   document.querySelectorAll('.nt').forEach(b=>b.classList.remove('act'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('act'));
   document.getElementById('panel-client-detail').classList.add('act');
 }
-function renderClientDetail(id){
-  const cl=getClient(id);if(!cl)return;
+async function renderClientDetail(id){
+  const cl=await getClient(id);if(!cl)return;
   document.getElementById('det-cl-nm').textContent=cl.name;
   document.getElementById('cl-info-disp').innerHTML=[['Sector',cl.industry],['Descripción',cl.desc],['Público',cl.audience],['Tono',cl.tone],['Color 1','<span style="width:12px;height:12px;border-radius:50%;background:'+cl.color+';display:inline-block;vertical-align:middle;margin-right:4px"></span>'+cl.color],['Color 2','<span style="width:12px;height:12px;border-radius:50%;background:'+cl.color2+';display:inline-block;vertical-align:middle;margin-right:4px"></span>'+cl.color2],['Estilo',cl.style]].filter(r=>r[1]).map(r=>`<div class="det-row"><span class="dk">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('');
   renderDocsList(cl);
-  const cals=getCals().filter(c=>c.clientId===id);
+  const cals=(await getCals()).filter(c=>c.client_id===id);
   const cg=document.getElementById('cl-cals-grid'),ce=document.getElementById('cl-cals-empty');
   if(cals.length===0){cg.style.display='none';ce.style.display='block';}
-  else{cg.style.display='grid';ce.style.display='none';cg.innerHTML=cals.map(c=>`<div style="background:rgba(4,6,10,.5);border:1px solid var(--bd);border-radius:var(--rs);padding:.7rem;cursor:none;transition:all .15s" onmouseenter="this.style.borderColor='var(--bdh)'" onmouseleave="this.style.borderColor='var(--bd)'" onclick="openCalAndGo('${c.id}')"><div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px">${esc(c.name)}</div><div style="font-size:8.5px;font-family:var(--m);color:var(--mt)">${c.posts.length} posts</div></div>`).join('');}
+  else{cg.style.display='grid';ce.style.display='none';cg.innerHTML=cals.map(c=>`<div style="background:rgba(4,6,10,.5);border:1px solid var(--bd);border-radius:var(--rs);padding:.7rem;cursor:none;transition:all .15s" onmouseenter="this.style.borderColor='var(--bdh)'" onmouseleave="this.style.borderColor='var(--bd)'" onclick="openCalAndGo('${c.id}')"><div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px">${esc(c.name)}</div><div style="font-size:8.5px;font-family:var(--m);color:var(--mt)">${(c.posts||[]).length} posts</div></div>`).join('');}
 }
-function openCalAndGo(id){activeCal=id;tab('gen',document.querySelector('[data-p=gen]'));renderCalBar();openCal(id);}
+async function openCalAndGo(id){activeCal=id;await tab('gen',document.querySelector('[data-p=gen]'));await renderCalBar();await openCal(id);}
 function renderDocsList(cl){
   const list=document.getElementById('docs-list');
   list.innerHTML=(cl.docs||[]).map((d,i)=>`<div class="di"><span class="di-ico">${d.mimeType?.startsWith('image/')?'🖼':'📄'}</span><div style="flex:1;min-width:0"><div class="di-nm">${esc(d.name)}</div>${d.analysis?'<div class="di-an">'+esc(d.analysis.slice(0,90))+'…</div>':''}</div><span class="di-st ${d.analysis?'dst-ok':'dst-p'}">${d.analysis?'Analizado':'Pendiente'}</span><button class="di-del" onclick="delDoc('${cl.id}',${i})">×</button></div>`).join('');
@@ -1628,17 +1624,17 @@ async function handleDocs(e){
   }
   e.target.value='';renderClientDetail(activeClient);toast('Documentos procesados ✓','tok');
 }
-function delDoc(clientId,idx){const data=getD();const ci=data.clients.findIndex(c=>c.id===clientId);if(ci<0)return;data.clients[ci].docs.splice(idx,1);setD(data);renderClientDetail(clientId);}
+function delDoc(client_id,idx){const data=getD();const ci=data.clients.findIndex(c=>c.id===client_id);if(ci<0)return;data.clients[ci].docs.splice(idx,1);setD(data);renderClientDetail(client_id);}
 
 /* ══ REFERENCES ══ */
-function renderRefs(){
-  const refs=getRefs();const grid=document.getElementById('refs-grid');const empty=document.getElementById('refs-empty');
+async function renderRefs(){
+  const refs=await getRefs();const grid=document.getElementById('refs-grid');const empty=document.getElementById('refs-empty');
   document.getElementById('str').textContent=selRefs.size;document.getElementById('btn-rcnt').textContent=selRefs.size;
   if(refs.length===0){grid.style.display='none';empty.style.display='flex';document.getElementById('ref-bar').style.display='none';return;}
   grid.style.display='grid';empty.style.display='none';
   grid.innerHTML=refs.map((r,i)=>`<div class="rcard${selRefs.has(r.id)?' sel':''}" id="rc-${r.id}" style="animation-delay:${i*25}ms" onclick="toggleRef('${r.id}')">
 <button class="rdel" onclick="delRef(event,'${r.id}')">× eliminar</button>
-<img class="rimg" src="data:${r.mimeType};base64,${r.base64}" alt="">
+<img class="rimg" src="data:${r.mime_type};base64,${r.base64}" alt="">
 <div class="ri"><div class="rnm">${esc(r.name)}</div><div class="rtags">${(r.tags||[]).map(t=>'<span class="rtag">'+esc(t)+'</span>').join('')}</div></div>
 </div>`).join('');
   updateRefBar();
@@ -1677,7 +1673,7 @@ function renderCalsAll(){
   if(cals.length===0){grid.style.display='none';empty.style.display='flex';return;}
   grid.style.display='grid';empty.style.display='none';
   grid.innerHTML=cals.map((c,i)=>{
-    const cl=c.clientId?getClient(c.clientId):null;
+    const cl=c.client_id?getClient(c.client_id):null;
     const prompts=c.posts.filter(p=>p._prompt).length;
     return`<div class="ccard" style="animation-delay:${i*35}ms;cursor:none" onclick="openCalAndGo('${c.id}')">
 <div class="cc-hd"><div class="cc-av" style="background:linear-gradient(135deg,${cl?.color||'#3a5c9e'},${cl?.color2||'#6a8fc8'});font-size:16px">📅</div>
@@ -1823,8 +1819,8 @@ async function launchStudio(){
 
   // Get selected client
   const selClientEl = document.querySelector('#studio-client-sel .cs-opt.sel');
-  const clientId = selClientEl?.dataset?.id||null;
-  const cl = clientId ? getClient(clientId) : null;
+  const client_id = selClientEl?.dataset?.id||null;
+  const cl = client_id ? getClient(client_id) : null;
 
   // Get image style
   const imgStyle = document.getElementById('studio-img-style').value.trim();
@@ -1844,7 +1840,7 @@ async function launchStudio(){
   const data=getD();
   const newCalId='cal_studio_'+Date.now();
   studioGenCalId=newCalId;
-  data.cals.push({id:newCalId,name,desc:prompt.slice(0,120),clientId:clientId||null,posts:[]});
+  data.cals.push({id:newCalId,name,desc:prompt.slice(0,120),client_id:client_id||null,posts:[]});
   setD(data);
 
   // Build context
@@ -2113,14 +2109,14 @@ function toggleAngle(i){
   chk.innerHTML = DEFAULT_ANGLES[i].sel ? '<span style="font-size:9px;color:#fff;line-height:1">✓</span>' : '';
 }
 
-function updateAICalSection(clientId){
+function updateAICalSection(client_id){
   const aiSec = document.getElementById('ai-cal-section');
   const btnAI = document.getElementById('btn-create-ai');
   const brief = document.getElementById('ai-cal-brief');
   const briefTxt = document.getElementById('ai-cal-brief-txt');
 
-  if(clientId){
-    const cl = getClient(clientId);
+  if(client_id){
+    const cl = getClient(client_id);
     if(cl){
       aiSec.style.display = 'block';
       btnAI.style.display = 'inline-flex';
@@ -2144,8 +2140,8 @@ async function saveCalWithAI(){
   const name = document.getElementById('cal-nm').value.trim();
   if(!name){toast('El nombre es obligatorio','terr');return;}
   const selOpt = document.querySelector('.cs-opt.sel');
-  const clientId = selOpt?.dataset?.id||'';
-  const cl = clientId ? getClient(clientId) : null;
+  const client_id = selOpt?.dataset?.id||'';
+  const cl = client_id ? getClient(client_id) : null;
   const selectedAngles = DEFAULT_ANGLES.filter(a=>a.sel);
   if(selectedAngles.length===0){toast('Selecciona al menos un ángulo','terr');return;}
   const extra = document.getElementById('ai-cal-extra').value.trim();
@@ -2153,7 +2149,7 @@ async function saveCalWithAI(){
   // Create the calendar first
   const data = getD();
   const newCalId = 'cal_'+Date.now();
-  const nc = {id:newCalId, name, desc:document.getElementById('cal-ds').value.trim(), clientId:clientId||null, posts:[]};
+  const nc = {id:newCalId, name, desc:document.getElementById('cal-ds').value.trim(), client_id:client_id||null, posts:[]};
   data.cals.push(nc);
   setD(data);
   activeCal = newCalId;
@@ -2280,8 +2276,8 @@ Responde SOLO con el JSON. Sin markdown ni backticks.`;
 
 /* ══ AI AUTO-FILL SINGLE POST ══ */
 async function autoFillPost(){
-  const cal=getCal(activeCal);if(!cal?.clientId)return;
-  const cl=getClient(cal.clientId);if(!cl)return;
+  const cal=getCal(activeCal);if(!cal?.client_id)return;
+  const cl=getClient(cal.client_id);if(!cl)return;
   const btn=document.getElementById('btn-autofill-post');
   btn.textContent='⟳ Generando…';btn.style.pointerEvents='none';
 
