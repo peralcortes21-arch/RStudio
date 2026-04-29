@@ -452,6 +452,27 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 
 /* ─── TOAST ─── */
 .toast{position:fixed;bottom:14px;left:50%;transform:translateX(-50%) translateY(10px);z-index:9999;padding:8px 16px;border-radius:20px;font-size:9.5px;font-weight:700;opacity:0;transition:all .2s var(--ease);pointer-events:none;font-family:var(--f);white-space:nowrap;backdrop-filter:blur(20px)}
+
+/* ─── LOGIN ─── */
+#lscr{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem}
+.lbox{background:linear-gradient(180deg,rgba(26,26,38,.95),rgba(19,19,28,.95));border:1px solid var(--bd-2);border-radius:var(--r-lg);padding:2.5rem;width:100%;max-width:380px;box-shadow:var(--el-4),0 0 0 1px rgba(255,255,255,.04) inset;animation:modalIn .35s var(--ease-spring)}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.llogo{display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem}
+.llogo img{width:72px;height:72px;border-radius:12px;box-shadow:0 0 24px rgba(91,115,255,.35)}
+.ltit{font-size:28px;font-family:var(--ff-serif);font-weight:600;color:var(--tx-1);text-align:center;letter-spacing:-.02em;line-height:1.1;margin-bottom:.5rem}
+.lsub{font-size:11px;color:var(--tx-3);font-family:var(--ff-mono);text-align:center;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1.75rem}
+.lfield{margin-bottom:1rem}
+.lfield input{width:100%;background:rgba(7,7,12,.6);border:1px solid var(--bd-1);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:var(--tx-1);font-family:var(--ff-display);outline:none;transition:border-color var(--dur-2),box-shadow var(--dur-2)}
+.lfield input::placeholder{color:var(--tx-4)}
+.lfield input:focus{border-color:var(--bd-ac);box-shadow:0 0 0 3px var(--ac-glow)}
+.l-err{font-size:10px;color:var(--er);font-family:var(--ff-mono);margin-bottom:1rem;min-height:16px}
+.lbtn{width:100%;background:var(--grad-accent);color:#fff;border:none;border-radius:var(--r-sm);padding:10px 12px;font-size:11px;font-weight:700;font-family:var(--ff-display);cursor:none;transition:all var(--dur-2);box-shadow:var(--el-2),0 0 0 1px rgba(255,255,255,.08) inset}
+.lbtn:hover{box-shadow:var(--el-3),var(--el-glow);transform:translateY(-1px)}
+.lbtn:active{transform:translateY(0);box-shadow:var(--el-1)}
+.user-pill{display:flex;align-items:center;gap:8px;margin-left:auto;padding:6px 12px;border-radius:var(--r-pill);background:rgba(255,255,255,.03);border:1px solid var(--bd-1);font-size:10px;color:var(--tx-1);font-weight:600}
+.user-pill button{background:none;border:none;color:var(--tx-3);cursor:none;font-size:12px;padding:2px;transition:color var(--dur-2)}
+.user-pill button:hover{color:var(--tx-1)}
+.lm-img{width:30px;height:30px;border-radius:8px;flex-shrink:0}
 .tok{background:rgba(26,184,84,.14);color:var(--ok);border:1px solid rgba(26,184,84,.28)}
 .terr{background:rgba(224,64,64,.14);color:var(--er);border:1px solid rgba(224,64,64,.28)}
 .twrn{background:rgba(224,152,0,.14);color:var(--wn);border:1px solid rgba(224,152,0,.28)}
@@ -464,9 +485,24 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 <canvas id="bgc"></canvas>
 <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
 
-<div class="app">
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="lscr">
+  <div class="lbox">
+    <div class="llogo"><img src="/imagenes/logo.jpg" alt="RStudio"></div>
+    <h1 class="ltit">RStudio</h1>
+    <p class="lsub">by CLIENDER Studio</p>
+    <form onsubmit="doLogin(event)">
+      <div class="lfield"><input id="l-em" type="email" placeholder="email@cliender.com" autocomplete="username" required></div>
+      <div class="lfield"><input id="l-pw" type="password" placeholder="Contraseña" autocomplete="current-password" required></div>
+      <div id="l-err" class="l-err"></div>
+      <button type="submit" class="lbtn">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<div class="app" id="app" style="display:none">
 <div class="topbar">
-  <div class="logo"><div class="lm">C</div><div><div class="ln">CLIENDER</div><div class="lt">studio</div></div></div>
+  <div class="logo"><img src="/imagenes/logo.jpg" alt="RStudio" class="lm-img"><div><div class="ln">CLIENDER</div><div class="lt">studio</div></div></div>
   <div class="nav">
     <button class="nt act" data-p="gen" onclick="tab('gen',this)">Generador</button>
     <button class="nt" data-p="clientes" onclick="tab('clientes',this)">Clientes</button>
@@ -474,6 +510,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
     <button class="nt" data-p="cals" onclick="tab('cals',this)">Calendarios</button>
   </div>
   <button style="background:none;border:none;color:var(--mt);cursor:none;font-size:12px;padding:0 8px;transition:color .15s;margin-right:8px" onclick="openConfigModal()" title="Configuración de API keys">⚙️</button>
+  <div class="user-pill"><span id="user-nm"></span><button onclick="logout()" title="Cerrar sesión">↪</button></div>
   <div class="tst">
     <div class="ts">Posts <b id="stv">0</b></div>
     <div class="ts">Imgs <b id="stg">0</b></div>
@@ -1017,6 +1054,14 @@ let activeCal=null,activeClient=null;
 const imgSrcs={};
 let selRefs=new Set();
 let selTipoV=null,editPId=null,editCId=null,editClId=null;
+
+/* ══ AUTH ══ */
+const USERS={'nicolas@cliender.com':'Master123','pablo@cliender.com':'Master123','toni@cliender.com':'Master123','dan@cliender.com':'Master123'};
+const SSK='cliender_session';
+function checkSess(){const s=localStorage.getItem(SSK);if(s){try{const sess=JSON.parse(s);showApp(sess);return true;}catch(e){}}}
+function doLogin(e){e.preventDefault();const em=document.getElementById('l-em').value.trim().toLowerCase(),pw=document.getElementById('l-pw').value;if(USERS[em]&&USERS[em]===pw){const name=em.split('@')[0],sess={email:em,name};localStorage.setItem(SSK,JSON.stringify(sess));showApp(sess);}else{document.getElementById('l-err').textContent='Credenciales incorrectas';}}
+function showApp(s){document.getElementById('lscr').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('user-nm').textContent=s.name;}
+function logout(){localStorage.removeItem(SSK);location.reload();}
 
 /* ══ STORAGE ══ */
 const SK='cliender_v4';
@@ -2294,10 +2339,11 @@ dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if
 
 /* ══ INIT ══ */
 function init(){
+  if(!checkSess())return;
   ensureDefault();renderFmtPicker();renderCalBar();
   const cals=getCals();if(cals.length>0){activeCal=cals[0].id;openCal(activeCal);}
 }
-init();
+window.addEventListener('load',init);
 </script>
 </body>
 </html>
