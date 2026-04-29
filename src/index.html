@@ -1488,31 +1488,29 @@ function openEditCal(){
   });
   openM('m-cal');
 }
-function saveCal(){
+async function saveCal(){
   const name=document.getElementById('cal-nm').value.trim();if(!name){toast('El nombre es obligatorio','terr');return;}
   const selOpt=document.querySelector('.cs-opt.sel');const client_id=selOpt?.dataset?.id||null;
-  const data=getD();
-  if(editCId){
-    const i=data.cals.findIndex(c=>c.id===editCId);
-    if(i>=0){data.cals[i].name=name;data.cals[i].desc=document.getElementById('cal-ds').value.trim();data.cals[i].client_id=client_id;}
-  }else{
-    const nc={id:'cal_'+Date.now(),name,desc:document.getElementById('cal-ds').value.trim(),client_id,posts:[]};
-    data.cals.push(nc);activeCal=nc.id;
-  }
-  // Reset button text
-  document.getElementById('btn-create-manual').textContent='Crear vacío';
-  setD(data);closeM('m-cal');renderCalBar();
-  if(editCId)openCal(editCId);else openCal(activeCal);
-  if(activeClient)renderClientDetail(activeClient);
-  renderCalsAll();toast(editCId?'Actualizado ✓':'Creado ✓','tok');
-}
+  try{
+    const cal={name,description:document.getElementById('cal-ds').value.trim(),client_id};
+    const method=editCId?'PUT':'POST',endpoint=editCId?'/api/calendars/'+editCId:'/api/calendars';
+    const r=await fetch(endpoint,{method,headers:authHeaders(),body:JSON.stringify(cal)});
+    if(!r.ok){toast('Error al guardar','terr');return;}
+    const newCal=await r.json();
+    if(!editCId)activeCal=newCal.id;
+    document.getElementById('btn-create-manual').textContent='Crear vacío';
+    _invalidate('cals');closeM('m-cal');await renderCalBar();
+    if(editCId)await openCal(editCId);else await openCal(activeCal);
+    if(activeClient)await renderClientDetail(activeClient);
+    await renderCalsAll();toast(editCId?'Actualizado ✓':'Creado ✓','tok');
+  }catch{toast('Error de conexión','terr');}}
 function delCal(){
   if(!activeCal||activeCal===DC.id){toast('No se puede eliminar el calendario base','terr');return;}
-  showConfirm('Eliminar calendario','Se eliminará este calendario y todos sus posts.','Eliminar',()=>{
-    const data=getD();data.cals=data.cals.filter(c=>c.id!==activeCal);setD(data);
-    const cals=getCals();activeCal=cals.length>0?cals[0].id:null;
-    renderCalBar();if(activeCal)openCal(activeCal);else{document.getElementById('chdr').style.display='none';document.getElementById('filtrow').style.display='none';document.getElementById('pgrid').style.display='none';document.getElementById('grid-empty').style.display='flex';}
-    renderCalsAll();toast('Eliminado','twrn');
+  showConfirm('Eliminar calendario','Se eliminará este calendario y todos sus posts.','Eliminar',async()=>{
+    try{const r=await fetch('/api/calendars/'+activeCal,{method:'DELETE',headers:authHeaders()});if(!r.ok){toast('Error al eliminar','terr');return;}_invalidate('cals');
+    const cals=await getCals();activeCal=cals.length>0?cals[0].id:null;
+    await renderCalBar();if(activeCal)await openCal(activeCal);else{document.getElementById('chdr').style.display='none';document.getElementById('filtrow').style.display='none';document.getElementById('pgrid').style.display='none';document.getElementById('grid-empty').style.display='flex';}
+    await renderCalsAll();toast('Eliminado','twrn');}catch{toast('Error de conexión','terr');}
   });
 }
 function openAddPost(){
@@ -1543,15 +1541,17 @@ function editPost(id){
   openM('m-post');
 }
 function selTipo(el){selTipoV=el.dataset.t;document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');}
-function savePost(){
+async function savePost(){
   const hook=document.getElementById('p-hook').value.trim();if(!hook){toast('El hook es obligatorio','terr');return;}
   if(!selTipoV){toast('Selecciona el tipo','terr');return;}
-  const data=getD();const ci=data.cals.findIndex(c=>c.id===activeCal);if(ci<0)return;
-  const np={id:editPId||('p_'+Date.now()),h:document.getElementById('p-h').value||'10:00',a:document.getElementById('p-a').value.trim()||'POST',t:selTipoV,hook,sub:document.getElementById('p-sub').value.trim(),body:document.getElementById('p-body').value.trim(),cta:document.getElementById('p-cta').value.trim(),v:document.getElementById('p-vis').value.trim()};
-  if(editPId){const pi=data.cals[ci].posts.findIndex(p=>p.id===editPId);if(pi>=0)data.cals[ci].posts[pi]=np;}else data.cals[ci].posts.push(np);
-  setD(data);closeM('m-post');openCal(activeCal);toast(editPId?'Actualizado ✓':'Post creado ✓','tok');
-}
-function delPost(id){showConfirm('Eliminar post','Este post se eliminará del calendario.','Eliminar',()=>{const data=getD();const ci=data.cals.findIndex(c=>c.id===activeCal);if(ci<0)return;data.cals[ci].posts=data.cals[ci].posts.filter(p=>p.id!==id);setD(data);openCal(activeCal);toast('Eliminado','twrn');});}
+  try{
+    const post={hour:document.getElementById('p-h').value||'10:00',angle:document.getElementById('p-a').value.trim()||'POST',type:selTipoV,hook,sub_title:document.getElementById('p-sub').value.trim(),body:document.getElementById('p-body').value.trim(),cta:document.getElementById('p-cta').value.trim(),visual:document.getElementById('p-vis').value.trim()};
+    const method=editPId?'PUT':'POST',endpoint=editPId?'/api/calendars/'+activeCal+'/posts/'+editPId:'/api/calendars/'+activeCal+'/posts';
+    const r=await fetch(endpoint,{method,headers:authHeaders(),body:JSON.stringify(post)});
+    if(!r.ok){toast('Error al guardar','terr');return;}
+    _invalidate('cals');closeM('m-post');await openCal(activeCal);toast(editPId?'Actualizado ✓':'Post creado ✓','tok');
+  }catch{toast('Error de conexión','terr');}}
+function delPost(id){showConfirm('Eliminar post','Este post se eliminará del calendario.','Eliminar',async()=>{try{const r=await fetch('/api/calendars/'+activeCal+'/posts/'+id,{method:'DELETE',headers:authHeaders()});if(!r.ok){toast('Error al eliminar','terr');return;}_invalidate('cals');await openCal(activeCal);toast('Eliminado','twrn');}catch{toast('Error de conexión','terr');}});}
 
 /* ══ CLIENTS ══ */
 async function renderClients(){
@@ -1668,13 +1668,13 @@ function applyRefs(){tab('gen',document.querySelector('[data-p=gen]'));toast(sel
 function delRef(e,id){e.stopPropagation();showConfirm('Eliminar referencia','Esta imagen de referencia se eliminará.','Eliminar',()=>{selRefs.delete(id);const data=getD();data.refs=data.refs.filter(r=>r.id!==id);setD(data);renderRefs();});}
 
 /* ══ ALL CALS ══ */
-function renderCalsAll(){
-  const cals=getCals();const grid=document.getElementById('cals-all-grid');const empty=document.getElementById('cals-all-empty');
+async function renderCalsAll(){
+  const cals=await getCals();const clients=await getClients();const grid=document.getElementById('cals-all-grid');const empty=document.getElementById('cals-all-empty');
   if(cals.length===0){grid.style.display='none';empty.style.display='flex';return;}
   grid.style.display='grid';empty.style.display='none';
   grid.innerHTML=cals.map((c,i)=>{
-    const cl=c.client_id?getClient(c.client_id):null;
-    const prompts=c.posts.filter(p=>p._prompt).length;
+    const cl=c.client_id?clients.find(cl=>cl.id===c.client_id):null;
+    const prompts=(c.posts||[]).filter(p=>p._prompt).length;
     return`<div class="ccard" style="animation-delay:${i*35}ms;cursor:none" onclick="openCalAndGo('${c.id}')">
 <div class="cc-hd"><div class="cc-av" style="background:linear-gradient(135deg,${cl?.color||'#3a5c9e'},${cl?.color2||'#6a8fc8'});font-size:16px">📅</div>
 <div style="flex:1"><div class="cc-nm">${esc(c.name)}</div><div class="cc-in">${cl?'🏢 '+cl.name:'Sin cliente'}</div></div></div>
@@ -2141,17 +2141,15 @@ async function saveCalWithAI(){
   if(!name){toast('El nombre es obligatorio','terr');return;}
   const selOpt = document.querySelector('.cs-opt.sel');
   const client_id = selOpt?.dataset?.id||'';
-  const cl = client_id ? getClient(client_id) : null;
+  const cl = client_id ? await getClient(client_id) : null;
   const selectedAngles = DEFAULT_ANGLES.filter(a=>a.sel);
   if(selectedAngles.length===0){toast('Selecciona al menos un ángulo','terr');return;}
   const extra = document.getElementById('ai-cal-extra').value.trim();
 
-  // Create the calendar first
-  const data = getD();
+  // Create the calendar first via API
   const newCalId = 'cal_'+Date.now();
-  const nc = {id:newCalId, name, desc:document.getElementById('cal-ds').value.trim(), client_id:client_id||null, posts:[]};
-  data.cals.push(nc);
-  setD(data);
+  const nc = {id:newCalId, name, description:document.getElementById('cal-ds').value.trim(), client_id:client_id||null};
+  try{const r=await fetch('/api/calendars',{method:'POST',headers:authHeaders(),body:JSON.stringify(nc)});if(!r.ok){toast('Error al crear calendario','terr');return;}_invalidate('cals');}catch{toast('Error de conexión','terr');return;}
   activeCal = newCalId;
 
   // Show progress
@@ -2251,11 +2249,8 @@ Responde SOLO con el JSON. Sin markdown ni backticks.`;
         v: p.visual||'',
         _prompt: ''
       }));
-      // Save posts
-      const d2 = getD();const ci = d2.cals.findIndex(c=>c.id===newCalId);
-      if(ci>=0){d2.cals[ci].posts.push(...newPosts);setD(d2);}
-      totalGenerated += newPosts.length;
-      logEl.innerHTML += `<span style="color:var(--ok)">✓</span> ${esc(angle.key)} — ${newPosts.length} posts creados<br>`;
+      // Save posts via API bulk endpoint
+      try{const r=await fetch('/api/calendars/'+newCalId+'/posts/bulk',{method:'PUT',headers:authHeaders(),body:JSON.stringify({posts:newPosts.map(p=>({hour:p.h,angle:p.a,type:p.t,hook:p.hook,sub_title:p.sub,body:p.body,cta:p.cta,visual:p.v}))})});if(r.ok){totalGenerated+=newPosts.length;logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> ${esc(angle.key)} — ${newPosts.length} posts creados<br>`;}else{logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> ${esc(angle.key)} — error al guardar<br>`;}}catch(e){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${esc(angle.key)} — ${esc(e.message.slice(0,30))}<br>`;}
     }catch(e){
       logEl.innerHTML += `<span style="color:var(--er)">✕</span> ${esc(angle.key)} — error: ${esc(e.message.slice(0,50))}<br>`;
     }
@@ -2268,16 +2263,17 @@ Responde SOLO con el JSON. Sin markdown ni backticks.`;
   document.getElementById('ai-cal-done-btns').style.display='block';
 
   // Update UI
-  renderCalBar();openCal(newCalId);
-  if(activeClient)renderClientDetail(activeClient);
-  renderCalsAll();
+  _invalidate('cals');
+  await renderCalBar();await openCal(newCalId);
+  if(activeClient)await renderClientDetail(activeClient);
+  await renderCalsAll();
   toast(`${totalGenerated} posts generados con IA ✦`,'tok');
 }
 
 /* ══ AI AUTO-FILL SINGLE POST ══ */
 async function autoFillPost(){
-  const cal=getCal(activeCal);if(!cal?.client_id)return;
-  const cl=getClient(cal.client_id);if(!cl)return;
+  const cal=await getCal(activeCal);if(!cal?.client_id)return;
+  const cl=await getClient(cal.client_id);if(!cl)return;
   const btn=document.getElementById('btn-autofill-post');
   btn.textContent='⟳ Generando…';btn.style.pointerEvents='none';
 
