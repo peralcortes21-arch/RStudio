@@ -970,40 +970,6 @@ function ensureDefault(){
   const d=getD();
   // Default calendar
   if(!d.cals.find(x=>x.id===DC.id)){d.cals.unshift(DC);}
-  // Demo client
-  const demoId='demo_client_v1';
-  if(!d.clients.find(x=>x.id===demoId)){
-    const demoClient={
-      id:demoId,
-      name:'Dental Premium Madrid',
-      industry:'Clínica Dental',
-      desc:'Clínica dental de alta gama en Madrid especializada en estética dental, implantes y blanqueamiento. Referente en tecnología Invisalign en la zona norte de Madrid.',
-      audience:'Adultos 30-55 años, profesionales con nivel adquisitivo medio-alto, preocupados por su imagen y salud dental',
-      tone:'profesional',
-      color:'#1a6b8a',
-      color2:'#d4af37',
-      style:'premium clinic photography, clean white and navy blue, gold accents, modern dental technology, before-after shots, confident smiling professionals',
-      docs:[
-        {name:'Brand Guidelines — DentalPremium.pdf',mimeType:'application/pdf',base64:'',analysis:'Marca premium y sofisticada con colores azul marino #1a6b8a y dorado #d4af37. Tipografía Playfair Display para títulos. Estilo visual limpio y profesional con fotografías de alta calidad. Tono de comunicación formal pero cercano, enfatizando confianza y experiencia clínica.'},
-        {name:'Dossier Servicios 2025.pdf',mimeType:'application/pdf',base64:'',analysis:'Servicios principales: Implantes dentales (desde 890€), Invisalign (desde 2.400€), Blanqueamiento profesional (desde 320€), Carillas de porcelana. Diferenciadores: tecnología 3D, sedación consciente, garantía de por vida en implantes. Equipo de 8 especialistas con 15+ años de experiencia.'}
-      ]
-    };
-    const demoCal={
-      id:'demo_cal_v1',
-      name:'Dental Premium — Captación Enero',
-      desc:'Calendario de captación de nuevos pacientes',
-      clientId:demoId,
-      posts:[
-        {id:'dp01',h:'09:00',a:'SALES 01',t:'Miedo',hook:'Llevas años\nevitando el dentista.\nLo sabemos.',sub:'y lo entendemos',body:'El miedo al dentista afecta al 40% de los adultos.\nNo es debilidad. Es una respuesta normal.\n\nEn Dental Premium Madrid te acompañamos desde el primer minuto.',cta:'Primera consulta gratuita sin compromiso',v:'dark premium dental clinic interior, warm indirect lighting, empty comfortable chair, calm and trustworthy atmosphere, no clinical harshness'},
-        {id:'dp02',h:'13:00',a:'SALES 02',t:'Resultado',hook:'De esconder\ntu sonrisa a\nno poder parar de sonreír.',sub:'en menos de lo que crees',body:'El blanqueamiento profesional actúa en una sola sesión.\nResultados visibles desde el primer día.\n\nPorque tu sonrisa merece brillar.',cta:'Ver resultados reales de nuestros pacientes',v:'dramatic before-after split, dark moody left side with dull smile, bright right side with radiant confident smile, gold accent lighting, premium photography'},
-        {id:'dp03',h:'19:00',a:'TECH 02',t:'Deseo',hook:'Invisalign.\nNadie lo nota.\nTú sí.',sub:'ortodoncia invisible para adultos',body:'Sin brackets. Sin incomodidad visible.\nCambio gradual que solo tú y nosotros conocemos.\n\nTu vida no para. Tu tratamiento, tampoco.',cta:'Análisis 3D gratuito esta semana',v:'split scene, left professional meeting nobody notices anything, right 3D scan technology, navy blue and gold color palette, sleek modern dental technology'},
-        {id:'dp04',h:'11:00',a:'SALES 05',t:'Prueba',hook:'Más de 2.400\npacientes confían\nen nosotros.',sub:'y siguen volviendo',body:'15 años. 8 especialistas. Una sola misión:\nque nunca tengas miedo de sonreír.\n\nGarantía de por vida en implantes.',cta:'Únete a nuestra familia de pacientes',v:'warm authentic patient testimonial photography, genuine smiles, navy and gold tones, before-after feeling, trust and community'},
-        {id:'dp05',h:'17:00',a:'BRAND 01',t:'Deseo',hook:'Tu boca es\ntu primera\ntarjeta de visita.',sub:'cuídala como merece',body:'Una sonrisa sana y estética no es un lujo.\nEs inversión en confianza, en salud, en ti.\n\nEn Dental Premium Madrid lo hacemos posible.',cta:'Descubre nuestros planes de financiación',v:'elegant close-up confident smile, professional setting, golden ratio composition, premium lighting with blue and gold tones, aspirational lifestyle'}
-      ]
-    };
-    d.clients.push(demoClient);
-    if(!d.cals.find(x=>x.id===demoCal.id))d.cals.push(demoCal);
-  }
   setD(d);
 }
 
