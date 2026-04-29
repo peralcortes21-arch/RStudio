@@ -86,6 +86,19 @@
   --ok:#1ab854;
   --wn:#e09800;
   --er:#e04040;
+  /* Old token aliases */
+  --v1:var(--ac-500);
+  --v2:var(--ac-600);
+  --v3:var(--ac-300);
+  --v4:var(--ac-50);
+  --pa:rgba(91,115,255,.09);
+  --c1:var(--ac-300);
+  --g1:#c4a5ff;
+  --g2:#d4b5ff;
+  --s1:var(--bg-1);
+  --s2:var(--bg-2);
+  --s3:var(--bg-3);
+  --s4:var(--bg-4);
 }
 *,::before,::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -151,7 +164,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 .ctl-hint{font-size:9.5px;color:var(--tx-3);font-family:var(--ff-mono);margin-left:auto;letter-spacing:.01em}
 .ctl-hint b{color:var(--ac-300);font-weight:600}
 /* Dropdown panel */
-.ctl-drop{position:absolute;top:calc(100% + 8px);left:0;z-index:300;background:rgba(20,20,30,.92);backdrop-filter:blur(24px) saturate(160%);border:1px solid var(--bd-2);border-radius:var(--r-md);padding:6px;display:none;flex-direction:column;gap:1px;min-width:240px;box-shadow:var(--el-4);transform-origin:top left;animation:dropIn .22s var(--ease-spring)}
+.ctl-drop{position:absolute;top:calc(100% + 8px);left:0;z-index:9500;background:rgba(20,20,30,.92);backdrop-filter:blur(24px) saturate(160%);border:1px solid var(--bd-2);border-radius:var(--r-md);padding:6px;display:none;flex-direction:column;gap:1px;min-width:240px;box-shadow:var(--el-4);transform-origin:top left;animation:dropIn .22s var(--ease-spring)}
 .ctl-drop.open{display:flex}
 @keyframes dropIn{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 /* Model options */
