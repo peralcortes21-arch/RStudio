@@ -1060,8 +1060,8 @@ const JWT_KEY='cliender_jwt';
 function getToken(){return localStorage.getItem(JWT_KEY)||'';}
 function authHeaders(){return{'Content-Type':'application/json','Authorization':'Bearer '+getToken()};}
 async function checkSess(){const token=getToken();if(!token)return false;try{const r=await fetch('/api/auth/me',{headers:authHeaders()});if(!r.ok){localStorage.removeItem(JWT_KEY);return false;}const{user}=await r.json();showApp(user);return true;}catch{return false;}}
-async function doLogin(e){e.preventDefault();const em=document.getElementById('l-em').value.trim().toLowerCase(),pw=document.getElementById('l-pw').value;try{const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw})});if(!r.ok){document.getElementById('l-err').textContent='Credenciales incorrectas';return;}const{token,user}=await r.json();localStorage.setItem(JWT_KEY,token);showApp(user);}catch{document.getElementById('l-err').textContent='Error de conexión';}}
-function showApp(s){document.getElementById('lscr').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('user-nm').textContent=s.name;renderFmtPicker();renderCalBar();}
+async function doLogin(e){e.preventDefault();const em=document.getElementById('l-em').value.trim().toLowerCase(),pw=document.getElementById('l-pw').value;try{const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw})});if(!r.ok){document.getElementById('l-err').textContent='Credenciales incorrectas';return;}const{token,user}=await r.json();localStorage.setItem(JWT_KEY,token);await showApp(user);}catch{document.getElementById('l-err').textContent='Error de conexión';}}
+async function showApp(s){document.getElementById('lscr').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('user-nm').textContent=s.name;renderFmtPicker();await renderCalBar();}
 function logout(){localStorage.removeItem(JWT_KEY);location.reload();}
 
 /* ══ STORAGE LAYER ══ */
@@ -2330,10 +2330,10 @@ dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
 dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if(e.dataTransfer.files.length&&activeClient){const inp=dz.querySelector('input');const dt=new DataTransfer();[...e.dataTransfer.files].forEach(f=>dt.items.add(f));inp.files=dt.files;handleDocs({target:inp});}});
 
 /* ══ INIT ══ */
-function init(){
-  if(!checkSess())return;
-  ensureDefault();renderFmtPicker();renderCalBar();
-  const cals=getCals();if(cals.length>0){activeCal=cals[0].id;openCal(activeCal);}
+async function init(){
+  if(!await checkSess())return;
+  await ensureDefault();renderFmtPicker();await renderCalBar();
+  const cals=await getCals();if(cals.length>0){activeCal=cals[0].id;await openCal(activeCal);}
 }
 window.addEventListener('load',init);
 </script>
