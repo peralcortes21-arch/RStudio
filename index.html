@@ -65,24 +65,42 @@ body:has(button:hover) .cd{background:rgba(255,255,255,.9);transform:scale(1.3)}
 .panel{display:none;flex:1;overflow:hidden;flex-direction:column}
 .panel.act{display:flex}
 
-/* ─── TOOLBAR ─── */
-.toolbar{background:rgba(8,8,14,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--bd);padding:.4rem 1.25rem;display:flex;align-items:center;gap:4px;flex-wrap:wrap;flex-shrink:0}
-.tlb{font-size:8px;font-family:var(--m);color:var(--dm);letter-spacing:.14em;flex-shrink:0}
-.tbtn{padding:4px 12px;border-radius:6px;font-size:8.5px;font-weight:600;border:1px solid var(--bd);background:transparent;color:var(--mt);cursor:none;transition:all .15s var(--ease);font-family:var(--m)}
-.tbtn:hover{border-color:var(--bdh);color:var(--tx);background:rgba(255,255,255,.03)}.tbtn.act{border-color:transparent;color:#fff;background:var(--v1)}
-.tsep{width:1px;height:13px;background:var(--bd);flex-shrink:0;margin:0 2px}
-.thint{font-size:7.5px;color:var(--dm);font-family:var(--m);margin-left:auto}.thint b{color:var(--ok)}
-
-/* ─── FORMAT ─── */
-.fmts{background:rgba(8,8,14,.7);border-bottom:1px solid var(--bd);padding:.38rem 1.25rem;display:flex;align-items:center;gap:4px;overflow-x:auto;flex-shrink:0}
-.flb{font-size:8px;font-family:var(--m);color:var(--dm);letter-spacing:.14em;white-space:nowrap;flex-shrink:0}
-.fb2{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 7px;border-radius:var(--rs);border:1px solid var(--bd);background:transparent;cursor:none;transition:all .15s var(--ease);flex-shrink:0}
-.fb2:hover{border-color:var(--bdh)}.fb2.act{border-color:var(--v1);background:var(--pa)}
-.fbox{background:var(--pa);border:1px solid rgba(58,92,158,.32);border-radius:2px}
-.flbl{font-size:7.5px;font-family:var(--m);color:var(--mt);white-space:nowrap;text-align:center}
-.fsub{font-size:6.5px;font-family:var(--m);color:var(--dm);white-space:nowrap}
-.fb2.act .flbl{color:var(--v3)}.fb2.act .fbox{background:rgba(58,92,158,.3);border-color:var(--v2)}
-.fsep{width:1px;height:20px;background:var(--bd);flex-shrink:0;margin:0 3px}
+/* ─── CONTROL BAR ─── */
+.ctlbar{background:rgba(8,8,14,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);padding:.3rem 1.25rem;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.ctl-lbl{font-size:7px;font-family:var(--m);color:var(--dm);letter-spacing:.14em;text-transform:uppercase;padding:0 3px;flex-shrink:0}
+.ctl-item{position:relative;flex-shrink:0}
+.ctl-btn{display:flex;align-items:center;gap:5px;padding:4px 9px;border-radius:6px;border:1px solid var(--bd);background:transparent;color:var(--mt);cursor:none;transition:all .15s var(--ease);font-family:var(--f);font-size:8.5px;font-weight:500;white-space:nowrap}
+.ctl-btn:hover{border-color:var(--bdh);color:var(--tx);background:rgba(255,255,255,.03)}
+.ctl-btn.open{border-color:rgba(138,166,208,.3);color:var(--tx);background:rgba(58,92,158,.07)}
+.ctl-chev{flex-shrink:0;opacity:.45;transition:transform .15s var(--ease),opacity .15s}
+.ctl-btn:hover .ctl-chev,.ctl-btn.open .ctl-chev{opacity:.9}
+.ctl-btn.open .ctl-chev{transform:rotate(180deg)}
+.ctl-sep{width:1px;height:14px;background:var(--bd);flex-shrink:0;margin:0 3px}
+.ctl-hint{font-size:7.5px;color:var(--dm);font-family:var(--m);margin-left:auto}.ctl-hint b{color:var(--v3)}
+/* Dropdown panel */
+.ctl-drop{position:absolute;top:calc(100% + 6px);left:0;z-index:300;background:#0f0f1a;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:4px;display:none;flex-direction:column;gap:1px;min-width:210px;box-shadow:0 16px 48px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.03) inset;animation:ctlIn .14s var(--ease-expo)}
+.ctl-drop.open{display:flex}
+@keyframes ctlIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+/* Model options */
+.ctl-opt{display:flex;flex-direction:column;padding:7px 10px;border-radius:6px;border:none;background:transparent;cursor:none;text-align:left;transition:background .12s;gap:1px;width:100%}
+.ctl-opt:hover{background:rgba(255,255,255,.05)}
+.ctl-opt.act{background:rgba(58,92,158,.1)}
+.ctl-opt-n{font-size:9px;font-weight:600;color:var(--tx);font-family:var(--f);display:flex;align-items:center;justify-content:space-between}
+.ctl-opt-n .ctl-check{font-size:8px;color:var(--v3);opacity:0}
+.ctl-opt.act .ctl-opt-n .ctl-check{opacity:1}
+.ctl-opt-d{font-size:7.5px;color:var(--mt);font-family:var(--m);margin-top:1px}
+.ctl-opt.act .ctl-opt-n{color:var(--v3)}
+/* Format dropdown grid */
+.fmt-drop{flex-direction:row;flex-wrap:wrap;min-width:220px;gap:2px;padding:6px}
+.fmt-opt{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 8px;border-radius:6px;border:none;background:transparent;cursor:none;transition:background .12s;min-width:52px}
+.fmt-opt:hover{background:rgba(255,255,255,.05)}
+.fmt-opt.act{background:rgba(58,92,158,.1)}
+.fmt-thumb{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.1);border-radius:2px;display:block;transition:background .12s,border-color .12s}
+.fmt-opt.act .fmt-thumb{background:rgba(58,92,158,.3);border-color:rgba(138,166,208,.35)}
+.fmt-lbl{font-size:8.5px;font-weight:600;color:var(--mt);font-family:var(--f);transition:color .12s}
+.fmt-sub{font-size:7px;color:var(--dm);font-family:var(--m)}
+.fmt-opt.act .fmt-lbl{color:var(--v3)}
+.fmt-opt:hover .fmt-lbl{color:var(--tx)}
 
 /* ─── CAL TABS ─── */
 .calbar{background:rgba(8,8,14,.7);border-bottom:1px solid var(--bd);padding:0 1.25rem;display:flex;align-items:center;overflow-x:auto;flex-shrink:0}
@@ -377,14 +395,39 @@ body:has(button:hover) .cd{background:rgba(255,255,255,.9);transform:scale(1.3)}
 
 <!-- ══ PANEL: GENERADOR ══ -->
 <div id="panel-gen" class="panel act">
-  <div class="toolbar">
-    <span class="tlb">MODELO</span>
-    <button class="tbtn act" data-m="nano-banana-2" onclick="setM(this)">Nano Banana 2</button>
-    <button class="tbtn" data-m="nano-banana-pro" onclick="setM(this)">Nano Banana Pro</button>
-    <button class="tbtn" data-m="gpt-image-2-text-to-image" onclick="setM(this)">GPT Image 2</button>
-    <span class="thint" id="mhint"><b>Asíncrono</b> · Google · Texto a imagen</span>
+  <div class="ctlbar">
+    <span class="ctl-lbl">MODELO</span>
+    <div class="ctl-item" id="ctl-model">
+      <button class="ctl-btn" id="ctl-model-btn" onclick="toggleCtl('model')">
+        <span id="ctl-model-val">Nano Banana 2</span>
+        <svg class="ctl-chev" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2.5 3.75L5 6.25L7.5 3.75" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="ctl-drop" id="ctl-model-drop">
+        <button class="ctl-opt act" data-m="nano-banana-2" onclick="pickModel('nano-banana-2')">
+          <span class="ctl-opt-n">Nano Banana 2 <span class="ctl-check">✓</span></span>
+          <span class="ctl-opt-d">Google · Texto a imagen · Multi-ref</span>
+        </button>
+        <button class="ctl-opt" data-m="nano-banana-pro" onclick="pickModel('nano-banana-pro')">
+          <span class="ctl-opt-n">Nano Banana Pro <span class="ctl-check">✓</span></span>
+          <span class="ctl-opt-d">Google · Imagen a imagen · Referencias</span>
+        </button>
+        <button class="ctl-opt" data-m="gpt-image-2-text-to-image" onclick="pickModel('gpt-image-2-text-to-image')">
+          <span class="ctl-opt-n">GPT Image 2 <span class="ctl-check">✓</span></span>
+          <span class="ctl-opt-d">OpenAI · Alta coherencia de texto</span>
+        </button>
+      </div>
+    </div>
+    <div class="ctl-sep"></div>
+    <span class="ctl-lbl">FORMATO</span>
+    <div class="ctl-item" id="ctl-fmt">
+      <button class="ctl-btn" id="ctl-fmt-btn" onclick="toggleCtl('fmt')">
+        <span id="ctl-fmt-val">1:1</span>
+        <svg class="ctl-chev" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2.5 3.75L5 6.25L7.5 3.75" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="ctl-drop fmt-drop" id="ctl-fmt-drop"></div>
+    </div>
+    <span class="ctl-hint" id="mhint"><b>Asíncrono</b> · Google · Texto a imagen</span>
   </div>
-  <div class="fmts"><span class="flb">FORMATO</span><div id="fmt-grp" style="display:flex;gap:4px;flex-wrap:nowrap;align-items:center"></div></div>
   <div class="calbar" id="calbar"><button class="ctab add" onclick="openNewCal()" title="Nuevo">＋</button></div>
   <div class="chdr" id="chdr" style="display:none">
     <div><div class="cname" id="cname">—</div><div class="cdesc" id="cdesctxt"></div></div>
@@ -976,24 +1019,52 @@ function tab(p,btn){
 }
 
 /* ══ FORMAT + MODEL ══ */
-function renderFmtBar(){
-  const avail=MF[AM];const grp=document.getElementById('fmt-grp');grp.innerHTML='';let lastG=null;
+function renderFmtPicker(){
+  const avail=MF[AM];const drop=document.getElementById('ctl-fmt-drop');drop.innerHTML='';
   FORMATS.forEach(f=>{
     if(!avail.includes(f.key))return;
-    if(f.g!==lastG&&lastG!==null){const s=document.createElement('div');s.className='fsep';grp.appendChild(s);}
-    lastG=f.g;
-    const iP=f.h>f.w;const pw=iP?Math.round(14*f.w/f.h):14;const ph=iP?14:Math.round(14*f.h/f.w);
-    const btn=document.createElement('button');btn.className='fb2'+(f.key===AF?' act':'');
-    btn.innerHTML=`<div class="fbox" style="width:${pw}px;height:${ph}px"></div><div class="flbl">${f.label}</div><div class="fsub">${f.px}×${f.py}</div>`;
-    btn.onclick=()=>{document.querySelectorAll('.fb2').forEach(b=>b.classList.remove('act'));btn.classList.add('act');AF=f.key;document.getElementById('stf').textContent=f.label;};
-    grp.appendChild(btn);
+    const iP=f.h>f.w;const pw=iP?Math.round(22*f.w/f.h):22;const ph=iP?22:Math.round(22*f.h/f.w);
+    const btn=document.createElement('button');btn.className='fmt-opt'+(f.key===AF?' act':'');
+    btn.innerHTML=`<div class="fmt-thumb" style="width:${pw}px;height:${ph}px"></div><div class="fmt-lbl">${f.label}</div><div class="fmt-sub">${f.px}×${f.py}</div>`;
+    btn.onclick=()=>pickFmt(f.key,f.label);
+    drop.appendChild(btn);
   });
-  if(!avail.includes(AF)){AF=avail[0];document.getElementById('stf').textContent=FORMATS.find(x=>x.key===AF)?.label||AF;}
+  if(!avail.includes(AF)){AF=avail[0];const f=FORMATS.find(x=>x.key===AF);if(f)document.getElementById('ctl-fmt-val').textContent=f.label;}
 }
-function setM(btn){
-  document.querySelectorAll('.tbtn').forEach(b=>b.classList.remove('act'));btn.classList.add('act');
-  AM=btn.dataset.m;document.getElementById('stm').textContent=MODELS[AM].label;document.getElementById('mhint').innerHTML=MODELS[AM].hint;renderFmtBar();
+function pickFmt(key,label){
+  AF=key;
+  document.getElementById('ctl-fmt-val').textContent=label;
+  document.getElementById('stf').textContent=label;
+  renderFmtPicker();
+  closeCtl('fmt');
 }
+function pickModel(m){
+  AM=m;
+  document.getElementById('ctl-model-val').textContent=MODELS[m].label;
+  document.getElementById('stm').textContent=MODELS[m].label;
+  document.getElementById('mhint').innerHTML=MODELS[m].hint;
+  document.querySelectorAll('.ctl-opt').forEach(b=>b.classList.toggle('act',b.dataset.m===m));
+  renderFmtPicker();
+  closeCtl('model');
+}
+function toggleCtl(id){
+  const btn=document.getElementById('ctl-'+id+'-btn');
+  const drop=document.getElementById('ctl-'+id+'-drop');
+  const open=drop.classList.contains('open');
+  document.querySelectorAll('.ctl-drop').forEach(d=>{d.classList.remove('open');});
+  document.querySelectorAll('.ctl-btn').forEach(b=>b.classList.remove('open'));
+  if(!open){drop.classList.add('open');btn.classList.add('open');}
+}
+function closeCtl(id){
+  document.getElementById('ctl-'+id+'-drop').classList.remove('open');
+  document.getElementById('ctl-'+id+'-btn').classList.remove('open');
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.ctl-item')){
+    document.querySelectorAll('.ctl-drop').forEach(d=>d.classList.remove('open'));
+    document.querySelectorAll('.ctl-btn').forEach(b=>b.classList.remove('open'));
+  }
+});
 
 /* ══ CALENDAR ══ */
 function renderCalBar(){
@@ -2165,7 +2236,7 @@ dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if
 
 /* ══ INIT ══ */
 function init(){
-  ensureDefault();renderFmtBar();renderCalBar();
+  ensureDefault();renderFmtPicker();renderCalBar();
   const cals=getCals();if(cals.length>0){activeCal=cals[0].id;openCal(activeCal);}
 }
 init();
