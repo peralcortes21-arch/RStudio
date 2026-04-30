@@ -2331,9 +2331,8 @@ dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if
 
 /* ══ INIT ══ */
 async function init(){
-  if(!await checkSess())return;
-  await ensureDefault();renderFmtPicker();await renderCalBar();
-  const cals=await getCals();if(cals.length>0){activeCal=cals[0].id;await openCal(activeCal);}
+  const hasSession=await checkSess();
+  if(hasSession)return;
 }
 window.addEventListener('load',init);
 </script>
