@@ -2337,6 +2337,7 @@ dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if
 async function init(){
   const hasSession=await checkSess();
   if(hasSession)return;
+  await demoLogin();
 }
 window.addEventListener('load',init);
 </script>
