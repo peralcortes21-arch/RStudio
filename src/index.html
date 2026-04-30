@@ -488,20 +488,6 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
 
 <!-- ══ LOGIN SCREEN ══ -->
-<div id="lscr">
-  <div class="lbox">
-    <div class="llogo"><img src="./assets/images/logo.jpg" alt="RStudio"></div>
-    <h1 class="ltit">RStudio</h1>
-    <p class="lsub">by CLIENDER Studio</p>
-    <form onsubmit="doLogin(event)">
-      <div class="lfield"><input id="l-em" type="email" placeholder="email@cliender.com" autocomplete="username" required></div>
-      <div class="lfield"><input id="l-pw" type="password" placeholder="Contraseña" autocomplete="current-password" required></div>
-      <div id="l-err" class="l-err"></div>
-      <button type="submit" class="lbtn">Entrar</button>
-      <button type="button" class="lbtn-demo" onclick="demoLogin()">Demo: Nicolas</button>
-    </form>
-  </div>
-</div>
 
 <div class="app" id="app" style="display:none">
 <div class="topbar">
@@ -513,7 +499,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
     <button class="nt" data-p="cals" onclick="tab('cals',this)">Calendarios</button>
   </div>
   <button style="background:none;border:none;color:var(--mt);cursor:none;font-size:12px;padding:0 8px;transition:color .15s;margin-right:8px" onclick="openConfigModal()" title="Configuración de API keys">⚙️</button>
-  <div class="user-pill"><span id="user-nm"></span><button onclick="logout()" title="Cerrar sesión">↪</button></div>
+  <div class="user-pill"><span id="user-nm"></span></div>
   <div class="tst">
     <div class="ts">Posts <b id="stv">0</b></div>
     <div class="ts">Imgs <b id="stg">0</b></div>
@@ -1058,15 +1044,7 @@ const imgSrcs={};
 let selRefs=new Set();
 let selTipoV=null,editPId=null,editCId=null,editClId=null;
 
-/* ══ AUTH + API ══ */
-const JWT_KEY='cliender_jwt';
-function getToken(){return localStorage.getItem(JWT_KEY)||'';}
-function authHeaders(){return({'Content-Type':'application/json','Authorization':'Bearer '+getToken()});}
-async function checkSess(){const token=getToken();if(!token)return false;try{const r=await fetch('/api/auth/me',{headers:authHeaders()});if(!r.ok){localStorage.removeItem(JWT_KEY);return false;}const{user}=await r.json();await showApp(user);return true;}catch{return false;}}
-async function doLogin(e){e.preventDefault();console.log('🔐 Login attempt...');const em=document.getElementById('l-em').value.trim().toLowerCase(),pw=document.getElementById('l-pw').value;console.log('Email:',em);try{const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw})});console.log('Response status:',r.status);if(!r.ok){document.getElementById('l-err').textContent='Credenciales incorrectas';return;}const{token,user}=await r.json();console.log('✓ Login success, token:',token.slice(0,30));localStorage.setItem(JWT_KEY,token);await showApp(user);}catch(err){console.error('❌ Error:',err);document.getElementById('l-err').textContent='Error: '+err.message;}}
-async function demoLogin(){console.log('🔐 Demo login...');try{const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'nicolas@cliender.com',password:'Master123'})});if(!r.ok){document.getElementById('l-err').textContent='Error en demo login';return;}const{token,user}=await r.json();console.log('✓ Demo login success');localStorage.setItem(JWT_KEY,token);await showApp(user);}catch(err){console.error('❌ Demo login error:',err);}}
-async function showApp(s){console.log('📱 showApp called with user:',s.name);try{document.getElementById('lscr').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('user-nm').textContent=s.name;renderFmtPicker();console.log('✓ renderFmtPicker done');await renderCalBar();console.log('✓ renderCalBar done');}catch(err){console.error('❌ showApp error:',err);}}
-function logout(){localStorage.removeItem(JWT_KEY);location.reload();}
+/* ══ NO AUTHENTICATION ══ */
 
 /* ══ STORAGE LAYER ══ */
 // Adaptadores para normalizar API response a formato frontend (snake_case → camelCase)
@@ -1076,11 +1054,11 @@ function normPosts(ps){return ps.map(normPost);}
 
 let _cache={clients:null,cals:null,refs:null};
 function _invalidate(key){_cache[key]=null;}
-async function getClients(){if(_cache.clients)return _cache.clients;try{const r=await fetch('/api/clients',{headers:authHeaders()});_cache.clients=await r.json();return _cache.clients;}catch{return[];}}
-async function getCals(){if(_cache.cals)return _cache.cals;try{const r=await fetch('/api/calendars',{headers:authHeaders()});const raw=await r.json();_cache.cals=raw.map(c=>({...normCal(c),desc:c.description,posts:[]}));return _cache.cals;}catch{return[];}}
-async function getRefs(){if(_cache.refs)return _cache.refs;try{const r=await fetch('/api/refs',{headers:authHeaders()});_cache.refs=await r.json();return _cache.refs;}catch{return[];}}
+async function getClients(){if(_cache.clients)return _cache.clients;try{const r=await fetch('/api/clients',{headers:{'Content-Type':'application/json'}});_cache.clients=await r.json();return _cache.clients;}catch{return[];}}
+async function getCals(){if(_cache.cals)return _cache.cals;try{const r=await fetch('/api/calendars',{headers:{'Content-Type':'application/json'}});const raw=await r.json();_cache.cals=raw.map(c=>({...normCal(c),desc:c.description,posts:[]}));return _cache.cals;}catch{return[];}}
+async function getRefs(){if(_cache.refs)return _cache.refs;try{const r=await fetch('/api/refs',{headers:{'Content-Type':'application/json'}});_cache.refs=await r.json();return _cache.refs;}catch{return[];}}
 async function getClient(id){return(await getClients()).find(c=>c.id===id);}
-async function getCal(id){const cal=await getCals().then(cs=>cs.find(c=>c.id===id));if(cal&&!cal.posts?.length){try{const r=await fetch('/api/calendars/'+id+'/posts',{headers:authHeaders()});cal.posts=normPosts(await r.json());}catch{}}return cal;}
+async function getCal(id){const cal=await getCals().then(cs=>cs.find(c=>c.id===id));if(cal&&!cal.posts?.length){try{const r=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});cal.posts=normPosts(await r.json());}catch{}}return cal;}
 async function getPost(pid){const cal=await getCal(activeCal);return cal?.posts?.find(p=>p.id===pid);}
 
 /* Pre-seed KIE key from build-time config (set once, user can override via settings) */
@@ -1113,7 +1091,7 @@ const DC={id:'default_v4',name:'Cliender — SALES & TECH',desc:'Calendario base
 
 async function ensureDefault(){
   const cals=await getCals();
-  if(!cals.find(x=>x.id===DC.id)){try{await fetch('/api/calendars',{method:'POST',headers:authHeaders(),body:JSON.stringify({id:DC.id,name:DC.name,description:DC.desc,client_id:DC.client_id})});_invalidate('cals');}catch{}}
+  if(!cals.find(x=>x.id===DC.id)){try{await fetch('/api/calendars',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:DC.id,name:DC.name,description:DC.desc,client_id:DC.client_id})});_invalidate('cals');}catch{}}
 }
 
 /* ══ NAVIGATION ══ */
@@ -1187,7 +1165,7 @@ async function openCal(id){
   document.getElementById('chdr').style.display='flex';document.getElementById('filtrow').style.display='flex';
   document.getElementById('cname').textContent=cal.name;
   document.getElementById('cdesctxt').textContent=cal.description||'';
-  try{const pr=await fetch('/api/calendars/'+id+'/posts',{headers:authHeaders()});const posts=await pr.json();document.getElementById('ccnt').textContent=posts.length+' posts';const ct=document.getElementById('ctag');if(cal.client_id){const cl=await getClient(cal.client_id);ct.style.display='block';ct.textContent=cl?'🏢 '+cl.name:'sin cliente';}else ct.style.display='none';renderGrid(posts);renderAngleFilter(posts);}catch{}}
+  try{const pr=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});const posts=await pr.json();document.getElementById('ccnt').textContent=posts.length+' posts';const ct=document.getElementById('ctag');if(cal.client_id){const cl=await getClient(cal.client_id);ct.style.display='block';ct.textContent=cl?'🏢 '+cl.name:'sin cliente';}else ct.style.display='none';renderGrid(posts);renderAngleFilter(posts);}catch{}}
 }
 function renderAngleFilter(posts){
   const angles=[...new Set(posts.map(p=>p.a))];
@@ -1498,7 +1476,7 @@ async function saveCal(){
   try{
     const cal={name,description:document.getElementById('cal-ds').value.trim(),client_id};
     const method=editCId?'PUT':'POST',endpoint=editCId?'/api/calendars/'+editCId:'/api/calendars';
-    const r=await fetch(endpoint,{method,headers:authHeaders(),body:JSON.stringify(cal)});
+    const r=await fetch(endpoint,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(cal)});
     if(!r.ok){toast('Error al guardar','terr');return;}
     const newCal=await r.json();
     if(!editCId)activeCal=newCal.id;
@@ -1511,7 +1489,7 @@ async function saveCal(){
 function delCal(){
   if(!activeCal||activeCal===DC.id){toast('No se puede eliminar el calendario base','terr');return;}
   showConfirm('Eliminar calendario','Se eliminará este calendario y todos sus posts.','Eliminar',async()=>{
-    try{const r=await fetch('/api/calendars/'+activeCal,{method:'DELETE',headers:authHeaders()});if(!r.ok){toast('Error al eliminar','terr');return;}_invalidate('cals');
+    try{const r=await fetch('/api/calendars/'+activeCal,{method:'DELETE',headers:{'Content-Type':'application/json'}});if(!r.ok){toast('Error al eliminar','terr');return;}_invalidate('cals');
     const cals=await getCals();activeCal=cals.length>0?cals[0].id:null;
     await renderCalBar();if(activeCal)await openCal(activeCal);else{document.getElementById('chdr').style.display='none';document.getElementById('filtrow').style.display='none';document.getElementById('pgrid').style.display='none';document.getElementById('grid-empty').style.display='flex';}
     await renderCalsAll();toast('Eliminado','twrn');}catch{toast('Error de conexión','terr');}
@@ -1551,11 +1529,11 @@ async function savePost(){
   try{
     const post={hour:document.getElementById('p-h').value||'10:00',angle:document.getElementById('p-a').value.trim()||'POST',type:selTipoV,hook,sub_title:document.getElementById('p-sub').value.trim(),body:document.getElementById('p-body').value.trim(),cta:document.getElementById('p-cta').value.trim(),visual:document.getElementById('p-vis').value.trim()};
     const method=editPId?'PUT':'POST',endpoint=editPId?'/api/calendars/'+activeCal+'/posts/'+editPId:'/api/calendars/'+activeCal+'/posts';
-    const r=await fetch(endpoint,{method,headers:authHeaders(),body:JSON.stringify(post)});
+    const r=await fetch(endpoint,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(post)});
     if(!r.ok){toast('Error al guardar','terr');return;}
     _invalidate('cals');closeM('m-post');await openCal(activeCal);toast(editPId?'Actualizado ✓':'Post creado ✓','tok');
   }catch{toast('Error de conexión','terr');}}
-function delPost(id){showConfirm('Eliminar post','Este post se eliminará del calendario.','Eliminar',async()=>{try{const r=await fetch('/api/calendars/'+activeCal+'/posts/'+id,{method:'DELETE',headers:authHeaders()});if(!r.ok){toast('Error al eliminar','terr');return;}_invalidate('cals');await openCal(activeCal);toast('Eliminado','twrn');}catch{toast('Error de conexión','terr');}});}
+function delPost(id){showConfirm('Eliminar post','Este post se eliminará del calendario.','Eliminar',async()=>{try{const r=await fetch('/api/calendars/'+activeCal+'/posts/'+id,{method:'DELETE',headers:{'Content-Type':'application/json'}});if(!r.ok){toast('Error al eliminar','terr');return;}_invalidate('cals');await openCal(activeCal);toast('Eliminado','twrn');}catch{toast('Error de conexión','terr');}});}
 
 /* ══ CLIENTS ══ */
 async function renderClients(){
@@ -1587,8 +1565,8 @@ async function openEditClient(id){
 async function saveClient(){
   const name=document.getElementById('cl-name').value.trim();if(!name){toast('El nombre es obligatorio','terr');return;}
   const nc={name,industry:document.getElementById('cl-ind').value.trim(),description:document.getElementById('cl-desc').value.trim(),audience:document.getElementById('cl-aud').value.trim(),tone:document.getElementById('cl-tone').value,color:document.getElementById('cl-c1').value,color2:document.getElementById('cl-c2').value,style:document.getElementById('cl-style').value.trim()};
-  try{const method=editClId?'PUT':'POST',endpoint=editClId?'/api/clients/'+editClId:'/api/clients';const r=await fetch(endpoint,{method,headers:authHeaders(),body:JSON.stringify(nc)});if(!r.ok){toast('Error al guardar','terr');return;}_invalidate('clients');closeM('m-client');await renderClients();if(editClId&&activeClient===editClId){editClId=null;await renderClientDetail(activeClient);}toast(editClId?'Cliente actualizado ✓':'Cliente creado ✓','tok');}catch{toast('Error de conexión','terr');}}
-function delClient(id){showConfirm('Eliminar cliente','Este cliente y su información se eliminarán.','Eliminar',async()=>{try{const r=await fetch('/api/clients/'+id,{method:'DELETE',headers:authHeaders()});if(!r.ok){toast('Error al eliminar','terr');return;}_invalidate('clients');await renderClients();toast('Eliminado','twrn');}catch{toast('Error de conexión','terr');}});}
+  try{const method=editClId?'PUT':'POST',endpoint=editClId?'/api/clients/'+editClId:'/api/clients';const r=await fetch(endpoint,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(nc)});if(!r.ok){toast('Error al guardar','terr');return;}_invalidate('clients');closeM('m-client');await renderClients();if(editClId&&activeClient===editClId){editClId=null;await renderClientDetail(activeClient);}toast(editClId?'Cliente actualizado ✓':'Cliente creado ✓','tok');}catch{toast('Error de conexión','terr');}}
+function delClient(id){showConfirm('Eliminar cliente','Este cliente y su información se eliminarán.','Eliminar',async()=>{try{const r=await fetch('/api/clients/'+id,{method:'DELETE',headers:{'Content-Type':'application/json'}});if(!r.ok){toast('Error al eliminar','terr');return;}_invalidate('clients');await renderClients();toast('Eliminado','twrn');}catch{toast('Error de conexión','terr');}});}
 function openClientDetail(id){
   activeClient=id;renderClientDetail(id);
   document.querySelectorAll('.nt').forEach(b=>b.classList.remove('act'));
@@ -2153,7 +2131,7 @@ async function saveCalWithAI(){
   // Create the calendar first via API
   const newCalId = 'cal_'+Date.now();
   const nc = {id:newCalId, name, description:document.getElementById('cal-ds').value.trim(), client_id:client_id||null};
-  try{const r=await fetch('/api/calendars',{method:'POST',headers:authHeaders(),body:JSON.stringify(nc)});if(!r.ok){toast('Error al crear calendario','terr');return;}_invalidate('cals');}catch{toast('Error de conexión','terr');return;}
+  try{const r=await fetch('/api/calendars',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(nc)});if(!r.ok){toast('Error al crear calendario','terr');return;}_invalidate('cals');}catch{toast('Error de conexión','terr');return;}
   activeCal = newCalId;
 
   // Show progress
@@ -2254,7 +2232,7 @@ Responde SOLO con el JSON. Sin markdown ni backticks.`;
         _prompt: ''
       }));
       // Save posts via API bulk endpoint
-      try{const r=await fetch('/api/calendars/'+newCalId+'/posts/bulk',{method:'PUT',headers:authHeaders(),body:JSON.stringify({posts:newPosts.map(p=>({hour:p.h,angle:p.a,type:p.t,hook:p.hook,sub_title:p.sub,body:p.body,cta:p.cta,visual:p.v}))})});if(r.ok){totalGenerated+=newPosts.length;logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> ${esc(angle.key)} — ${newPosts.length} posts creados<br>`;}else{logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> ${esc(angle.key)} — error al guardar<br>`;}}catch(e){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${esc(angle.key)} — ${esc(e.message.slice(0,30))}<br>`;}
+      try{const r=await fetch('/api/calendars/'+newCalId+'/posts/bulk',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({posts:newPosts.map(p=>({hour:p.h,angle:p.a,type:p.t,hook:p.hook,sub_title:p.sub,body:p.body,cta:p.cta,visual:p.v}))})});if(r.ok){totalGenerated+=newPosts.length;logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> ${esc(angle.key)} — ${newPosts.length} posts creados<br>`;}else{logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> ${esc(angle.key)} — error al guardar<br>`;}}catch(e){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${esc(angle.key)} — ${esc(e.message.slice(0,30))}<br>`;}
     }catch(e){
       logEl.innerHTML += `<span style="color:var(--er)">✕</span> ${esc(angle.key)} — error: ${esc(e.message.slice(0,50))}<br>`;
     }
@@ -2335,9 +2313,8 @@ dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if
 
 /* ══ INIT ══ */
 async function init(){
-  document.getElementById('lscr').style.display='none';
   document.getElementById('app').style.display='flex';
-  document.getElementById('user-nm').textContent='Usuario';
+  document.getElementById('user-nm').textContent='RStudio';
   renderFmtPicker();
   await renderCalBar();
   const cals=await getCals();
