@@ -1,0 +1,214 @@
+================================================================================
+RSTUDIO DEBUG - START HERE
+================================================================================
+
+You reported 4 issues:
+  1. Algo pegado en esquina superior izquierda (Stuck in corner)
+  2. No ve calendarios/cursos (Can't see calendars)
+  3. No puede usar herramienta (Can't use tool)
+  4. App parece estar dentro de un usuario (App feels trapped)
+
+I've analyzed the complete codebase and created debug tools.
+
+================================================================================
+QUICK START (3 STEPS):
+================================================================================
+
+STEP 1: Open the test file in your browser
+  ├─ File menu → Open → test-debug.html
+  └─ OR copy/paste: file:///Users/nicolasag/Desktop/RStudio/test-debug.html
+
+STEP 2: Read the results (green = good, red = problem)
+  ├─ Look for ✓ (passed tests) - these are working
+  ├─ Look for ✗ (failed tests) - these need fixing
+  └─ Look for ⚠ (warnings) - these may cause issues
+
+STEP 3: Check what failed
+  ├─ If API tests fail (red) → API server not running
+  ├─ If function tests fail (red) → JavaScript problem in init()
+  ├─ If DOM tests fail (red) → HTML elements missing
+  └─ Read the ANALYSIS_SUMMARY.txt or DEBUG_GUIDE.md for details
+
+================================================================================
+WHAT EACH FILE DOES:
+================================================================================
+
+test-debug.html
+  → Runs 50+ automated tests
+  → Shows visual dashboard with pass/fail results
+  → Tests: init(), DOM elements, API endpoints, functions
+  → Take this file first!
+
+DEBUG_GUIDE.md
+  → Explains what's broken in simple terms
+  → Shows code locations with line numbers
+  → Explains the init() flow and dependencies
+  → Has console commands to debug
+
+ANALYSIS_SUMMARY.txt
+  → Complete technical analysis
+  → Root cause scenarios
+  → Key code locations
+  → Debugging procedures
+
+================================================================================
+MOST LIKELY CULPRIT:
+================================================================================
+
+Based on code analysis, the issue is probably:
+
+  /api/calendars endpoint is not responding
+    ↓
+  getCals() returns empty array or fails
+    ↓
+  renderCalBar() renders empty (no calendar tabs)
+    ↓
+  activeCal stays null
+    ↓
+  No calendar opens, no posts show
+    ↓
+  Tool can't work without active calendar
+    ↓
+  App looks empty/broken
+
+The test file will confirm this.
+
+================================================================================
+VERIFICATION CHECKLIST:
+================================================================================
+
+After you run test-debug.html, check these:
+
+  [ ] API Tests section - all green?
+      → If red: API server not responding
+      → Check: Is /api/calendars endpoint running?
+
+  [ ] Function Tests section - all green?
+      → If red: JavaScript error in init()
+      → Check: Browser console (F12) for error
+
+  [ ] DOM Elements section - all green?
+      → If red: HTML elements missing or hidden
+      → Check: Element visibility/display properties
+
+  [ ] Initialization Tests section - all green?
+      → If red: init() function failed
+      → Check: Browser console for details
+
+  [ ] Visual Rendering section - all green?
+      → If red: UI not displaying correctly
+      → Check: Overflow/visibility CSS issues
+
+================================================================================
+BROWSER CONSOLE TIPS:
+================================================================================
+
+Open browser: F12 or Cmd+Option+I
+
+Copy/paste these to debug:
+
+// See what init() returns
+await window.init()
+
+// Check if calendars loaded
+window.activeCal
+
+// Get all calendars
+await window.getCals()
+
+// Check if app is visible
+document.getElementById('app').style.display
+
+// See any JavaScript errors
+// (check Console tab for red messages)
+
+================================================================================
+IF YOU NEED HELP INTERPRETING RESULTS:
+================================================================================
+
+Red ✗ test?
+  1. Read the test name - it says what's wrong
+  2. Look at ANALYSIS_SUMMARY.txt for that section
+  3. Check the line number given in DEBUG_GUIDE.md
+  4. Open src/index.html and go to that line
+
+Still stuck?
+  1. Share the test results with me
+  2. Include browser console errors (F12)
+  3. Include which API tests failed (if any)
+  4. Include the exact error messages shown
+
+================================================================================
+EXPECTED RESULTS FOR WORKING APP:
+================================================================================
+
+If the app is working correctly, you should see:
+
+Initialization Tests:
+  ✓ App container (#app) found
+  ✓ User name element (#user-nm) found
+  ✓ Page fully loaded
+  ✓ init() function exists
+  ✓ init() executed successfully
+
+DOM Element Checks:
+  ✓ All 14 elements found and visible
+
+API Endpoint Tests:
+  ✓ GET /api/clients: Status 200
+  ✓ GET /api/calendars: Status 200
+  ✓ GET /api/refs: Status 200
+
+Function Execution Tests:
+  ✓ renderFmtPicker() defined
+  ✓ renderFmtPicker() executed, rendered X format buttons
+  ✓ renderCalBar() executed, rendered X calendar tabs
+  ✓ getCals() returned array with X calendars
+
+Visual Rendering Tests:
+  ✓ App container is visible
+
+State & Cache Tests:
+  ✓ All global variables initialized
+
+If you see mostly green with some yellow, the app is probably working.
+If you see red X marks, that's what's broken - fix those first.
+
+================================================================================
+NEXT ACTIONS:
+================================================================================
+
+1. RIGHT NOW:
+   → Open test-debug.html in browser
+   → Screenshot or note what's red
+
+2. AFTER TEST RESULTS:
+   → If API failed → check API server
+   → If JavaScript failed → check browser console
+   → If DOM failed → check HTML structure
+   → Read ANALYSIS_SUMMARY.txt for your issue
+
+3. THEN:
+   → Fix the broken component
+   → Re-run test-debug.html
+   → Verify it's green now
+
+4. FINALLY:
+   → Go back to src/index.html
+   → App should now work normally
+
+================================================================================
+
+Questions? See:
+  - DEBUG_GUIDE.md (explanations)
+  - ANALYSIS_SUMMARY.txt (technical details)
+
+Files created:
+  ✓ test-debug.html (615 lines) - The tester
+  ✓ DEBUG_GUIDE.md - User guide
+  ✓ ANALYSIS_SUMMARY.txt - Technical analysis
+  ✓ START_HERE.txt (this file)
+
+Ready? Open test-debug.html now!
+
+================================================================================

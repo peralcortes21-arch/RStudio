@@ -569,12 +569,12 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
     <div class="fg" id="angle-fg"><span class="fglb">ÁNGULO</span></div>
   </div>
   <div class="gsec">
-    <div id="grid-empty" class="empty">
+    <div id="grid-empty" class="empty" style="display:none">
       <div class="eico">📅</div><div class="ettl">Sin calendario activo</div>
       <div class="esub">Selecciona o crea un calendario. Los prompts se generan automáticamente.</div>
       <button class="ecta" onclick="openNewCal()">+ Crear calendario</button>
     </div>
-    <div id="pgrid" class="pgrid" style="display:none"></div>
+    <div id="pgrid" class="pgrid" style="display:flex"></div>
     <div class="no-res" id="no-res" style="display:none">Sin posts con este filtro.</div>
   </div>
   <div class="botbar">
@@ -2314,7 +2314,15 @@ async function init(){
   renderFmtPicker();
   await renderCalBar();
   const cals=await getCals();
-  if(cals.length>0){activeCal=cals[0].id;await openCal(activeCal);}
+  if(cals.length>0){
+    activeCal=cals[0].id;
+    await openCal(activeCal);
+  }else{
+    document.getElementById('grid-empty').style.display='flex';
+    document.getElementById('pgrid').style.display='none';
+    document.getElementById('chdr').style.display='none';
+    document.getElementById('filtrow').style.display='none';
+  }
 }
 window.addEventListener('load',init);
 </script>
