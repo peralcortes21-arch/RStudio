@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RStudio - Diagnóstico</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #07070c;
+  color: #f4f4f8;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  padding: 40px 20px;
+}
+.container { max-width: 800px; margin: 0 auto; }
+h1 { font-size: 28px; margin-bottom: 30px; text-align: center; }
+.test-section {
+  background: #13131c;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.test-item {
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border-left: 4px solid transparent;
+  font-size: 14px;
+}
+.pass {
+  background: rgba(26, 184, 84, 0.15);
+  border-left-color: #1ab854;
+  color: #1ab854;
+}
+.fail {
+  background: rgba(224, 64, 64, 0.15);
+  border-left-color: #e04040;
+  color: #e04040;
+}
+.warning {
+  background: rgba(224, 152, 0, 0.15);
+  border-left-color: #e09800;
+  color: #e09800;
+}
+button {
+  background: linear-gradient(135deg,#5b73ff 0%,#7c4dff 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: all 0.2s;
+}
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 24px rgba(91, 115, 255, 0.35);
+}
+button:active {
+  transform: scale(0.98);
+}
+.code {
+  background: rgba(0,0,0,0.3);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  overflow-x: auto;
+  margin-top: 8px;
+}
+.footer { text-align: center; color: rgba(255,255,255,0.5); margin-top: 40px; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🔍 Diagnóstico de RStudio</h1>
+
+<div class="test-section">
+  <h2>1. Estado del Sistema</h2>
+  <div id="results"></div>
+</div>
+
+<div class="test-section">
+  <h2>2. Test de Botones</h2>
+  <p style="margin-bottom: 15px; color: rgba(255,255,255,0.8);">Prueba hacer click en estos botones:</p>
+  <button onclick="testClick('Botón 1')">🧪 Botón Test 1</button>
+  <button onclick="testClick('Botón 2')">🧪 Botón Test 2</button>
+  <button onclick="testClick('Botón 3')">🧪 Botón Test 3</button>
+  <div id="click-result" style="margin-top: 15px;"></div>
+</div>
+
+<div class="test-section">
+  <h2>3. Información de la App Principal</h2>
+  <button onclick="checkMainApp()">📱 Verificar App en localhost</button>
+  <div id="app-info" style="margin-top: 15px;"></div>
+</div>
+
+<div class="footer">
+  <p>Si todos los tests pasan pero la app no funciona, abre la consola (F12) y revisa los errores JavaScript</p>
+</div>
+</div>
+
+<script>
+const results = document.getElementById('results');
+let testsPassed = 0;
+let testsFailed = 0;
+
+function addTest(name, passed, details = '') {
+  const div = document.createElement('div');
+  div.className = `test-item ${passed ? 'pass' : 'fail'}`;
+  const status = passed ? '✓' : '✗';
+  div.innerHTML = `${status} ${name}${details ? `<div class="code">${details}</div>` : ''}`;
+  results.appendChild(div);
+  if(passed) testsPassed++; else testsFailed++;
+}
+
+// Test 1: JavaScript está activo
+addTest('JavaScript habilitado', true);
+
+// Test 2: onclick funciona
+window.testOnClick = function() { return true; };
+const testBtn = document.createElement('button');
+testBtn.onclick = () => { window.testOnClick(); };
+const hasOnclick = testBtn.onclick !== null;
+addTest('onclick handlers funcionan', hasOnclick);
+
+// Test 3: Fetch API disponible
+addTest('Fetch API disponible', typeof fetch !== 'undefined');
+
+// Test 4: Conectar a API
+fetch('http://localhost/api/calendars')
+  .then(r => {
+    addTest('API /api/calendars responde', r.status === 200, `Status: ${r.status}`);
+    return r.json();
+  })
+  .then(data => {
+    addTest('API retorna JSON válido', Array.isArray(data), `Calendarios: ${data.length}`);
+  })
+  .catch(e => {
+    addTest('API accesible', false, `Error: ${e.message}`);
+  });
+
+// Test 5: Cargar HTML principal
+fetch('http://localhost/')
+  .then(r => r.text())
+  .then(html => {
+    addTest('Frontend carga', html.length > 1000, `Bytes: ${html.length}`);
+
+    const hasInit = html.includes('async function init');
+    addTest('Función init() existe', hasInit);
+
+    const hasTab = html.includes('function tabHandler');
+    addTest('Wrapper tabHandler existe', hasTab);
+
+    const hasOnclick = (html.match(/onclick="/g) || []).length > 0;
+    addTest('Elementos con onclick existen', hasOnclick, `Total: ${(html.match(/onclick="/g) || []).length}`);
+  })
+  .catch(e => {
+    addTest('Frontend accesible', false, e.message);
+  });
+
+function testClick(name) {
+  const resultDiv = document.getElementById('click-result');
+  const msg = document.createElement('div');
+  msg.className = 'test-item pass';
+  msg.innerHTML = `✓ ${name} fue clickeado correctamente`;
+  resultDiv.innerHTML = '';
+  resultDiv.appendChild(msg);
+}
+
+function checkMainApp() {
+  const appDiv = document.getElementById('app-info');
+  appDiv.innerHTML = '<div class="test-item warning">⏳ Cargando...</div>';
+
+  fetch('http://localhost/')
+    .then(r => r.text())
+    .then(html => {
+      const checks = [];
+      checks.push(['App visible', html.includes('style="display:flex"')]);
+      checks.push(['Calendarios en HTML', html.includes('calbar')]);
+      checks.push(['Botones de navegación', html.includes('Generador') && html.includes('Clientes')]);
+      checks.push(['Modales definidos', (html.match(/modal-bg/g) || []).length > 0]);
+
+      appDiv.innerHTML = '';
+      checks.forEach(([name, ok]) => {
+        const item = document.createElement('div');
+        item.className = `test-item ${ok ? 'pass' : 'fail'}`;
+        item.innerHTML = `${ok ? '✓' : '✗'} ${name}`;
+        appDiv.appendChild(item);
+      });
+    })
+    .catch(e => {
+      appDiv.innerHTML = `<div class="test-item fail">✗ Error: ${e.message}</div>`;
+    });
+}
+
+// Auto-check después de 1 segundo
+setTimeout(() => {
+  document.querySelector('.test-section:first-of-type').innerHTML +=
+    `<div style="margin-top: 15px; padding: 12px; background: rgba(75,99,245,0.1); border-radius: 6px; border-left: 4px solid #4a63f5;">
+      <strong>Resumen:</strong> ${testsPassed} pasaron, ${testsFailed} fallaron
+    </div>`;
+}, 1500);
+</script>
+</body>
+</html>

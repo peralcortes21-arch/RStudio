@@ -2316,19 +2316,25 @@ function openAddPostHandler(){openAddPost();}
 
 /* ══ INIT ══ */
 async function init(){
-  document.getElementById('app').style.display='flex';
-  document.getElementById('user-nm').textContent='RStudio';
-  renderFmtPicker();
-  await renderCalBar();
-  const cals=await getCals();
-  if(cals.length>0){
-    activeCal=cals[0].id;
-    await openCal(activeCal);
-  }else{
+  try{
+    document.getElementById('app').style.display='flex';
+    document.getElementById('user-nm').textContent='RStudio';
+    renderFmtPicker();
+    await renderCalBar();
+    const cals=await getCals();
+    if(cals.length>0){
+      activeCal=cals[0].id;
+      await openCal(activeCal);
+    }else{
+      document.getElementById('grid-empty').style.display='flex';
+      document.getElementById('pgrid').style.display='none';
+      document.getElementById('chdr').style.display='none';
+      document.getElementById('filtrow').style.display='none';
+    }
+  }catch(e){
+    console.error('Init error:',e);
     document.getElementById('grid-empty').style.display='flex';
     document.getElementById('pgrid').style.display='none';
-    document.getElementById('chdr').style.display='none';
-    document.getElementById('filtrow').style.display='none';
   }
 }
 window.addEventListener('load',init);
