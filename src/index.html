@@ -469,6 +469,8 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 .lbtn{width:100%;background:var(--grad-accent);color:#fff;border:none;border-radius:var(--r-sm);padding:10px 12px;font-size:11px;font-weight:700;font-family:var(--ff-display);cursor:none;transition:all var(--dur-2);box-shadow:var(--el-2),0 0 0 1px rgba(255,255,255,.08) inset}
 .lbtn:hover{box-shadow:var(--el-3),var(--el-glow);transform:translateY(-1px)}
 .lbtn:active{transform:translateY(0);box-shadow:var(--el-1)}
+.lbtn-demo{width:100%;background:rgba(91,115,255,.15);color:var(--ac-400);border:1px solid var(--bd-ac);border-radius:var(--r-sm);padding:10px 12px;font-size:11px;font-weight:700;font-family:var(--ff-display);cursor:none;transition:all var(--dur-2);margin-top:8px}
+.lbtn-demo:hover{background:rgba(91,115,255,.25);box-shadow:0 0 0 3px var(--ac-glow)}
 .user-pill{display:flex;align-items:center;gap:8px;margin-left:auto;padding:6px 12px;border-radius:var(--r-pill);background:rgba(255,255,255,.03);border:1px solid var(--bd-1);font-size:10px;color:var(--tx-1);font-weight:600}
 .user-pill button{background:none;border:none;color:var(--tx-3);cursor:none;font-size:12px;padding:2px;transition:color var(--dur-2)}
 .user-pill button:hover{color:var(--tx-1)}
@@ -496,6 +498,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
       <div class="lfield"><input id="l-pw" type="password" placeholder="Contraseña" autocomplete="current-password" required></div>
       <div id="l-err" class="l-err"></div>
       <button type="submit" class="lbtn">Entrar</button>
+      <button type="button" class="lbtn-demo" onclick="demoLogin()">Demo: Nicolas</button>
     </form>
   </div>
 </div>
@@ -1061,6 +1064,7 @@ function getToken(){return localStorage.getItem(JWT_KEY)||'';}
 function authHeaders(){return({'Content-Type':'application/json','Authorization':'Bearer '+getToken()});}
 async function checkSess(){const token=getToken();if(!token)return false;try{const r=await fetch('/api/auth/me',{headers:authHeaders()});if(!r.ok){localStorage.removeItem(JWT_KEY);return false;}const{user}=await r.json();await showApp(user);return true;}catch{return false;}}
 async function doLogin(e){e.preventDefault();console.log('🔐 Login attempt...');const em=document.getElementById('l-em').value.trim().toLowerCase(),pw=document.getElementById('l-pw').value;console.log('Email:',em);try{const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,password:pw})});console.log('Response status:',r.status);if(!r.ok){document.getElementById('l-err').textContent='Credenciales incorrectas';return;}const{token,user}=await r.json();console.log('✓ Login success, token:',token.slice(0,30));localStorage.setItem(JWT_KEY,token);await showApp(user);}catch(err){console.error('❌ Error:',err);document.getElementById('l-err').textContent='Error: '+err.message;}}
+async function demoLogin(){console.log('🔐 Demo login...');try{const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'nicolas@cliender.com',password:'Master123'})});if(!r.ok){document.getElementById('l-err').textContent='Error en demo login';return;}const{token,user}=await r.json();console.log('✓ Demo login success');localStorage.setItem(JWT_KEY,token);await showApp(user);}catch(err){console.error('❌ Demo login error:',err);}}
 async function showApp(s){console.log('📱 showApp called with user:',s.name);try{document.getElementById('lscr').style.display='none';document.getElementById('app').style.display='flex';document.getElementById('user-nm').textContent=s.name;renderFmtPicker();console.log('✓ renderFmtPicker done');await renderCalBar();console.log('✓ renderCalBar done');}catch(err){console.error('❌ showApp error:',err);}}
 function logout(){localStorage.removeItem(JWT_KEY);location.reload();}
 
