@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Debug - RStudio Login</title>
+  <style>
+    body { font-family: monospace; background: #0a0a0f; color: #fff; padding: 20px; }
+    .log { background: #1a1a26; padding: 10px; margin: 10px 0; border-radius: 6px; border-left: 3px solid #4a63f5; }
+    .success { border-left-color: #10b981; }
+    .error { border-left-color: #ef4444; }
+    button { background: #4a63f5; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; margin: 10px 0; }
+    button:hover { background: #3a4fd9; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Debug - RStudio Login</h1>
+
+  <h2>Paso 1: Verificar que la API funciona</h2>
+  <button onclick="testAPI()">Test API Login</button>
+
+  <h2>Paso 2: Verificar localStorage</h2>
+  <button onclick="testLocalStorage()">Test localStorage</button>
+
+  <h2>Paso 3: Simular doLogin()</button>
+  <button onclick="testLoginFunction()">Simular doLogin()</button>
+
+  <h2>Logs:</h2>
+  <div id="logs"></div>
+
+  <script>
+    const logsEl = document.getElementById('logs');
+
+    function log(msg, success = true) {
+      const div = document.createElement('div');
+      div.className = 'log ' + (success ? 'success' : 'error');
+      div.textContent = msg;
+      logsEl.appendChild(div);
+    }
+
+    async function testAPI() {
+      try {
+        log('🌐 Conectando a /api/auth/login...');
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: 'nicolas@cliender.com', password: 'Master123' })
+        });
+
+        if (!res.ok) {
+          log(`❌ Error HTTP ${res.status}`, false);
+          return;
+        }
+
+        const data = await res.json();
+        log(`✅ Login exitoso: ${data.user.name}`);
+        log(`Token: ${data.token.slice(0, 50)}...`);
+      } catch (err) {
+        log(`❌ Error: ${err.message}`, false);
+      }
+    }
+
+    function testLocalStorage() {
+      try {
+        localStorage.setItem('test_key', 'test_value');
+        const val = localStorage.getItem('test_key');
+        if (val === 'test_value') {
+          log('✅ localStorage funciona');
+          localStorage.removeItem('test_key');
+        } else {
+          log('❌ localStorage no retorna valor correcto', false);
+        }
+      } catch (err) {
+        log(`❌ localStorage error: ${err.message}`, false);
+      }
+    }
+
+    async function testLoginFunction() {
+      try {
+        log('🔐 Simulando doLogin()...');
+
+        // Simular el formulario
+        const em = 'nicolas@cliender.com';
+        const pw = 'Master123';
+
+        log(`Email: ${em}`);
+        log(`Password: ${pw}`);
+
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: em, password: pw })
+        });
+
+        log(`Respuesta HTTP: ${res.status}`);
+
+        if (!res.ok) {
+          log('❌ Credenciales incorrectas', false);
+          return;
+        }
+
+        const { token, user } = await res.json();
+        log(`✅ Token recibido: ${token.slice(0, 30)}...`);
+        log(`✅ Usuario: ${user.name}`);
+
+        // Guardar token
+        localStorage.setItem('cliender_jwt', token);
+        log('✅ Token guardado en localStorage');
+
+        // Verificar que el token se puede usar
+        const meRes = await fetch('/api/auth/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (meRes.ok) {
+          log('✅ Token válido (verificado con /api/auth/me)');
+        } else {
+          log('❌ Token no válido', false);
+        }
+
+      } catch (err) {
+        log(`❌ Error en testLoginFunction: ${err.message}`, false);
+      }
+    }
+
+    // Auto-run on load
+    window.addEventListener('load', () => {
+      log('✅ Página de debug cargada');
+      log('Haz click en los botones para testear cada parte');
+    });
+  </script>
+</body>
+</html>
