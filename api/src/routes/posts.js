@@ -1,11 +1,11 @@
 const express = require('express');
 const pool = require('../db');
-const { verifyJWT } = require('../middleware/auth');
+const { optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // GET all posts in calendar
-router.get('/:calId/posts', verifyJWT, async (req, res) => {
+router.get('/:calId/posts', optionalAuth, async (req, res) => {
   try {
     const cal = await pool.query('SELECT id FROM calendars WHERE id = $1 AND user_id = $2', [req.params.calId, req.user.userId]);
     if (cal.rows.length === 0) return res.status(404).json({ error: 'Calendar not found' });
@@ -19,7 +19,7 @@ router.get('/:calId/posts', verifyJWT, async (req, res) => {
 });
 
 // GET single post
-router.get('/:calId/posts/:postId', verifyJWT, async (req, res) => {
+router.get('/:calId/posts/:postId', optionalAuth, async (req, res) => {
   try {
     const cal = await pool.query('SELECT id FROM calendars WHERE id = $1 AND user_id = $2', [req.params.calId, req.user.userId]);
     if (cal.rows.length === 0) return res.status(404).json({ error: 'Calendar not found' });
@@ -34,7 +34,7 @@ router.get('/:calId/posts/:postId', verifyJWT, async (req, res) => {
 });
 
 // POST new post
-router.post('/:calId/posts', verifyJWT, async (req, res) => {
+router.post('/:calId/posts', optionalAuth, async (req, res) => {
   const { id, position, hour, angle, type, hook, sub_title, body, cta, visual, prompt, img_src } = req.body;
   if (!hook) return res.status(400).json({ error: 'Missing hook' });
 
@@ -57,7 +57,7 @@ router.post('/:calId/posts', verifyJWT, async (req, res) => {
 });
 
 // PUT update post
-router.put('/:calId/posts/:postId', verifyJWT, async (req, res) => {
+router.put('/:calId/posts/:postId', optionalAuth, async (req, res) => {
   const { hour, angle, type, hook, sub_title, body, cta, visual, prompt, img_src } = req.body;
   try {
     const cal = await pool.query('SELECT id FROM calendars WHERE id = $1 AND user_id = $2', [req.params.calId, req.user.userId]);
@@ -76,7 +76,7 @@ router.put('/:calId/posts/:postId', verifyJWT, async (req, res) => {
 });
 
 // DELETE post
-router.delete('/:calId/posts/:postId', verifyJWT, async (req, res) => {
+router.delete('/:calId/posts/:postId', optionalAuth, async (req, res) => {
   try {
     const cal = await pool.query('SELECT id FROM calendars WHERE id = $1 AND user_id = $2', [req.params.calId, req.user.userId]);
     if (cal.rows.length === 0) return res.status(404).json({ error: 'Calendar not found' });
@@ -91,7 +91,7 @@ router.delete('/:calId/posts/:postId', verifyJWT, async (req, res) => {
 });
 
 // PUT bulk upsert posts (para saveCalWithAI)
-router.put('/:calId/posts/bulk', verifyJWT, async (req, res) => {
+router.put('/:calId/posts/bulk', optionalAuth, async (req, res) => {
   const { posts } = req.body;
   if (!Array.isArray(posts)) return res.status(400).json({ error: 'Expected posts array' });
 

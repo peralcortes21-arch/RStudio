@@ -1,11 +1,11 @@
 const express = require('express');
 const pool = require('../db');
-const { verifyJWT } = require('../middleware/auth');
+const { optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // GET all calendars for user
-router.get('/', verifyJWT, async (req, res) => {
+router.get('/', optionalAuth, async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT c.*, COUNT(p.id) as post_count FROM calendars c
@@ -23,7 +23,7 @@ router.get('/', verifyJWT, async (req, res) => {
 });
 
 // GET single calendar
-router.get('/:id', verifyJWT, async (req, res) => {
+router.get('/:id', optionalAuth, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM calendars WHERE id = $1 AND user_id = $2', [req.params.id, req.user.userId]);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Calendar not found' });
@@ -35,7 +35,7 @@ router.get('/:id', verifyJWT, async (req, res) => {
 });
 
 // POST new calendar
-router.post('/', verifyJWT, async (req, res) => {
+router.post('/', optionalAuth, async (req, res) => {
   const { id, name, description, clientId } = req.body;
   if (!name) return res.status(400).json({ error: 'Missing name' });
 
@@ -53,7 +53,7 @@ router.post('/', verifyJWT, async (req, res) => {
 });
 
 // PUT update calendar
-router.put('/:id', verifyJWT, async (req, res) => {
+router.put('/:id', optionalAuth, async (req, res) => {
   const { name, description, clientId } = req.body;
   try {
     const result = await pool.query(
@@ -69,7 +69,7 @@ router.put('/:id', verifyJWT, async (req, res) => {
 });
 
 // DELETE calendar (cascade deletes posts)
-router.delete('/:id', verifyJWT, async (req, res) => {
+router.delete('/:id', optionalAuth, async (req, res) => {
   try {
     const result = await pool.query('DELETE FROM calendars WHERE id = $1 AND user_id = $2 RETURNING id', [req.params.id, req.user.userId]);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Calendar not found' });

@@ -1,11 +1,11 @@
 const express = require('express');
 const pool = require('../db');
-const { verifyJWT } = require('../middleware/auth');
+const { optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // GET all clients for user
-router.get('/', verifyJWT, async (req, res) => {
+router.get('/', optionalAuth, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM clients WHERE user_id = $1 ORDER BY created_at DESC', [req.user.userId]);
     res.json(result.rows);
@@ -16,7 +16,7 @@ router.get('/', verifyJWT, async (req, res) => {
 });
 
 // GET single client
-router.get('/:id', verifyJWT, async (req, res) => {
+router.get('/:id', optionalAuth, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM clients WHERE id = $1 AND user_id = $2', [req.params.id, req.user.userId]);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Client not found' });
@@ -28,7 +28,7 @@ router.get('/:id', verifyJWT, async (req, res) => {
 });
 
 // POST new client
-router.post('/', verifyJWT, async (req, res) => {
+router.post('/', optionalAuth, async (req, res) => {
   const { id, name, industry, description, audience, tone, color, color2, style } = req.body;
   if (!name) return res.status(400).json({ error: 'Missing name' });
 
@@ -46,7 +46,7 @@ router.post('/', verifyJWT, async (req, res) => {
 });
 
 // PUT update client
-router.put('/:id', verifyJWT, async (req, res) => {
+router.put('/:id', optionalAuth, async (req, res) => {
   const { name, industry, description, audience, tone, color, color2, style } = req.body;
   try {
     const result = await pool.query(
@@ -62,7 +62,7 @@ router.put('/:id', verifyJWT, async (req, res) => {
 });
 
 // DELETE client
-router.delete('/:id', verifyJWT, async (req, res) => {
+router.delete('/:id', optionalAuth, async (req, res) => {
   try {
     const result = await pool.query('DELETE FROM clients WHERE id = $1 AND user_id = $2 RETURNING id', [req.params.id, req.user.userId]);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Client not found' });
@@ -74,7 +74,7 @@ router.delete('/:id', verifyJWT, async (req, res) => {
 });
 
 // GET client docs
-router.get('/:id/docs', verifyJWT, async (req, res) => {
+router.get('/:id/docs', optionalAuth, async (req, res) => {
   try {
     const client = await pool.query('SELECT id FROM clients WHERE id = $1 AND user_id = $2', [req.params.id, req.user.userId]);
     if (client.rows.length === 0) return res.status(404).json({ error: 'Client not found' });
@@ -88,7 +88,7 @@ router.get('/:id/docs', verifyJWT, async (req, res) => {
 });
 
 // POST new client doc
-router.post('/:id/docs', verifyJWT, async (req, res) => {
+router.post('/:id/docs', optionalAuth, async (req, res) => {
   const { name, base64, mimeType, analysis } = req.body;
   if (!name || !base64) return res.status(400).json({ error: 'Missing fields' });
 
@@ -108,7 +108,7 @@ router.post('/:id/docs', verifyJWT, async (req, res) => {
 });
 
 // DELETE client doc
-router.delete('/:id/docs/:docId', verifyJWT, async (req, res) => {
+router.delete('/:id/docs/:docId', optionalAuth, async (req, res) => {
   try {
     const client = await pool.query('SELECT id FROM clients WHERE id = $1 AND user_id = $2', [req.params.id, req.user.userId]);
     if (client.rows.length === 0) return res.status(404).json({ error: 'Client not found' });

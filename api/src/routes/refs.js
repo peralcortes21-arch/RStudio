@@ -1,11 +1,11 @@
 const express = require('express');
 const pool = require('../db');
-const { verifyJWT } = require('../middleware/auth');
+const { optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // GET all refs for user (sin base64 para performance)
-router.get('/', verifyJWT, async (req, res) => {
+router.get('/', optionalAuth, async (req, res) => {
   try {
     const result = await pool.query(
       'SELECT id, user_id, name, mime_type, analysis, tags, created_at FROM refs WHERE user_id = $1 ORDER BY created_at DESC',
@@ -19,7 +19,7 @@ router.get('/', verifyJWT, async (req, res) => {
 });
 
 // GET single ref (con base64)
-router.get('/:id', verifyJWT, async (req, res) => {
+router.get('/:id', optionalAuth, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM refs WHERE id = $1 AND user_id = $2', [req.params.id, req.user.userId]);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Ref not found' });
@@ -31,7 +31,7 @@ router.get('/:id', verifyJWT, async (req, res) => {
 });
 
 // POST new ref
-router.post('/', verifyJWT, async (req, res) => {
+router.post('/', optionalAuth, async (req, res) => {
   const { id, name, base64, mimeType, analysis, tags } = req.body;
   if (!name || !base64) return res.status(400).json({ error: 'Missing fields' });
 
@@ -49,7 +49,7 @@ router.post('/', verifyJWT, async (req, res) => {
 });
 
 // DELETE ref
-router.delete('/:id', verifyJWT, async (req, res) => {
+router.delete('/:id', optionalAuth, async (req, res) => {
   try {
     const result = await pool.query('DELETE FROM refs WHERE id = $1 AND user_id = $2 RETURNING id', [req.params.id, req.user.userId]);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Ref not found' });
