@@ -110,10 +110,8 @@ body{background:var(--bg-0);color:var(--tx-1);font-family:var(--ff-display);font
 
 /* ─── CURSOR ─── */
 #cur{position:fixed;z-index:9999;pointer-events:none;top:0;left:0;will-change:transform}
-.cd{width:7px;height:7px;background:rgba(255,255,255,.75);border-radius:50%;position:absolute;top:-3.5px;left:-3.5px;transition:transform .1s,background .18s}
-.cr{width:28px;height:28px;border:1px solid var(--bd-1);border-radius:50%;position:absolute;top:-14px;left:-14px;transition:all var(--dur-2) var(--ease-out)}
-body:has(button:hover) .cr{width:40px;height:40px;top:-20px;left:-20px;border-color:var(--bd-2);box-shadow:0 0 16px var(--ac-glow)}
-body:has(button:hover) .cd{background:var(--ac-300);transform:scale(1.3)}
+.cd{width:7px;height:7px;background:rgba(255,255,255,.75);border-radius:50%;position:absolute;top:-3.5px;left:-3.5px}
+.cr{width:28px;height:28px;border:1px solid var(--bd-1);border-radius:50%;position:absolute;top:-14px;left:-14px}
 
 /* Grain atmosphere */
 body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .04 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");mix-blend-mode:overlay;opacity:.5}
@@ -1054,15 +1052,12 @@ function normPosts(ps){return ps.map(normPost);}
 
 let _cache={clients:null,cals:null,refs:null};
 function _invalidate(key){_cache[key]=null;}
-async function getClients(){if(_cache.clients)return _cache.clients;try{const r=await fetch('/api/clients',{headers:{'Content-Type':'application/json'}});_cache.clients=await r.json();return _cache.clients;}catch{return[];}}
-async function getCals(){if(_cache.cals)return _cache.cals;try{const r=await fetch('/api/calendars',{headers:{'Content-Type':'application/json'}});const raw=await r.json();_cache.cals=raw.map(c=>({...normCal(c),desc:c.description,posts:[]}));return _cache.cals;}catch{return[];}}
-async function getRefs(){if(_cache.refs)return _cache.refs;try{const r=await fetch('/api/refs',{headers:{'Content-Type':'application/json'}});_cache.refs=await r.json();return _cache.refs;}catch{return[];}}
+async function getClients(){if(_cache.clients)return _cache.clients;try{const r=await fetch('/api/clients',{headers:{'Content-Type':'application/json'}});if(!r.ok)return[];_cache.clients=await r.json();return _cache.clients;}catch{return[];}}
+async function getCals(){if(_cache.cals)return _cache.cals;try{const r=await fetch('/api/calendars',{headers:{'Content-Type':'application/json'}});if(!r.ok)return[];const raw=await r.json();_cache.cals=raw.map(c=>({...normCal(c),desc:c.description,posts:[]}));return _cache.cals;}catch{return[];}}
+async function getRefs(){if(_cache.refs)return _cache.refs;try{const r=await fetch('/api/refs',{headers:{'Content-Type':'application/json'}});if(!r.ok)return[];_cache.refs=await r.json();return _cache.refs;}catch{return[];}}
 async function getClient(id){return(await getClients()).find(c=>c.id===id);}
-async function getCal(id){const cal=await getCals().then(cs=>cs.find(c=>c.id===id));if(cal&&!cal.posts?.length){try{const r=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});cal.posts=normPosts(await r.json());}catch{}}return cal;}
+async function getCal(id){const cal=await getCals().then(cs=>cs.find(c=>c.id===id));if(cal&&!cal.posts?.length){try{const r=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});if(r.ok)cal.posts=normPosts(await r.json());}catch{}}return cal;}
 async function getPost(pid){const cal=await getCal(activeCal);return cal?.posts?.find(p=>p.id===pid);}
-
-/* Pre-seed KIE key from build-time config (set once, user can override via settings) */
-if(!localStorage.getItem('cliender_kie_key'))localStorage.setItem('cliender_kie_key','74946423891211d63848c8e8b68b2edc');
 
 /* DEFAULT CAL */
 const DC={id:'default_v4',name:'Cliender — SALES & TECH',desc:'Calendario base completo',client_id:null,posts:[
@@ -1102,7 +1097,7 @@ async function tab(p,btn){
   document.getElementById('panel-'+p).classList.add('act');
   if(p==='clientes')await renderClients();
   if(p==='refs'){await renderRefs();updateStudioRefs();}
-  if(p==='cals'){renderStudio();}
+  if(p==='cals'){await renderStudio();}
 }
 
 /* ══ FORMAT + MODEL ══ */
@@ -1165,7 +1160,7 @@ async function openCal(id){
   document.getElementById('chdr').style.display='flex';document.getElementById('filtrow').style.display='flex';
   document.getElementById('cname').textContent=cal.name;
   document.getElementById('cdesctxt').textContent=cal.description||'';
-  try{const pr=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});const posts=await pr.json();document.getElementById('ccnt').textContent=posts.length+' posts';const ct=document.getElementById('ctag');if(cal.client_id){const cl=await getClient(cal.client_id);ct.style.display='block';ct.textContent=cl?'🏢 '+cl.name:'sin cliente';}else ct.style.display='none';renderGrid(posts);renderAngleFilter(posts);}catch{}}
+  try{const pr=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});if(!pr.ok){toast('Error: '+pr.statusText,'terr');return;}const posts=await pr.json();document.getElementById('ccnt').textContent=posts.length+' posts';const ct=document.getElementById('ctag');if(cal.client_id){const cl=await getClient(cal.client_id);ct.style.display='block';ct.textContent=cl?'🏢 '+cl.name:'sin cliente';}else ct.style.display='none';renderGrid(posts);renderAngleFilter(posts);}catch{}}
 }
 function renderAngleFilter(posts){
   const angles=[...new Set(posts.map(p=>p.a))];
@@ -1208,9 +1203,9 @@ function fT(v,b){AT=v;document.querySelectorAll('.frow .fg:first-child .fb').for
 function getFI(){return FORMATS.find(x=>x.key===AF)||FORMATS[0];}
 
 /* ══ BUILD CONTEXT ══ */
-function buildClientCtx(){
-  if(!activeCal)return'';const cal=getCal(activeCal);if(!cal?.client_id)return'';
-  const cl=getClient(cal.client_id);if(!cl)return'';
+async function buildClientCtx(){
+  if(!activeCal)return'';const cal=await getCal(activeCal);if(!cal?.client_id)return'';
+  const cl=await getClient(cal.client_id);if(!cl)return'';
   let ctx=`CLIENTE: ${cl.name}\n`;
   if(cl.industry)ctx+=`Sector: ${cl.industry}\n`;
   if(cl.desc)ctx+=`Descripción: ${cl.desc}\n`;
@@ -1222,9 +1217,9 @@ function buildClientCtx(){
   if(cl.docs?.length){const analyzed=cl.docs.filter(d=>d.analysis);if(analyzed.length){ctx+='\nDOCUMENTOS ANALIZADOS:\n';analyzed.forEach(d=>{ctx+=`- ${d.name}: ${d.analysis.slice(0,120)}\n`;});}}
   return ctx;
 }
-function buildRefCtx(){
+async function buildRefCtx(){
   if(selRefs.size===0)return{text:'',images:[]};
-  const refs=getRefs().filter(r=>selRefs.has(r.id));
+  const refs=(await getRefs()).filter(r=>selRefs.has(r.id));
   const text=refs.map(r=>{let t='Ref visual';if(r.tags?.length)t+=` (${r.tags.join(',')})`;if(r.analysis)t+=`: ${r.analysis}`;return t;}).join('\n');
   const images=refs.filter(r=>r.base64&&r.mimeType).slice(0,2).map(r=>({base64:r.base64,mimeType:r.mimeType}));
   return{text,images};
@@ -1235,16 +1230,17 @@ async function gP(id){
   const p=getPost(id);if(!p)return;
   const btn=document.getElementById('bgp-'+id),pt=document.getElementById('pt-'+id);
   btn.disabled=true;pt.innerHTML='<span class="ganim">⟳ Generando…</span>';dot(id,'sl');
-  const clCtx=buildClientCtx(),refCtx=buildRefCtx();
+  const clCtx=await buildClientCtx(),refCtx=await buildRefCtx();
   const sys=buildSys(clCtx,refCtx.text);
   let uc=buildUC(p);
   if(refCtx.images.length>0){uc=[...refCtx.images.map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:buildUC(p)+'\nInspírate en el estilo de las referencias visuales para el FONDO.'}];}
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:280,system:sys,messages:[{role:'user',content:uc}]})});
+    if(!r.ok){toast('Error: '+r.statusText,'terr');dot(id,'er');btn.disabled=false;return;}
     const dd=await r.json();const txt=dd.content?.[0]?.text?.trim()||fbP(p,clCtx);
     pt.textContent=txt;pt.dataset.prompt=txt;
-    // Save prompt
-    const data=getD();const ci=data.cals.findIndex(c=>c.id===activeCal);if(ci>=0){const pi=data.cals[ci].posts.findIndex(x=>x.id===id);if(pi>=0){data.cals[ci].posts[pi]._prompt=txt;setD(data);}}
+    // Save prompt via API
+    try{await fetch('/api/calendars/'+activeCal+'/posts/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:txt})});}catch{}
   }catch{const fb=fbP(p,clCtx);pt.textContent=fb;pt.dataset.prompt=fb;}
   dot(id,'si');btn.disabled=false;toast('Prompt listo ✓','tok');
 }
@@ -1265,13 +1261,13 @@ function fbP(p,ctx){
 }
 
 /* ══ GENERATE ALL PROMPTS ══ */
-function openGenModal(){
-  const cal=getCal(activeCal);if(!cal)return;
-  const clCtx=buildClientCtx();const refCtx=buildRefCtx();
+async function openGenModal(){
+  const cal=await getCal(activeCal);if(!cal)return;
+  const clCtx=await buildClientCtx();const refCtx=await buildRefCtx();
   const gi=document.getElementById('gen-cl-info'),gt=document.getElementById('gen-cl-txt');
   if(clCtx){gi.style.display='block';gt.textContent=clCtx.slice(0,280)+(clCtx.length>280?'…':'');}else gi.style.display='none';
   const ri=document.getElementById('gen-refs-info'),rii=document.getElementById('gen-refs-imgs');
-  if(selRefs.size>0){ri.style.display='block';rii.innerHTML='';getRefs().filter(r=>selRefs.has(r.id)).forEach(r=>{const img=document.createElement('img');img.src='data:'+r.mimeType+';base64,'+r.base64;img.style.cssText='width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid rgba(255,255,255,.1)';rii.appendChild(img);});}else ri.style.display='none';
+  if(selRefs.size>0){ri.style.display='block';rii.innerHTML='';(await getRefs()).filter(r=>selRefs.has(r.id)).forEach(r=>{const img=document.createElement('img');img.src='data:'+r.mimeType+';base64,'+r.base64;img.style.cssText='width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid rgba(255,255,255,.1)';rii.appendChild(img);});}else ri.style.display='none';
   document.getElementById('gpbox').style.display='none';
   document.getElementById('gen-btns').style.display='flex';
   document.getElementById('gen-done').style.display='none';
@@ -1279,12 +1275,12 @@ function openGenModal(){
   openM('m-gen');
 }
 async function startGenAll(){
-  const cal=getCal(activeCal);if(!cal)return;
+  const cal=await getCal(activeCal);if(!cal)return;
   const posts=cal.posts;
   document.getElementById('gen-btns').style.display='none';
   document.getElementById('gpbox').style.display='block';
   const fillEl=document.getElementById('gpfill'),pctEl=document.getElementById('gp-pct'),lblEl=document.getElementById('gp-lbl'),logEl=document.getElementById('glog');
-  const clCtx=buildClientCtx(),refCtx=buildRefCtx();
+  const clCtx=await buildClientCtx(),refCtx=await buildRefCtx();
   const sys=buildSys(clCtx,refCtx.text);
   for(let i=0;i<posts.length;i++){
     const p=posts[i];const pct=Math.round((i/posts.length)*100);
@@ -1294,10 +1290,11 @@ async function startGenAll(){
     if(refCtx.images.length>0){uc=[...refCtx.images.slice(0,1).map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:buildUC(p)+'\nInspírate en el estilo visual de la referencia.'}];}
     try{
       const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:260,system:sys,messages:[{role:'user',content:uc}]})});
+      if(!r.ok){logEl.innerHTML+='<span style="color:var(--er)">✕</span> '+esc(p.hook.replace(/\n/g,' ').slice(0,38))+' (HTTP '+r.status+')<br>';dot(p.id,'er');continue;}
       const dd=await r.json();const txt=dd.content?.[0]?.text?.trim()||fbP(p,clCtx);
-      const data=getD();const ci=data.cals.findIndex(c=>c.id===activeCal);
-      if(ci>=0){const pi=data.cals[ci].posts.findIndex(x=>x.id===p.id);if(pi>=0){data.cals[ci].posts[pi]._prompt=txt;setD(data);}}
       const ptEl=document.getElementById('pt-'+p.id);if(ptEl){ptEl.textContent=txt;ptEl.dataset.prompt=txt;}
+      // Save prompt via API
+      try{await fetch('/api/calendars/'+activeCal+'/posts/'+p.id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:txt})});}catch{}
       dot(p.id,'si');
       logEl.innerHTML+='<span style="color:var(--ok)">✓</span> '+esc(p.hook.replace(/\n/g,' ').slice(0,42))+'<br>';
     }catch(e){logEl.innerHTML+='<span style="color:var(--er)">✕</span> '+esc(p.hook.replace(/\n/g,' ').slice(0,38))+' (error)<br>';}
@@ -1413,7 +1410,7 @@ function ldImg(src,isUrl){return new Promise((res,rej)=>{const img=new Image();i
 function rRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
 
 /* ══ CALENDAR CRUD ══ */
-function openNewCal(preClientId){
+async function openNewCal(preClientId){
   editCId=null;
   document.getElementById('m-cal-ttl').textContent='Nuevo calendario';
   document.getElementById('cal-nm').value='';document.getElementById('cal-ds').value='';
@@ -1433,19 +1430,19 @@ function openNewCal(preClientId){
     updateAICalSection('');
   };
   sel.appendChild(none);
-  getClients().forEach(cl=>{
+  (await getClients()).forEach(cl=>{
     const opt=document.createElement('div');opt.className='cs-opt'+(cl.id===preClientId?' sel':'');opt.dataset.id=cl.id;
     opt.innerHTML=`<div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,${cl.color||'#3a5c9e'},${cl.color2||'#6a8fc8'});display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">${(cl.name||'?')[0]}</div><div><div class="cs-nm">${esc(cl.name)}</div><div class="cs-in">${esc(cl.industry||'')}</div></div>`;
     opt.onclick=function(){document.querySelectorAll('.cs-opt').forEach(o=>o.classList.remove('sel'));this.classList.add('sel');updateAICalSection(cl.id);};
     sel.appendChild(opt);
   });
   renderAnglesGrid(preClientId);
-  updateAICalSection(preClientId||'');
+  await updateAICalSection(preClientId||'');
   openM('m-cal');
 }
-function openNewCalForClient(){if(activeClient)openNewCal(activeClient);}
-function openEditCal(){
-  const cal=getCal(activeCal);if(!cal)return;editCId=cal.id;
+async function openNewCalForClient(){if(activeClient)await openNewCal(activeClient);}
+async function openEditCal(){
+  const cal=await getCal(activeCal);if(!cal)return;editCId=cal.id;
   document.getElementById('m-cal-ttl').textContent='Editar calendario';
   document.getElementById('cal-nm').value=cal.name;
   document.getElementById('cal-ds').value=cal.desc||'';
@@ -1462,7 +1459,7 @@ function openEditCal(){
   none.innerHTML='<div><div class="cs-nm">Sin cliente</div><div class="cs-in">Calendario independiente</div></div>';
   none.onclick=function(){document.querySelectorAll('.cs-opt').forEach(o=>o.classList.remove('sel'));this.classList.add('sel');};
   sel.appendChild(none);
-  getClients().forEach(cl=>{
+  (await getClients()).forEach(cl=>{
     const opt=document.createElement('div');opt.className='cs-opt'+(cl.id===cal.client_id?' sel':'');opt.dataset.id=cl.id;
     opt.innerHTML=`<div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,${cl.color||'#3a5c9e'},${cl.color2||'#6a8fc8'});display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">${(cl.name||'?')[0]}</div><div><div class="cs-nm">${esc(cl.name)}</div><div class="cs-in">${esc(cl.industry||'')}</div></div>`;
     opt.onclick=function(){document.querySelectorAll('.cs-opt').forEach(o=>o.classList.remove('sel'));this.classList.add('sel');};
@@ -1495,18 +1492,18 @@ function delCal(){
     await renderCalsAll();toast('Eliminado','twrn');}catch{toast('Error de conexión','terr');}
   });
 }
-function openAddPost(){
+async function openAddPost(){
   editPId=null;
   document.getElementById('m-post-ttl').textContent='Nuevo post';
   ['p-h','p-a','p-hook','p-sub','p-body','p-cta','p-vis'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
   document.getElementById('p-h').value='10:00';
   selTipoV=null;document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('sel'));
   // Show AI button only if calendar has a client
-  const cal=getCal(activeCal);const hasClient=!!(cal?.client_id&&getClient(cal.client_id));
+  const cal=await getCal(activeCal);const hasClient=!!(cal?.client_id&&(await getClient(cal.client_id)));
   document.getElementById('btn-autofill-post').style.display=hasClient?'inline-flex':'none';
   openM('m-post');
 }
-function editPost(id){
+async function editPost(id){
   const p=getPost(id);if(!p)return;editPId=id;
   document.getElementById('m-post-ttl').textContent='Editar post';
   document.getElementById('p-h').value=p.h||'10:00';
@@ -1518,7 +1515,7 @@ function editPost(id){
   document.getElementById('p-vis').value=p.v||'';
   selTipoV=p.t||null;
   document.querySelectorAll('.type-opt').forEach(o=>o.classList.toggle('sel',o.dataset.t===p.t));
-  const cal=getCal(activeCal);const hasClient=!!(cal?.client_id&&getClient(cal.client_id));
+  const cal=await getCal(activeCal);const hasClient=!!(cal?.client_id&&(await getClient(cal.client_id)));
   document.getElementById('btn-autofill-post').style.display=hasClient?'inline-flex':'none';
   openM('m-post');
 }
@@ -1577,16 +1574,17 @@ async function renderClientDetail(id){
   const cl=await getClient(id);if(!cl)return;
   document.getElementById('det-cl-nm').textContent=cl.name;
   document.getElementById('cl-info-disp').innerHTML=[['Sector',cl.industry],['Descripción',cl.desc],['Público',cl.audience],['Tono',cl.tone],['Color 1','<span style="width:12px;height:12px;border-radius:50%;background:'+cl.color+';display:inline-block;vertical-align:middle;margin-right:4px"></span>'+cl.color],['Color 2','<span style="width:12px;height:12px;border-radius:50%;background:'+cl.color2+';display:inline-block;vertical-align:middle;margin-right:4px"></span>'+cl.color2],['Estilo',cl.style]].filter(r=>r[1]).map(r=>`<div class="det-row"><span class="dk">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('');
-  renderDocsList(cl);
+  let clDocs=[];try{const dr=await fetch('/api/clients/'+id+'/docs',{headers:{'Content-Type':'application/json'}});if(dr.ok)clDocs=await dr.json();}catch{}
+  renderDocsList(cl,clDocs);
   const cals=(await getCals()).filter(c=>c.client_id===id);
   const cg=document.getElementById('cl-cals-grid'),ce=document.getElementById('cl-cals-empty');
   if(cals.length===0){cg.style.display='none';ce.style.display='block';}
   else{cg.style.display='grid';ce.style.display='none';cg.innerHTML=cals.map(c=>`<div style="background:rgba(4,6,10,.5);border:1px solid var(--bd);border-radius:var(--rs);padding:.7rem;cursor:none;transition:all .15s" onmouseenter="this.style.borderColor='var(--bdh)'" onmouseleave="this.style.borderColor='var(--bd)'" onclick="openCalAndGo('${c.id}')"><div style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px">${esc(c.name)}</div><div style="font-size:8.5px;font-family:var(--m);color:var(--mt)">${(c.posts||[]).length} posts</div></div>`).join('');}
 }
 async function openCalAndGo(id){activeCal=id;await tab('gen',document.querySelector('[data-p=gen]'));await renderCalBar();await openCal(id);}
-function renderDocsList(cl){
+function renderDocsList(cl,docs){
   const list=document.getElementById('docs-list');
-  list.innerHTML=(cl.docs||[]).map((d,i)=>`<div class="di"><span class="di-ico">${d.mimeType?.startsWith('image/')?'🖼':'📄'}</span><div style="flex:1;min-width:0"><div class="di-nm">${esc(d.name)}</div>${d.analysis?'<div class="di-an">'+esc(d.analysis.slice(0,90))+'…</div>':''}</div><span class="di-st ${d.analysis?'dst-ok':'dst-p'}">${d.analysis?'Analizado':'Pendiente'}</span><button class="di-del" onclick="delDoc('${cl.id}',${i})">×</button></div>`).join('');
+  list.innerHTML=(docs||[]).map(d=>`<div class="di"><span class="di-ico">${d.mime_type?.startsWith('image/')||d.mimeType?.startsWith('image/')?'🖼':'📄'}</span><div style="flex:1;min-width:0"><div class="di-nm">${esc(d.name)}</div>${d.analysis?'<div class="di-an">'+esc(d.analysis.slice(0,90))+'…</div>':''}</div><span class="di-st ${d.analysis?'dst-ok':'dst-p'}">${d.analysis?'Analizado':'Pendiente'}</span><button class="di-del" onclick="delDoc('${cl.id}','${d.id}')">×</button></div>`).join('');
 }
 async function handleDocs(e){
   const files=[...e.target.files];if(!files.length||!activeClient)return;
@@ -1599,14 +1597,13 @@ async function handleDocs(e){
       if(mtype.startsWith('image/')){content=[{type:'image',source:{type:'base64',media_type:mtype,data:base64}},{type:'text',text:'Analiza este documento/imagen de marca en 2-3 frases: estilo visual, paleta de colores, tipografía y mood. Solo el análisis.'}];}
       else content='Analiza este documento de cliente. Extrae en 2-3 frases: propuesta de valor, tono de comunicación y estilo visual.';
       const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,messages:[{role:'user',content}]})});
-      const dd=await r.json();doc.analysis=dd.content?.[0]?.text?.trim()||'';
+      if(!r.ok){toast('Error: '+r.statusText,'terr');}else{const dd=await r.json();doc.analysis=dd.content?.[0]?.text?.trim()||'';}
     }catch{}
-    const data=getD();const ci=data.clients.findIndex(c=>c.id===activeClient);
-    if(ci>=0){if(!data.clients[ci].docs)data.clients[ci].docs=[];data.clients[ci].docs.push(doc);setD(data);}
+    try{await fetch('/api/clients/'+activeClient+'/docs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(doc)});}catch{toast('Error al guardar doc','terr');}
   }
-  e.target.value='';renderClientDetail(activeClient);toast('Documentos procesados ✓','tok');
+  e.target.value='';_invalidate('clients');renderClientDetail(activeClient);toast('Documentos procesados ✓','tok');
 }
-function delDoc(client_id,idx){const data=getD();const ci=data.clients.findIndex(c=>c.id===client_id);if(ci<0)return;data.clients[ci].docs.splice(idx,1);setD(data);renderClientDetail(client_id);}
+async function delDoc(client_id,docId){showConfirm('Eliminar documento','Este documento se eliminará.','Eliminar',async()=>{try{const r=await fetch('/api/clients/'+client_id+'/docs/'+docId,{method:'DELETE',headers:{'Content-Type':'application/json'}});if(!r.ok){toast('Error al eliminar','terr');return;}renderClientDetail(client_id);}catch{toast('Error de conexión','terr');}});}
 
 /* ══ REFERENCES ══ */
 async function renderRefs(){
@@ -1631,13 +1628,13 @@ async function handleRefsFiles(files){
     const ref={id:'ref_'+Date.now()+'_'+Math.random().toString(36).slice(2),name:file.name,base64,mimeType:mtype,tags:[],analysis:''};
     try{
       const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:160,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mtype,data:base64}},{type:'text',text:'Describe el estilo visual en 2 frases (paleta, iluminación, mood, estilo fotográfico). Solo la descripción.'}]}]})});
-      const dd=await r.json();ref.analysis=dd.content?.[0]?.text?.trim()||'';
+      if(!r.ok){toast('Error: '+r.statusText,'terr');}else{const dd=await r.json();ref.analysis=dd.content?.[0]?.text?.trim()||'';}
       const tw=['oscuro','claro','minimalista','editorial','cinematográfico','premium','vintage','moderno','abstracto','neon','tech','gradiente'];
       ref.tags=tw.filter(w=>ref.analysis.toLowerCase().includes(w)).slice(0,4);
     }catch{}
-    const data=getD();data.refs.push(ref);setD(data);
+    try{await fetch('/api/refs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:ref.id,name:ref.name,base64:ref.base64,mimeType:ref.mimeType,analysis:ref.analysis,tags:ref.tags})});}catch{toast('Error al guardar referencia','terr');}
   }
-  renderRefs();toast('Referencias añadidas ✓','tok');
+  _invalidate('refs');renderRefs();toast('Referencias añadidas ✓','tok');
 }
 function toggleRef(id){
   if(selRefs.has(id))selRefs.delete(id);else selRefs.add(id);
@@ -1647,7 +1644,7 @@ function toggleRef(id){
 function updateRefBar(){const bar=document.getElementById('ref-bar');bar.style.display=selRefs.size>0?'flex':'none';document.getElementById('rb-cnt').textContent=selRefs.size+' imagen'+(selRefs.size!==1?'es':'');}
 function clearSelRefs(){selRefs.clear();document.querySelectorAll('.rcard').forEach(c=>c.classList.remove('sel'));updateRefBar();document.getElementById('str').textContent=0;document.getElementById('btn-rcnt').textContent=0;}
 function applyRefs(){tab('gen',document.querySelector('[data-p=gen]'));toast(selRefs.size+' referencias activas en generador','tinfo');}
-function delRef(e,id){e.stopPropagation();showConfirm('Eliminar referencia','Esta imagen de referencia se eliminará.','Eliminar',()=>{selRefs.delete(id);const data=getD();data.refs=data.refs.filter(r=>r.id!==id);setD(data);renderRefs();});}
+function delRef(e,id){e.stopPropagation();showConfirm('Eliminar referencia','Esta imagen de referencia se eliminará.','Eliminar',async()=>{try{const r=await fetch('/api/refs/'+id,{method:'DELETE',headers:{'Content-Type':'application/json'}});if(!r.ok){toast('Error al eliminar','terr');return;}}catch{toast('Error de conexión','terr');return;}selRefs.delete(id);_invalidate('refs');renderRefs();});}
 
 /* ══ ALL CALS ══ */
 async function renderCalsAll(){
@@ -1661,7 +1658,7 @@ async function renderCalsAll(){
 <div class="cc-hd"><div class="cc-av" style="background:linear-gradient(135deg,${cl?.color||'#3a5c9e'},${cl?.color2||'#6a8fc8'});font-size:16px">📅</div>
 <div style="flex:1"><div class="cc-nm">${esc(c.name)}</div><div class="cc-in">${cl?'🏢 '+cl.name:'Sin cliente'}</div></div></div>
 ${c.desc?`<div class="cc-desc">${esc(c.desc.slice(0,65))}</div>`:''}
-<div class="cc-bgs"><span class="ccbg cbg-c">${c.posts.length} posts</span>${prompts?`<span class="ccbg cbg-d">${prompts} prompts</span>`:''}</div>
+<div class="cc-bgs"><span class="ccbg cbg-c">${c.post_count||0} posts</span>${prompts?`<span class="ccbg cbg-d">${prompts} prompts</span>`:''}</div>
 </div>`;
   }).join('');
 }
@@ -1677,19 +1674,19 @@ const STUDIO_STYLE_PRESETS = {
   'premium-luxury':'luxury premium, dark gold accents, marble textures, high-end product photography, exclusive atmosphere'
 };
 
-function calSubtab(sub, btn){
+async function calSubtab(sub, btn){
   document.querySelectorAll('#panel-cals .ctab').forEach(b=>b.classList.remove('act'));
   btn.classList.add('act');
   document.getElementById('cal-sub-studio').style.display = sub==='studio'?'flex':'none';
   document.getElementById('cal-sub-list').style.display = sub==='list'?'flex':'none';
   document.getElementById('cal-sub-studio').style.flexDirection = 'column';
-  if(sub==='list') renderCalsAll();
-  if(sub==='studio') renderStudio();
+  if(sub==='list') await renderCalsAll();
+  if(sub==='studio') await renderStudio();
 }
 
-function renderStudio(){
+async function renderStudio(){
   // Client selector
-  const clients = getClients();
+  const clients = await getClients();
   const sel = document.getElementById('studio-client-sel');
   const noClients = document.getElementById('studio-no-clients');
   if(clients.length===0){sel.style.display='none';noClients.style.display='block';}
@@ -1708,21 +1705,21 @@ function renderStudio(){
   updateStudioRefs();
   // Pre-fill prompt if client selected
   if(activeClient){
-    const cl = getClient(activeClient);
+    const cl = await getClient(activeClient);
     if(cl && !document.getElementById('studio-prompt').value){
       prefillStudioPrompt(cl);
     }
   }
 }
 
-function studioSelClient(el){
+async function studioSelClient(el){
   document.querySelectorAll('#studio-client-sel .cs-opt').forEach(o=>{
     o.classList.remove('sel');o.style.borderColor='var(--bd)';o.style.background='transparent';
   });
   el.classList.add('sel');el.style.borderColor='var(--v1)';el.style.background='rgba(58,92,158,.09)';
   const cid = el.dataset.id;
   if(cid){
-    const cl=getClient(cid);
+    const cl=await getClient(cid);
     if(cl) prefillStudioPrompt(cl);
   }
 }
@@ -1802,7 +1799,7 @@ async function launchStudio(){
   // Get selected client
   const selClientEl = document.querySelector('#studio-client-sel .cs-opt.sel');
   const client_id = selClientEl?.dataset?.id||null;
-  const cl = client_id ? getClient(client_id) : null;
+  const cl = client_id ? await getClient(client_id) : null;
 
   // Get image style
   const imgStyle = document.getElementById('studio-img-style').value.trim();
@@ -1818,12 +1815,10 @@ async function launchStudio(){
   const lblEl=document.getElementById('studio-prog-lbl');
   const logEl=document.getElementById('studio-prog-log');
 
-  // Create calendar
-  const data=getD();
+  // Create calendar via API
   const newCalId='cal_studio_'+Date.now();
   studioGenCalId=newCalId;
-  data.cals.push({id:newCalId,name,desc:prompt.slice(0,120),client_id:client_id||null,posts:[]});
-  setD(data);
+  try{const cr=await fetch('/api/calendars',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:newCalId,name,description:prompt.slice(0,120),client_id:client_id||null})});if(!cr.ok){toast('Error al crear calendario','terr');document.getElementById('studio-launch-btn').style.opacity='1';document.getElementById('studio-launch-btn').style.pointerEvents='';return;}_invalidate('cals');}catch{toast('Error de conexión','terr');document.getElementById('studio-launch-btn').style.opacity='1';document.getElementById('studio-launch-btn').style.pointerEvents='';return;}
 
   // Build context
   let clCtx='';
@@ -1877,6 +1872,7 @@ Responde SOLO con el JSON {"posts":[...]} sin markdown.`;
 
     try{
       const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system:sys,messages:[{role:'user',content:uc}]})});
+      if(!r.ok){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${angle.key} — HTTP ${r.status}<br>`;continue;}
       const dd=await r.json();let txt=dd.content?.[0]?.text?.trim()||'';
       txt=txt.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
       const fb=txt.indexOf('{');const lb=txt.lastIndexOf('}');if(fb>=0&&lb>fb)txt=txt.slice(fb,lb+1);
@@ -1887,10 +1883,8 @@ Responde SOLO con el JSON {"posts":[...]} sin markdown.`;
         h:p.hora||'10:00',a:angle.key,t:p.tipo||'Dolor',
         hook:p.hook||'',sub:p.sub||'',body:p.body||'',cta:p.cta||'',v:p.visual||'',_prompt:''
       }));
-      const d2=getD();const ci=d2.cals.findIndex(c=>c.id===newCalId);
-      if(ci>=0){d2.cals[ci].posts.push(...newPosts);setD(d2);}
-      totalPosts+=newPosts.length;
-      logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> ${angle.key} — ${newPosts.length} posts<br>`;
+      try{const sr=await fetch('/api/calendars/'+newCalId+'/posts/bulk',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({posts:newPosts.map(p=>({hour:p.h,angle:p.a,type:p.t,hook:p.hook,sub_title:p.sub,body:p.body,cta:p.cta,visual:p.v}))})});if(sr.ok){totalPosts+=newPosts.length;logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> ${angle.key} — ${newPosts.length} posts<br>`;}else{logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> ${angle.key} — error al guardar<br>`;}}catch(se){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${angle.key} — ${esc(se.message.slice(0,50))}<br>`;}
+      _invalidate('cals');
     }catch(e){
       logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${angle.key} — ${esc(e.message.slice(0,50))}<br>`;
     }
@@ -1905,7 +1899,7 @@ Responde SOLO con el JSON {"posts":[...]} sin markdown.`;
     lblEl.innerHTML='⬡ Fase 2/'+totalSteps+': Generando prompts de imagen...';
     // Switch to gen panel to render cards first
     activeCal=newCalId;renderCalBar();
-    const cal2=getCal(newCalId);
+    const cal2=await getCal(newCalId);
     if(cal2){
       renderGrid(cal2.posts);
       const cards=[...document.querySelectorAll('.card')];
@@ -2091,14 +2085,14 @@ function toggleAngle(i){
   chk.innerHTML = DEFAULT_ANGLES[i].sel ? '<span style="font-size:9px;color:#fff;line-height:1">✓</span>' : '';
 }
 
-function updateAICalSection(client_id){
+async function updateAICalSection(client_id){
   const aiSec = document.getElementById('ai-cal-section');
   const btnAI = document.getElementById('btn-create-ai');
   const brief = document.getElementById('ai-cal-brief');
   const briefTxt = document.getElementById('ai-cal-brief-txt');
 
   if(client_id){
-    const cl = getClient(client_id);
+    const cl = await getClient(client_id);
     if(cl){
       aiSec.style.display = 'block';
       btnAI.style.display = 'inline-flex';
@@ -2209,6 +2203,7 @@ Responde SOLO con el JSON. Sin markdown ni backticks.`;
         method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},
         body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1800,system:sys,messages:[{role:'user',content}]})
       });
+      if(!r.ok){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${esc(angle.key)} — HTTP ${r.status}<br>`;continue;}
       const dd = await r.json();
       let txt = dd.content?.[0]?.text?.trim()||'';
       // Robust JSON extraction
@@ -2283,6 +2278,7 @@ Responde SOLO con JSON válido sin markdown:
 
   try{
     const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:sys,messages:[{role:'user',content}]})});
+    if(!r.ok){toast('Error: '+r.statusText,'terr');return;}
     const dd=await r.json();let txt=dd.content?.[0]?.text?.trim()||'';
     txt=txt.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
     const fb=txt.indexOf('{');const lb=txt.lastIndexOf('}');if(fb>=0&&lb>fb)txt=txt.slice(fb,lb+1);

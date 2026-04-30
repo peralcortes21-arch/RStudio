@@ -2,6 +2,11 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
+if (!process.env.JWT_SECRET) {
+  console.error('ERROR: JWT_SECRET environment variable is required but not set');
+  process.exit(1);
+}
+
 const authRouter = require('./routes/auth');
 const clientsRouter = require('./routes/clients');
 const calendarsRouter = require('./routes/calendars');
