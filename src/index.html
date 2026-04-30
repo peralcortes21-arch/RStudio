@@ -491,10 +491,10 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 <div class="topbar">
   <div class="logo"><img src="./assets/images/logo.jpg" alt="RStudio" class="lm-img"><div><div class="ln">CLIENDER</div><div class="lt">studio</div></div></div>
   <div class="nav">
-    <button class="nt act" data-p="gen" onclick="tab('gen',this)">Generador</button>
-    <button class="nt" data-p="clientes" onclick="tab('clientes',this)">Clientes</button>
-    <button class="nt" data-p="refs" onclick="tab('refs',this)">Referencias</button>
-    <button class="nt" data-p="cals" onclick="tab('cals',this)">Calendarios</button>
+    <button class="nt act" data-p="gen" onclick="tabHandler('gen',this)">Generador</button>
+    <button class="nt" data-p="clientes" onclick="tabHandler('clientes',this)">Clientes</button>
+    <button class="nt" data-p="refs" onclick="tabHandler('refs',this)">Referencias</button>
+    <button class="nt" data-p="cals" onclick="tabHandler('cals',this)">Calendarios</button>
   </div>
   <button style="background:none;border:none;color:var(--mt);cursor:none;font-size:12px;padding:0 8px;transition:color .15s;margin-right:8px" onclick="openConfigModal()" title="Configuración de API keys">⚙️</button>
   <div class="user-pill"><span id="user-nm"></span></div>
@@ -544,15 +544,15 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
     </div>
     <span class="ctl-hint" id="mhint"><b>Asíncrono</b> · Google · Texto a imagen</span>
   </div>
-  <div class="calbar" id="calbar"><button class="ctab add" onclick="openNewCal()" title="Nuevo">＋</button></div>
+  <div class="calbar" id="calbar"><button class="ctab add" onclick="openNewCalHandler()" title="Nuevo">＋</button></div>
   <div class="chdr" id="chdr" style="display:none">
     <div><div class="cname" id="cname">—</div><div class="cdesc" id="cdesctxt"></div></div>
     <div class="ccnt" id="ccnt">0 posts</div>
     <div class="ctag" id="ctag" style="display:none">—</div>
     <div class="chdr-acts">
-      <button class="cabtn gen-all" onclick="openGenModal()">✦ Generar todos los prompts</button>
-      <button class="cabtn add" onclick="openAddPost()">+ Post</button>
-      <button class="cabtn" onclick="openEditCal()">Editar</button>
+      <button class="cabtn gen-all" onclick="openGenModalHandler()">✦ Generar todos los prompts</button>
+      <button class="cabtn add" onclick="openAddPostHandler()">+ Post</button>
+      <button class="cabtn" onclick="openEditCalHandler()">Editar</button>
       <button class="cabtn danger" onclick="delCal()">Eliminar</button>
     </div>
   </div>
@@ -572,7 +572,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
     <div id="grid-empty" class="empty" style="display:none">
       <div class="eico">📅</div><div class="ettl">Sin calendario activo</div>
       <div class="esub">Selecciona o crea un calendario. Los prompts se generan automáticamente.</div>
-      <button class="ecta" onclick="openNewCal()">+ Crear calendario</button>
+      <button class="ecta" onclick="openNewCalHandler()">+ Crear calendario</button>
     </div>
     <div id="pgrid" class="pgrid" style="display:flex"></div>
     <div class="no-res" id="no-res" style="display:none">Sin posts con este filtro.</div>
@@ -580,7 +580,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
   <div class="botbar">
     <button class="bba bba-p" onclick="batchP()">✦ Todos los prompts</button>
     <button class="bba bba-s bba" onclick="batchI()">⬡ Todas las imágenes</button>
-    <button class="bba bba-c" onclick="tab('refs',document.querySelector('[data-p=refs]'))">Refs activas: <b id="btn-rcnt">0</b></button>
+    <button class="bba bba-c" onclick="tabHandler('refs',document.querySelector('[data-p=refs]'))">Refs activas: <b id="btn-rcnt">0</b></button>
     <span class="gprog" id="gprog"></span>
   </div>
 </div>
@@ -605,7 +605,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 <div id="panel-client-detail" class="panel">
   <div class="sec-panel">
     <div class="breadcrumb">
-      <a onclick="tab('clientes',document.querySelector('[data-p=clientes]'))">Clientes</a>
+      <a onclick="tabHandler('clientes',document.querySelector('[data-p=clientes]'))">Clientes</a>
       <span>/</span><span id="det-cl-nm">—</span>
     </div>
     <div class="det-grid">
@@ -698,7 +698,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
         <div style="background:rgba(10,14,22,.8);border:1px solid var(--bd);border-radius:var(--r);padding:1rem">
           <div style="font-size:9px;font-family:var(--m);color:var(--dm);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem">CLIENTE</div>
           <div id="studio-client-sel" style="display:flex;flex-direction:column;gap:5px;max-height:160px;overflow-y:auto"></div>
-          <div id="studio-no-clients" style="font-size:9px;color:var(--dm);font-family:var(--m);padding:6px 0;display:none">Sin clientes — <a onclick="tab('clientes',document.querySelector('[data-p=clientes]'))" style="color:var(--c1);cursor:none">crea uno primero</a></div>
+          <div id="studio-no-clients" style="font-size:9px;color:var(--dm);font-family:var(--m);padding:6px 0;display:none">Sin clientes — <a onclick="tabHandler('clientes',document.querySelector('[data-p=clientes]'))" style="color:var(--c1);cursor:none">crea uno primero</a></div>
         </div>
 
         <!-- Main prompt -->
@@ -793,12 +793,12 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
     <div class="sec-panel">
       <div class="phdr">
         <div><div class="pttl">Todos los calendarios</div><div class="psub">Gestiona y accede a tus calendarios</div></div>
-        <button class="bba bba-p" onclick="openNewCal()">+ Nuevo clásico</button>
+        <button class="bba bba-p" onclick="openNewCalHandler()">+ Nuevo clásico</button>
       </div>
       <div class="pgrid2" id="cals-all-grid"></div>
       <div id="cals-all-empty" class="empty" style="display:none">
         <div class="eico">📅</div><div class="ettl">Sin calendarios</div>
-        <button class="ecta" onclick="openNewCal()">Crear ahora</button>
+        <button class="ecta" onclick="openNewCalHandler()">Crear ahora</button>
       </div>
     </div>
   </div>
@@ -2306,6 +2306,13 @@ const dz=document.getElementById('dz');
 dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
 dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
 dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');if(e.dataTransfer.files.length&&activeClient){const inp=dz.querySelector('input');const dt=new DataTransfer();[...e.dataTransfer.files].forEach(f=>dt.items.add(f));inp.files=dt.files;handleDocs({target:inp});}});
+
+/* ══ ONCLICK WRAPPERS (async functions cannot be awaited from onclick) ══ */
+function tabHandler(p,btn){tab(p,btn);}
+function openGenModalHandler(){openGenModal();}
+function openNewCalHandler(){openNewCal();}
+function openEditCalHandler(){openEditCal();}
+function openAddPostHandler(){openAddPost();}
 
 /* ══ INIT ══ */
 async function init(){
