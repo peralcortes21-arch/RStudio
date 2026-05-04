@@ -932,6 +932,28 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
   </div>
 </div>
 
+<!-- MODAL: STYLE PRESET -->
+<div class="modal-bg" id="m-style">
+  <div class="modal" style="max-width:420px">
+    <div class="mh">
+      <div class="mttl" id="m-style-ttl">Nuevo estilo</div>
+      <button class="mcls" onclick="closeM('m-style')">×</button>
+    </div>
+    <div class="mfield">
+      <label>Nombre del estilo</label>
+      <input id="style-name" placeholder="ej. Oscuro editorial" maxlength="40">
+    </div>
+    <div class="mfield">
+      <label>Descripción para la IA (en inglés)</label>
+      <textarea id="style-value" rows="4" placeholder="ej. dark moody editorial, deep shadows, navy background, volumetric purple light, 3D glass objects floating, cinematic depth of field"></textarea>
+    </div>
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeM('m-style')">Cancelar</button>
+      <button class="mbtn-ok" onclick="saveStylePresetModal()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: CONFIRMATION -->
 <div class="modal-bg" id="m-confirm">
   <div class="modal">
@@ -2185,24 +2207,42 @@ function applyStylePreset(id){
   document.getElementById('studio-img-style').value=p.value;
   toast(p.name+' aplicado','tok');
 }
+let _editStyleId = null;
+
 function editStylePreset(id){
-  const presets=getStylePresets();const p=presets.find(x=>x.id===id);if(!p)return;
-  const newName=prompt('Nombre del estilo:',p.name);if(!newName?.trim())return;
-  const newVal=prompt('Descripción en inglés:',p.value);if(!newVal?.trim())return;
-  p.name=newName.trim();p.value=newVal.trim();
-  saveStylePresets(presets);renderStylePresets();
+  const p=getStylePresets().find(x=>x.id===id);if(!p)return;
+  _editStyleId=id;
+  document.getElementById('m-style-ttl').textContent='Editar estilo';
+  document.getElementById('style-name').value=p.name;
+  document.getElementById('style-value').value=p.value;
+  openM('m-style');
 }
 function delStylePreset(id){
   const presets=getStylePresets().filter(x=>x.id!==id);
   saveStylePresets(presets);renderStylePresets();
 }
 function openAddStylePreset(){
-  const name=prompt('Nombre del estilo:');if(!name?.trim())return;
-  const value=prompt('Descripción en inglés (para la IA):');if(!value?.trim())return;
+  _editStyleId=null;
+  document.getElementById('m-style-ttl').textContent='Nuevo estilo';
+  document.getElementById('style-name').value='';
+  document.getElementById('style-value').value='';
+  openM('m-style');
+}
+function saveStylePresetModal(){
+  const name=document.getElementById('style-name').value.trim();
+  const value=document.getElementById('style-value').value.trim();
+  if(!name){toast('El nombre es obligatorio','terr');return;}
+  if(!value){toast('La descripción es obligatoria','terr');return;}
   const presets=getStylePresets();
-  presets.push({id:'p_'+Date.now(),name:name.trim(),value:value.trim()});
+  if(_editStyleId){
+    const p=presets.find(x=>x.id===_editStyleId);
+    if(p){p.name=name;p.value=value;}
+  } else {
+    presets.push({id:'p_'+Date.now(),name,value});
+  }
   saveStylePresets(presets);renderStylePresets();
-  toast('Estilo guardado ✓','tok');
+  closeM('m-style');
+  toast(_editStyleId?'Estilo actualizado ✓':'Estilo guardado ✓','tok');
 }
 
 let _calAngles = null;
