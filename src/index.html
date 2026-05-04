@@ -1161,7 +1161,6 @@ async function openCal(id){
   document.getElementById('cname').textContent=cal.name;
   document.getElementById('cdesctxt').textContent=cal.description||'';
   try{const pr=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});if(!pr.ok){toast('Error: '+pr.statusText,'terr');return;}const posts=await pr.json();document.getElementById('ccnt').textContent=posts.length+' posts';const ct=document.getElementById('ctag');if(cal.client_id){const cl=await getClient(cal.client_id);ct.style.display='block';ct.textContent=cl?'🏢 '+cl.name:'sin cliente';}else ct.style.display='none';renderGrid(posts);renderAngleFilter(posts);}catch{}}
-}
 function renderAngleFilter(posts){
   const angles=[...new Set(posts.map(p=>p.a))];
   const fg=document.getElementById('angle-fg');fg.innerHTML='<span class="fglb">ÁNGULO</span>';
