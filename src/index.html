@@ -557,15 +557,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
     </div>
   </div>
   <div class="frow" id="filtrow" style="display:none">
-    <div class="fg">
-      <span class="fglb">TIPO</span>
-      <button class="fb act" onclick="fT('all',this)">Todos</button>
-      <button class="fb td" onclick="fT('Dolor',this)">Dolor</button>
-      <button class="fb tm" onclick="fT('Miedo',this)">Miedo</button>
-      <button class="fb tr" onclick="fT('Resultado',this)">Resultado</button>
-      <button class="fb tp" onclick="fT('Prueba',this)">Prueba</button>
-      <button class="fb tde" onclick="fT('Deseo',this)">Deseo</button>
-    </div>
+    <div class="fg" id="tipo-fg"><span class="fglb">TIPO</span></div>
     <div class="fg" id="angle-fg"><span class="fglb">ÁNGULO</span></div>
   </div>
   <div class="gsec">
@@ -715,16 +707,12 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 
         <!-- Image style -->
         <div style="background:rgba(10,14,22,.8);border:1px solid var(--bd);border-radius:var(--r);padding:1rem">
-          <div style="font-size:9px;font-family:var(--m);color:var(--dm);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem">ESTILO DE IMÁGENES</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-            <button class="style-pill act" data-style="dark-editorial" onclick="selStyle(this)">Oscuro editorial</button>
-            <button class="style-pill" data-style="light-minimal" onclick="selStyle(this)">Claro minimalista</button>
-            <button class="style-pill" data-style="cinematic" onclick="selStyle(this)">Cinematográfico</button>
-            <button class="style-pill" data-style="neon-tech" onclick="selStyle(this)">Neon tech</button>
-            <button class="style-pill" data-style="natural-warm" onclick="selStyle(this)">Natural cálido</button>
-            <button class="style-pill" data-style="premium-luxury" onclick="selStyle(this)">Lujo premium</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+            <div style="font-size:9px;font-family:var(--m);color:var(--dm);letter-spacing:.12em;text-transform:uppercase">ESTILO DE IMÁGENES</div>
+            <button onclick="openAddStylePreset()" style="font-size:7.5px;font-family:var(--m);padding:2px 8px;border-radius:3px;background:transparent;border:1px solid var(--bd);color:var(--mt);cursor:pointer;transition:all .14s" onmouseover="this.style.borderColor='var(--v1)';this.style.color='var(--v3)'" onmouseout="this.style.borderColor='var(--bd)';this.style.color='var(--mt)'">+ Añadir estilo</button>
           </div>
-          <textarea id="studio-img-style" rows="2" style="width:100%;background:rgba(4,6,10,.7);border:1px solid var(--bd);border-radius:var(--rs);padding:7px 9px;font-size:10px;color:var(--mt);font-family:var(--m);outline:none;resize:none;line-height:1.5;transition:border-color .15s" placeholder="Descripción adicional del estilo visual en inglés..." onfocus="this.style.borderColor='var(--bdh)'" onblur="this.style.borderColor='var(--bd)'"></textarea>
+          <div id="style-presets-list" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px"></div>
+          <textarea id="studio-img-style" rows="2" style="width:100%;background:rgba(4,6,10,.7);border:1px solid var(--bd);border-radius:var(--rs);padding:7px 9px;font-size:10px;color:var(--mt);font-family:var(--m);outline:none;resize:none;line-height:1.5;transition:border-color .15s" placeholder="Descripción del estilo visual en inglés para la IA..." onfocus="this.style.borderColor='var(--bdh)'" onblur="this.style.borderColor='var(--bd)'"></textarea>
         </div>
 
         <!-- Active refs -->
@@ -903,13 +891,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
       <div class="mfield"><label>Ángulo / Serie</label><input id="p-a" placeholder="SALES 01" maxlength="30"></div>
     </div>
     <div class="mfield"><label>Tipo psicológico</label>
-      <div class="type-grid">
-        <div class="type-opt" data-t="Dolor" onclick="selTipo(this)">Dolor</div>
-        <div class="type-opt" data-t="Miedo" onclick="selTipo(this)">Miedo</div>
-        <div class="type-opt" data-t="Resultado" onclick="selTipo(this)">Resultado</div>
-        <div class="type-opt" data-t="Prueba" onclick="selTipo(this)">Prueba</div>
-        <div class="type-opt" data-t="Deseo" onclick="selTipo(this)">Deseo</div>
-      </div>
+      <div class="type-grid" id="post-type-grid"></div>
     </div>
     <div class="mfield"><label>Hook / Titular (usa Intro+Enter para saltos de línea)</label><textarea id="p-hook" rows="3" placeholder="Tu equipo cierra a las 6pm.&#10;Tus clientes, no."></textarea></div>
     <div class="mfield"><label>Subtítulo</label><input id="p-sub" placeholder="más leads de los que crees" maxlength="80"></div>
@@ -1160,7 +1142,7 @@ async function openCal(id){
   document.getElementById('chdr').style.display='flex';document.getElementById('filtrow').style.display='flex';
   document.getElementById('cname').textContent=cal.name;
   document.getElementById('cdesctxt').textContent=cal.description||'';
-  try{const pr=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});if(!pr.ok){toast('Error: '+pr.statusText,'terr');return;}const posts=await pr.json();document.getElementById('ccnt').textContent=posts.length+' posts';const ct=document.getElementById('ctag');if(cal.client_id){const cl=await getClient(cal.client_id);ct.style.display='block';ct.textContent=cl?'🏢 '+cl.name:'sin cliente';}else ct.style.display='none';renderGrid(posts);renderAngleFilter(posts);}catch{}}
+  try{const pr=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});if(!pr.ok){toast('Error: '+pr.statusText,'terr');return;}const posts=await pr.json();document.getElementById('ccnt').textContent=posts.length+' posts';const ct=document.getElementById('ctag');let calCl=null;if(cal.client_id){calCl=await getClient(cal.client_id);ct.style.display='block';ct.textContent=calCl?'🏢 '+calCl.name:'sin cliente';}else ct.style.display='none';renderGrid(posts);renderAngleFilter(posts);renderTypeFilter(posts,calCl);}catch{}}
 function renderAngleFilter(posts){
   const angles=[...new Set(posts.map(p=>p.a))];
   const fg=document.getElementById('angle-fg');fg.innerHTML='<span class="fglb">ÁNGULO</span>';
@@ -1496,10 +1478,10 @@ async function openAddPost(){
   document.getElementById('m-post-ttl').textContent='Nuevo post';
   ['p-h','p-a','p-hook','p-sub','p-body','p-cta','p-vis'].forEach(i=>{const el=document.getElementById(i);if(el)el.value='';});
   document.getElementById('p-h').value='10:00';
-  selTipoV=null;document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('sel'));
-  // Show AI button only if calendar has a client
-  const cal=await getCal(activeCal);const hasClient=!!(cal?.client_id&&(await getClient(cal.client_id)));
-  document.getElementById('btn-autofill-post').style.display=hasClient?'inline-flex':'none';
+  selTipoV=null;
+  const cal=await getCal(activeCal);const calCl=cal?.client_id?await getClient(cal.client_id):null;
+  await renderTypeGrid(calCl);
+  document.getElementById('btn-autofill-post').style.display=calCl?'inline-flex':'none';
   openM('m-post');
 }
 async function editPost(id){
@@ -1513,9 +1495,10 @@ async function editPost(id){
   document.getElementById('p-cta').value=p.cta||'';
   document.getElementById('p-vis').value=p.v||'';
   selTipoV=p.t||null;
+  const cal=await getCal(activeCal);const calCl=cal?.client_id?await getClient(cal.client_id):null;
+  await renderTypeGrid(calCl);
   document.querySelectorAll('.type-opt').forEach(o=>o.classList.toggle('sel',o.dataset.t===p.t));
-  const cal=await getCal(activeCal);const hasClient=!!(cal?.client_id&&(await getClient(cal.client_id)));
-  document.getElementById('btn-autofill-post').style.display=hasClient?'inline-flex':'none';
+  document.getElementById('btn-autofill-post').style.display=calCl?'inline-flex':'none';
   openM('m-post');
 }
 function selTipo(el){selTipoV=el.dataset.t;document.querySelectorAll('.type-opt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');}
@@ -1575,6 +1558,24 @@ async function renderClientDetail(id){
   document.getElementById('cl-info-disp').innerHTML=[['Sector',cl.industry],['Descripción',cl.desc],['Público',cl.audience],['Tono',cl.tone],['Color 1','<span style="width:12px;height:12px;border-radius:50%;background:'+cl.color+';display:inline-block;vertical-align:middle;margin-right:4px"></span>'+cl.color],['Color 2','<span style="width:12px;height:12px;border-radius:50%;background:'+cl.color2+';display:inline-block;vertical-align:middle;margin-right:4px"></span>'+cl.color2],['Estilo',cl.style]].filter(r=>r[1]).map(r=>`<div class="det-row"><span class="dk">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('');
   let clDocs=[];try{const dr=await fetch('/api/clients/'+id+'/docs',{headers:{'Content-Type':'application/json'}});if(dr.ok)clDocs=await dr.json();}catch{}
   renderDocsList(cl,clDocs);
+  // Types management
+  const clTypes=getClientTypes(cl);
+  const typesCard=document.createElement('div');typesCard.className='det-card';
+  typesCard.innerHTML=`<div class="dct" style="justify-content:space-between;align-items:center"><span>TIPOS PSICOLÓGICOS</span><div style="display:flex;gap:5px"><button onclick="addClientType('${id}')" class="bba bba-p" style="padding:3px 9px;font-size:7.5px;border:none">+ Añadir</button><button onclick="resetClientTypes('${id}')" style="padding:3px 8px;font-size:7.5px;border:1px solid var(--bd);background:transparent;color:var(--dm);border-radius:3px;cursor:pointer" title="Restaurar a Dolor/Miedo/Resultado/Prueba/Deseo">⟳ Reset</button></div></div>
+<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px">${clTypes.map(t=>`<div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:20px;overflow:hidden"><span style="font-size:8.5px;font-family:var(--m);padding:3px 9px;color:var(--tx)">${esc(t)}</span><button onclick="editClientType('${id}','${esc(t)}')" style="font-size:9px;background:transparent;border:none;color:var(--dm);cursor:pointer;padding:2px 4px" title="Renombrar">✎</button><button onclick="delClientType('${id}','${esc(t)}')" style="font-size:9px;background:transparent;border:none;color:var(--dm);cursor:pointer;padding:2px 6px" title="Eliminar">×</button></div>`).join('')}</div>`;
+  // Angles management
+  const clAngles=getClientAngles(cl);
+  const anglesCard=document.createElement('div');anglesCard.className='det-card';
+  anglesCard.innerHTML=`<div class="dct" style="justify-content:space-between;align-items:center"><span>ÁNGULOS DE CONTENIDO</span><div style="display:flex;gap:5px"><button onclick="addClientAngle('${id}')" class="bba bba-p" style="padding:3px 9px;font-size:7.5px;border:none">+ Añadir</button><button onclick="resetClientAngles('${id}')" style="padding:3px 8px;font-size:7.5px;border:1px solid var(--bd);background:transparent;color:var(--dm);border-radius:3px;cursor:pointer" title="Restaurar ángulos predeterminados">⟳ Reset</button></div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:5px;margin-top:8px">${clAngles.map(a=>`<div style="background:rgba(255,255,255,.02);border:1px solid var(--bd);border-radius:var(--rs);padding:6px 8px;display:flex;align-items:flex-start;justify-content:space-between;gap:4px"><div><div style="font-size:8px;font-weight:700;color:var(--tx)">${esc(a.key)}</div><div style="font-size:7.5px;font-family:var(--m);color:var(--mt)">${esc(a.label)}</div></div><button onclick="delClientAngle('${id}','${esc(a.key).replace(/'/g,"\\'")}')" style="font-size:9px;background:transparent;border:none;color:var(--dm);cursor:pointer;padding:1px 4px;flex-shrink:0" title="Eliminar">×</button></div>`).join('')}</div>`;
+  // Insert after info card
+  const detGrid=document.querySelector('#panel-client-detail .det-grid');
+  const existing=detGrid.querySelectorAll('.det-card');
+  // Remove old types/angles cards if they exist
+  detGrid.querySelectorAll('[data-cust]').forEach(e=>e.remove());
+  typesCard.dataset.cust='types';anglesCard.dataset.cust='angles';
+  detGrid.appendChild(typesCard);detGrid.appendChild(anglesCard);
+
   const cals=(await getCals()).filter(c=>c.client_id===id);
   const cg=document.getElementById('cl-cals-grid'),ce=document.getElementById('cl-cals-empty');
   if(cals.length===0){cg.style.display='none';ce.style.display='block';}
@@ -1699,14 +1700,16 @@ async function renderStudio(){
     ].join('');
   }
   // Angles
-  renderStudioAngles();
+  const initCl = activeClient ? await getClient(activeClient) : null;
+  renderStudioAngles(initCl);
   // Refs preview
   updateStudioRefs();
+  // Style presets
+  renderStylePresets();
   // Pre-fill prompt if client selected
   if(activeClient){
-    const cl = await getClient(activeClient);
-    if(cl && !document.getElementById('studio-prompt').value){
-      prefillStudioPrompt(cl);
+    if(initCl && !document.getElementById('studio-prompt').value){
+      prefillStudioPrompt(initCl);
     }
   }
 }
@@ -1719,7 +1722,9 @@ async function studioSelClient(el){
   const cid = el.dataset.id;
   if(cid){
     const cl=await getClient(cid);
-    if(cl) prefillStudioPrompt(cl);
+    if(cl){prefillStudioPrompt(cl);renderStudioAngles(cl);}
+  } else {
+    renderStudioAngles(null);
   }
 }
 
@@ -1741,26 +1746,35 @@ function prefillStudioPrompt(cl){
   if(!styleInp.value && cl.color) styleInp.value = `Primary color ${cl.color}, secondary ${cl.color2||'#00d9ff'}, dark premium photography`;
 }
 
-function renderStudioAngles(){
+let _studioAngles = null;
+
+function renderStudioAngles(cl){
+  _studioAngles = getClientAngles(cl);
   const grid = document.getElementById('studio-angles');
-  grid.innerHTML = DEFAULT_ANGLES.map((a,i)=>`
+  grid.innerHTML = _studioAngles.map((a,i)=>`
     <div class="studio-angle${a.sel?' sel':''}" id="sa-${i}" onclick="toggleStudioAngle(${i})">
       <div class="sa-chk">${a.sel?'<span style="font-size:9px;color:#fff;line-height:1">✓</span>':''}</div>
-      <div><div class="sa-key">${a.key}</div><div class="sa-lbl">${a.label}</div></div>
+      <div><div class="sa-key">${esc(a.key)}</div><div class="sa-lbl">${esc(a.label)}</div></div>
     </div>`).join('');
 }
 
 function toggleStudioAngle(i){
-  DEFAULT_ANGLES[i].sel = !DEFAULT_ANGLES[i].sel;
+  if(!_studioAngles)return;
+  _studioAngles[i].sel = !_studioAngles[i].sel;
   const el = document.getElementById('sa-'+i);
   const chk = el.querySelector('.sa-chk');
-  el.classList.toggle('sel', DEFAULT_ANGLES[i].sel);
-  chk.innerHTML = DEFAULT_ANGLES[i].sel ? '<span style="font-size:9px;color:#fff;line-height:1">✓</span>' : '';
+  el.classList.toggle('sel', _studioAngles[i].sel);
+  chk.innerHTML = _studioAngles[i].sel ? '<span style="font-size:9px;color:#fff;line-height:1">✓</span>' : '';
 }
 
 function selectAllAngles(val){
-  DEFAULT_ANGLES.forEach((a,i)=>{a.sel=val;});
-  renderStudioAngles();
+  if(!_studioAngles)return;
+  _studioAngles.forEach((a,i)=>{a.sel=val;});
+  const grid=document.getElementById('studio-angles');
+  grid.querySelectorAll('.studio-angle').forEach((el,i)=>{
+    el.classList.toggle('sel',val);
+    el.querySelector('.sa-chk').innerHTML=val?'<span style="font-size:9px;color:#fff;line-height:1">✓</span>':'';
+  });
 }
 
 function selStyle(btn){
@@ -1789,7 +1803,7 @@ async function launchStudio(){
   if(!name){toast('Pon un nombre al calendario','terr');return;}
   if(!prompt){toast('Escribe el prompt principal','terr');return;}
 
-  const selAngles = DEFAULT_ANGLES.filter(a=>a.sel);
+  const selAngles = (_studioAngles||DEFAULT_ANGLES).filter(a=>a.sel);
   if(selAngles.length===0){toast('Selecciona al menos un ángulo','terr');return;}
 
   const autoPrompts = document.getElementById('opt-auto-prompts').checked;
@@ -2040,6 +2054,9 @@ document.querySelectorAll('.modal-bg').forEach(bg=>bg.addEventListener('click',e
 
 /* ══ AI CALENDAR GENERATION ══ */
 
+const DEFAULT_TYPES = ['Dolor','Miedo','Resultado','Prueba','Deseo'];
+const STYLE_PRESETS_KEY = 'cliender_styles';
+
 const DEFAULT_ANGLES = [
   {key:'SALES 01', label:'Dolor — Leads perdidos',   desc:'Posts sobre leads que se pierden por no responder a tiempo',          sel:true},
   {key:'SALES 02', label:'Miedo — Velocidad',        desc:'Posts sobre perder ante la competencia por ser lento',                 sel:true},
@@ -2056,32 +2073,167 @@ const DEFAULT_ANGLES = [
   {key:'EDU 01',   label:'Educación — Tips',          desc:'Posts educativos con consejos prácticos del sector',                  sel:false},
   {key:'EDU 02',   label:'Educación — Errores',       desc:'Posts sobre errores comunes y cómo evitarlos',                       sel:false},
   {key:'PROMO 01', label:'Oferta / Lanzamiento',      desc:'Posts de promoción directa o lanzamiento de producto',                sel:false},
+  {key:'DOLOR OC', label:'Dolor oculto',              desc:'Posts que revelan un problema que el cliente no sabía que tenía',     sel:false},
+  {key:'EDU 03',   label:'Educativo',                 desc:'Posts que enseñan algo útil relacionado con el sector',               sel:false},
+  {key:'EXP 01',   label:'Experiencia personal',      desc:'Posts en primera persona que conectan emocionalmente',                sel:false},
+  {key:'ANT 01',   label:'Antes y después',           desc:'Posts que muestran la transformación real del cliente',               sel:false},
+  {key:'TEST 01',  label:'Testimonio',                desc:'Posts basados en la voz y experiencia del cliente final',             sel:false},
+  {key:'PROMO 02', label:'Promoción',                 desc:'Posts de oferta directa, descuento o llamada a la acción comercial',  sel:false},
+  {key:'URG 01',   label:'Urgencia',                  desc:'Posts que generan sensación de escasez o tiempo limitado',            sel:false},
+  {key:'ASPI 01',  label:'Aspiracional',              desc:'Posts sobre el estilo de vida o resultado deseado por el cliente',    sel:false},
+  {key:'OBJ 01',   label:'Objeción',                  desc:'Posts que rebaten las excusas más comunes para no comprar',           sel:false},
+  {key:'PROC 01',  label:'Proceso',                   desc:'Posts que muestran el método o sistema de trabajo paso a paso',       sel:false},
 ];
 
-function renderAnglesGrid(preClientId){
+/* ══ TYPES PER CLIENT ══ */
+function getClientTypes(cl){return cl?.custom_types?.length?cl.custom_types:[...DEFAULT_TYPES];}
+
+function renderTypeFilter(posts,cl){
+  const fg=document.getElementById('tipo-fg');fg.innerHTML='<span class="fglb">TIPO</span>';
+  const types=getClientTypes(cl);
+  const all=document.createElement('button');all.className='fb act';all.textContent='Todos';
+  all.onclick=()=>{AT='all';fg.querySelectorAll('.fb').forEach(b=>b.classList.remove('act'));all.classList.add('act');applyFilters();};
+  fg.appendChild(all);
+  const TYPE_CLASS={Dolor:'td',Miedo:'tm',Resultado:'tr',Prueba:'tp',Deseo:'tde'};
+  types.forEach(t=>{const b=document.createElement('button');b.className='fb '+(TYPE_CLASS[t]||'');b.textContent=t;
+    b.onclick=()=>{AT=t;fg.querySelectorAll('.fb').forEach(x=>x.classList.remove('act'));b.classList.add('act');applyFilters();};fg.appendChild(b);});
+}
+
+async function renderTypeGrid(cl){
+  const types=getClientTypes(cl);
+  const grid=document.getElementById('post-type-grid');
+  grid.innerHTML=types.map(t=>`<div class="type-opt${selTipoV===t?' sel':''}" data-t="${esc(t)}" onclick="selTipo(this)">${esc(t)}</div>`).join('');
+}
+
+async function addClientType(clientId){
+  const name=prompt('Nombre del nuevo tipo:');if(!name?.trim())return;
+  const cl=await getClient(clientId);if(!cl)return;
+  const types=getClientTypes(cl);
+  if(types.includes(name.trim())){toast('Ese tipo ya existe','terr');return;}
+  types.push(name.trim());
+  try{const r=await fetch('/api/clients/'+clientId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({custom_types:types})});if(!r.ok){toast('Error','terr');return;}_invalidate('clients');renderClientDetail(clientId);}catch{toast('Error de conexión','terr');}
+}
+async function delClientType(clientId,typeName){
+  const cl=await getClient(clientId);if(!cl)return;
+  const types=getClientTypes(cl).filter(t=>t!==typeName);
+  try{const r=await fetch('/api/clients/'+clientId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({custom_types:types})});if(!r.ok){toast('Error','terr');return;}_invalidate('clients');renderClientDetail(clientId);}catch{toast('Error de conexión','terr');}
+}
+async function editClientType(clientId,typeName){
+  const newName=prompt('Renombrar tipo:',typeName);if(!newName?.trim()||newName.trim()===typeName)return;
+  const cl=await getClient(clientId);if(!cl)return;
+  const types=getClientTypes(cl).map(t=>t===typeName?newName.trim():t);
+  try{const r=await fetch('/api/clients/'+clientId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({custom_types:types})});if(!r.ok){toast('Error','terr');return;}_invalidate('clients');renderClientDetail(clientId);}catch{toast('Error de conexión','terr');}
+}
+async function resetClientTypes(clientId){
+  try{const r=await fetch('/api/clients/'+clientId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({custom_types:[]})});if(!r.ok){toast('Error','terr');return;}_invalidate('clients');renderClientDetail(clientId);toast('Tipos restaurados a los predeterminados','tok');}catch{toast('Error de conexión','terr');}
+}
+
+/* ══ ANGLES PER CLIENT ══ */
+function getClientAngles(cl){
+  if(cl?.custom_angles?.length){
+    return cl.custom_angles.map(a=>({...a,sel:a.sel!==undefined?a.sel:true}));
+  }
+  return DEFAULT_ANGLES.map(a=>({...a}));
+}
+
+async function addClientAngle(clientId){
+  const key=prompt('Clave del ángulo (ej. SALES 01):');if(!key?.trim())return;
+  const label=prompt('Etiqueta (ej. Dolor — Leads perdidos):');if(!label?.trim())return;
+  const desc=prompt('Descripción (opcional):','Posts sobre...')||'';
+  const cl=await getClient(clientId);if(!cl)return;
+  const angles=getClientAngles(cl);
+  if(angles.find(a=>a.key===key.trim())){toast('Esa clave ya existe','terr');return;}
+  angles.push({key:key.trim(),label:label.trim(),desc,sel:true});
+  try{const r=await fetch('/api/clients/'+clientId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({custom_angles:angles})});if(!r.ok){toast('Error','terr');return;}_invalidate('clients');renderClientDetail(clientId);}catch{toast('Error de conexión','terr');}
+}
+async function delClientAngle(clientId,key){
+  const cl=await getClient(clientId);if(!cl)return;
+  const angles=getClientAngles(cl).filter(a=>a.key!==key);
+  try{const r=await fetch('/api/clients/'+clientId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({custom_angles:angles})});if(!r.ok){toast('Error','terr');return;}_invalidate('clients');renderClientDetail(clientId);}catch{toast('Error de conexión','terr');}
+}
+async function resetClientAngles(clientId){
+  try{const r=await fetch('/api/clients/'+clientId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({custom_angles:[]})});if(!r.ok){toast('Error','terr');return;}_invalidate('clients');renderClientDetail(clientId);toast('Ángulos restaurados a los predeterminados','tok');}catch{toast('Error de conexión','terr');}
+}
+
+/* ══ STYLE PRESETS ══ */
+function getStylePresets(){
+  try{const raw=localStorage.getItem(STYLE_PRESETS_KEY);if(raw)return JSON.parse(raw);}catch{}
+  const defaults=[
+    {id:'p1',name:'Oscuro editorial',value:'dark moody editorial, deep shadows, navy background, volumetric purple light, 3D glass objects floating, cinematic depth of field'},
+    {id:'p2',name:'Claro minimalista',value:'clean bright minimal, white and light gray tones, soft shadows, geometric shapes, premium product photography'},
+    {id:'p3',name:'Cinematográfico',value:'cinematic widescreen, dramatic lighting, rich colors, film grain, bokeh background, storytelling composition'},
+    {id:'p4',name:'Neon tech',value:'futuristic tech, neon light streaks, dark background, glowing elements, cyber aesthetic, holographic effects'},
+    {id:'p5',name:'Natural cálido',value:'natural warm tones, golden hour light, organic textures, soft focus, lifestyle photography'},
+    {id:'p6',name:'Lujo premium',value:'luxury premium, dark gold accents, marble textures, high-end product photography, exclusive atmosphere'},
+  ];
+  localStorage.setItem(STYLE_PRESETS_KEY,JSON.stringify(defaults));
+  return defaults;
+}
+function saveStylePresets(presets){localStorage.setItem(STYLE_PRESETS_KEY,JSON.stringify(presets));}
+function renderStylePresets(){
+  const list=document.getElementById('style-presets-list');if(!list)return;
+  const presets=getStylePresets();
+  list.innerHTML=presets.map(p=>`
+    <div class="style-pill-wrap" style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:20px;overflow:hidden">
+      <button class="style-pill" onclick="applyStylePreset('${esc(p.id)}')" title="${esc(p.value)}" style="padding:4px 9px;font-size:8px;font-family:var(--m);font-weight:600;background:transparent;border:none;color:var(--mt);cursor:pointer;transition:color .14s" onmouseover="this.style.color='var(--tx)'" onmouseout="this.style.color='var(--mt)'">${esc(p.name)}</button>
+      <button onclick="editStylePreset('${esc(p.id)}')" title="Editar" style="font-size:9px;background:transparent;border:none;color:var(--dm);cursor:pointer;padding:2px 5px;transition:color .14s" onmouseover="this.style.color='var(--v3)'" onmouseout="this.style.color='var(--dm)'">✎</button>
+      <button onclick="delStylePreset('${esc(p.id)}')" title="Eliminar" style="font-size:9px;background:transparent;border:none;color:var(--dm);cursor:pointer;padding:2px 6px;transition:color .14s" onmouseover="this.style.color='var(--er)'" onmouseout="this.style.color='var(--dm)'">×</button>
+    </div>`).join('');
+}
+function applyStylePreset(id){
+  const p=getStylePresets().find(x=>x.id===id);if(!p)return;
+  document.getElementById('studio-img-style').value=p.value;
+  toast(p.name+' aplicado','tok');
+}
+function editStylePreset(id){
+  const presets=getStylePresets();const p=presets.find(x=>x.id===id);if(!p)return;
+  const newName=prompt('Nombre del estilo:',p.name);if(!newName?.trim())return;
+  const newVal=prompt('Descripción en inglés:',p.value);if(!newVal?.trim())return;
+  p.name=newName.trim();p.value=newVal.trim();
+  saveStylePresets(presets);renderStylePresets();
+}
+function delStylePreset(id){
+  const presets=getStylePresets().filter(x=>x.id!==id);
+  saveStylePresets(presets);renderStylePresets();
+}
+function openAddStylePreset(){
+  const name=prompt('Nombre del estilo:');if(!name?.trim())return;
+  const value=prompt('Descripción en inglés (para la IA):');if(!value?.trim())return;
+  const presets=getStylePresets();
+  presets.push({id:'p_'+Date.now(),name:name.trim(),value:value.trim()});
+  saveStylePresets(presets);renderStylePresets();
+  toast('Estilo guardado ✓','tok');
+}
+
+let _calAngles = null;
+
+async function renderAnglesGrid(preClientId){
+  const cl = preClientId ? await getClient(preClientId) : null;
+  _calAngles = getClientAngles(cl);
   const grid = document.getElementById('angles-grid');
-  grid.innerHTML = DEFAULT_ANGLES.map((a,i) => `
-    <div class="angle-opt${a.sel?' sel':''}" id="aopt-${i}" onclick="toggleAngle(${i})" title="${a.desc}"
-      style="padding:7px 9px;border-radius:var(--rs);border:1px solid var(--bd);background:transparent;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:6px">
-      <div id="aopt-chk-${i}" style="width:14px;height:14px;border-radius:3px;border:1px solid var(--bd);background:${a.sel?'var(--v1)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s">
+  grid.innerHTML = _calAngles.map((a,i) => `
+    <div class="angle-opt${a.sel?' sel':''}" id="aopt-${i}" onclick="toggleAngle(${i})" title="${esc(a.desc||'')}"
+      style="padding:7px 9px;border-radius:var(--rs);border:1px solid ${a.sel?'var(--v1)':'var(--bd)'};background:${a.sel?'rgba(58,92,158,.09)':'transparent'};cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:6px">
+      <div id="aopt-chk-${i}" style="width:14px;height:14px;border-radius:3px;border:1px solid ${a.sel?'var(--v1)':'var(--bd)'};background:${a.sel?'var(--v1)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all .15s">
         ${a.sel?'<span style="font-size:9px;color:#fff;line-height:1">✓</span>':''}
       </div>
       <div>
-        <div style="font-size:8.5px;font-weight:700;color:var(--tx);line-height:1.2">${a.key}</div>
-        <div style="font-size:7.5px;font-family:var(--m);color:var(--mt);margin-top:2px">${a.label}</div>
+        <div style="font-size:8.5px;font-weight:700;color:var(--tx);line-height:1.2">${esc(a.key)}</div>
+        <div style="font-size:7.5px;font-family:var(--m);color:var(--mt);margin-top:2px">${esc(a.label)}</div>
       </div>
     </div>`).join('');
 }
 
 function toggleAngle(i){
-  DEFAULT_ANGLES[i].sel = !DEFAULT_ANGLES[i].sel;
+  if(!_calAngles)return;
+  _calAngles[i].sel = !_calAngles[i].sel;
   const opt = document.getElementById('aopt-'+i);
   const chk = document.getElementById('aopt-chk-'+i);
-  opt.style.borderColor = DEFAULT_ANGLES[i].sel ? 'var(--v1)' : 'var(--bd)';
-  opt.style.background = DEFAULT_ANGLES[i].sel ? 'rgba(58,92,158,.09)' : 'transparent';
-  chk.style.background = DEFAULT_ANGLES[i].sel ? 'var(--v1)' : 'transparent';
-  chk.style.borderColor = DEFAULT_ANGLES[i].sel ? 'var(--v1)' : 'var(--bd)';
-  chk.innerHTML = DEFAULT_ANGLES[i].sel ? '<span style="font-size:9px;color:#fff;line-height:1">✓</span>' : '';
+  opt.style.borderColor = _calAngles[i].sel ? 'var(--v1)' : 'var(--bd)';
+  opt.style.background = _calAngles[i].sel ? 'rgba(58,92,158,.09)' : 'transparent';
+  chk.style.background = _calAngles[i].sel ? 'var(--v1)' : 'transparent';
+  chk.style.borderColor = _calAngles[i].sel ? 'var(--v1)' : 'var(--bd)';
+  chk.innerHTML = _calAngles[i].sel ? '<span style="font-size:9px;color:#fff;line-height:1">✓</span>' : '';
 }
 
 async function updateAICalSection(client_id){
@@ -2103,11 +2255,13 @@ async function updateAICalSection(client_id){
       if(cl.docs?.filter(d=>d.analysis).length) briefStr += `\nDocs analizados: ${cl.docs.filter(d=>d.analysis).length}`;
       brief.style.display = 'block';
       briefTxt.textContent = briefStr.trim();
+      await renderAnglesGrid(client_id);
     }
   } else {
     aiSec.style.display = 'none';
     btnAI.style.display = 'none';
     brief.style.display = 'none';
+    await renderAnglesGrid(null);
   }
 }
 
@@ -2117,7 +2271,8 @@ async function saveCalWithAI(){
   const selOpt = document.querySelector('.cs-opt.sel');
   const client_id = selOpt?.dataset?.id||'';
   const cl = client_id ? await getClient(client_id) : null;
-  const selectedAngles = DEFAULT_ANGLES.filter(a=>a.sel);
+  if(!_calAngles) _calAngles = getClientAngles(cl);
+  const selectedAngles = _calAngles.filter(a=>a.sel);
   if(selectedAngles.length===0){toast('Selecciona al menos un ángulo','terr');return;}
   const extra = document.getElementById('ai-cal-extra').value.trim();
 

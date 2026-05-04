@@ -29,14 +29,14 @@ router.get('/:id', optionalAuth, async (req, res) => {
 
 // POST new client
 router.post('/', optionalAuth, async (req, res) => {
-  const { id, name, industry, description, audience, tone, color, color2, style } = req.body;
+  const { id, name, industry, description, audience, tone, color, color2, style, custom_types, custom_angles } = req.body;
   if (!name) return res.status(400).json({ error: 'Missing name' });
 
   try {
     const clientId = id || `cl_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const result = await pool.query(
-      'INSERT INTO clients (id, user_id, name, industry, description, audience, tone, color, color2, style) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
-      [clientId, req.user.userId, name, industry || null, description || null, audience || null, tone || null, color || null, color2 || null, style || null]
+      'INSERT INTO clients (id, user_id, name, industry, description, audience, tone, color, color2, style, custom_types, custom_angles) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *',
+      [clientId, req.user.userId, name, industry || null, description || null, audience || null, tone || null, color || null, color2 || null, style || null, JSON.stringify(custom_types || []), JSON.stringify(custom_angles || [])]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -47,11 +47,26 @@ router.post('/', optionalAuth, async (req, res) => {
 
 // PUT update client
 router.put('/:id', optionalAuth, async (req, res) => {
-  const { name, industry, description, audience, tone, color, color2, style } = req.body;
+  const { name, industry, description, audience, tone, color, color2, style, custom_types, custom_angles } = req.body;
   try {
+    const fields = [];
+    const vals = [req.params.id, req.user.userId];
+    let i = 3;
+    if (name !== undefined)         { fields.push(`name=$${i++}`);         vals.push(name); }
+    if (industry !== undefined)     { fields.push(`industry=$${i++}`);     vals.push(industry); }
+    if (description !== undefined)  { fields.push(`description=$${i++}`);  vals.push(description); }
+    if (audience !== undefined)     { fields.push(`audience=$${i++}`);     vals.push(audience); }
+    if (tone !== undefined)         { fields.push(`tone=$${i++}`);         vals.push(tone); }
+    if (color !== undefined)        { fields.push(`color=$${i++}`);        vals.push(color); }
+    if (color2 !== undefined)       { fields.push(`color2=$${i++}`);       vals.push(color2); }
+    if (style !== undefined)        { fields.push(`style=$${i++}`);        vals.push(style); }
+    if (custom_types !== undefined) { fields.push(`custom_types=$${i++}`); vals.push(JSON.stringify(custom_types)); }
+    if (custom_angles !== undefined){ fields.push(`custom_angles=$${i++}`);vals.push(JSON.stringify(custom_angles)); }
+    if (fields.length === 0) return res.status(400).json({ error: 'No fields to update' });
+    fields.push(`updated_at=NOW()`);
     const result = await pool.query(
-      'UPDATE clients SET name = COALESCE($2, name), industry = COALESCE($3, industry), description = COALESCE($4, description), audience = COALESCE($5, audience), tone = COALESCE($6, tone), color = COALESCE($7, color), color2 = COALESCE($8, color2), style = COALESCE($9, style), updated_at = NOW() WHERE id = $1 AND user_id = $10 RETURNING *',
-      [req.params.id, name, industry, description, audience, tone, color, color2, style, req.user.userId]
+      `UPDATE clients SET ${fields.join(', ')} WHERE id=$1 AND user_id=$2 RETURNING *`,
+      vals
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Client not found' });
     res.json(result.rows[0]);
