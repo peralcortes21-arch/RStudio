@@ -514,23 +514,8 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
   <div class="ctlbar">
     <span class="ctl-lbl">MODELO</span>
     <div class="ctl-item" id="ctl-model">
-      <button class="ctl-btn" id="ctl-model-btn" onclick="toggleCtl('model')">
-        <span id="ctl-model-val">Nano Banana 2</span>
-        <svg class="ctl-chev" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2.5 3.75L5 6.25L7.5 3.75" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <div class="ctl-drop" id="ctl-model-drop">
-        <button class="ctl-opt act" data-m="nano-banana-2" onclick="pickModel('nano-banana-2')">
-          <span class="ctl-opt-n">Nano Banana 2 <span class="ctl-check">✓</span></span>
-          <span class="ctl-opt-d">Google · Texto a imagen · Multi-ref</span>
-        </button>
-        <button class="ctl-opt" data-m="nano-banana-pro" onclick="pickModel('nano-banana-pro')">
-          <span class="ctl-opt-n">Nano Banana Pro <span class="ctl-check">✓</span></span>
-          <span class="ctl-opt-d">Google · Imagen a imagen · Referencias</span>
-        </button>
-        <button class="ctl-opt" data-m="gpt-image-2-text-to-image" onclick="pickModel('gpt-image-2-text-to-image')">
-          <span class="ctl-opt-n">GPT Image 2 <span class="ctl-check">✓</span></span>
-          <span class="ctl-opt-d">OpenAI · Alta coherencia de texto</span>
-        </button>
+      <div class="ctl-btn" style="cursor:default">
+        <span id="ctl-model-val">GPT Image 2</span>
       </div>
     </div>
     <div class="ctl-sep"></div>
@@ -715,16 +700,12 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 
         <!-- Image style -->
         <div style="background:rgba(10,14,22,.8);border:1px solid var(--bd);border-radius:var(--r);padding:1rem">
-          <div style="font-size:9px;font-family:var(--m);color:var(--dm);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem">ESTILO DE IMÁGENES</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-            <button class="style-pill act" data-style="dark-editorial" onclick="selStyle(this)">Oscuro editorial</button>
-            <button class="style-pill" data-style="light-minimal" onclick="selStyle(this)">Claro minimalista</button>
-            <button class="style-pill" data-style="cinematic" onclick="selStyle(this)">Cinematográfico</button>
-            <button class="style-pill" data-style="neon-tech" onclick="selStyle(this)">Neon tech</button>
-            <button class="style-pill" data-style="natural-warm" onclick="selStyle(this)">Natural cálido</button>
-            <button class="style-pill" data-style="premium-luxury" onclick="selStyle(this)">Lujo premium</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+            <div style="font-size:9px;font-family:var(--m);color:var(--dm);letter-spacing:.12em;text-transform:uppercase">ESTILO DE IMÁGENES</div>
+            <button onclick="openAddStylePreset()" style="font-size:7.5px;font-family:var(--m);padding:2px 8px;border-radius:3px;background:transparent;border:1px solid var(--bd);color:var(--mt);cursor:pointer" onmouseover="this.style.color='var(--v3)';this.style.borderColor='var(--v1)'" onmouseout="this.style.color='var(--mt)';this.style.borderColor='var(--bd)'">+ Añadir preset</button>
           </div>
-          <textarea id="studio-img-style" rows="2" style="width:100%;background:rgba(4,6,10,.7);border:1px solid var(--bd);border-radius:var(--rs);padding:7px 9px;font-size:10px;color:var(--mt);font-family:var(--m);outline:none;resize:none;line-height:1.5;transition:border-color .15s" placeholder="Descripción adicional del estilo visual en inglés..." onfocus="this.style.borderColor='var(--bdh)'" onblur="this.style.borderColor='var(--bd)'"></textarea>
+          <div id="style-presets-list" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px"></div>
+          <textarea id="studio-img-style" rows="2" style="width:100%;background:rgba(4,6,10,.7);border:1px solid var(--bd);border-radius:var(--rs);padding:7px 9px;font-size:10px;color:var(--mt);font-family:var(--m);outline:none;resize:none;line-height:1.5;transition:border-color .15s" placeholder="Describe el estilo visual en inglés (ej: dark editorial, navy, volumetric light...)" onfocus="this.style.borderColor='var(--bdh)'" onblur="this.style.borderColor='var(--bd)'"></textarea>
         </div>
 
         <!-- Active refs -->
@@ -751,17 +732,13 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 
         <!-- Options -->
         <div style="background:rgba(10,14,22,.8);border:1px solid var(--bd);border-radius:var(--r);padding:1rem">
-          <div style="font-size:9px;font-family:var(--m);color:var(--dm);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem">OPCIONES</div>
-          <div style="display:flex;flex-direction:column;gap:7px">
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-              <input type="checkbox" id="opt-auto-prompts" checked style="accent-color:var(--v1)">
-              <span style="font-size:9px;color:var(--tx)">Generar prompts de imagen automáticamente</span>
-            </label>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-              <input type="checkbox" id="opt-auto-images" style="accent-color:var(--v1)">
-              <span style="font-size:9px;color:var(--tx)">Generar imágenes automáticamente</span>
-            </label>
-            <div style="font-size:8px;font-family:var(--m);color:var(--dm);padding-left:21px">⚠ Las imágenes tardan ~15s cada una</div>
+          <div style="font-size:9px;font-family:var(--m);color:var(--dm);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.8rem">POSTS A GENERAR</div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <input type="number" id="opt-posts-count" value="10" min="1" max="30" style="width:64px;background:rgba(4,6,10,.7);border:1px solid var(--bd);border-radius:var(--rs);padding:6px 8px;font-size:16px;font-weight:700;color:var(--tx);font-family:var(--f);outline:none;text-align:center" onfocus="this.style.borderColor='var(--bdh)'" onblur="this.style.borderColor='var(--bd)'">
+            <div>
+              <div style="font-size:9px;color:var(--tx)">posts en total</div>
+              <div style="font-size:8px;font-family:var(--m);color:var(--dm);margin-top:2px">máximo 30 · distribuidos entre los ángulos seleccionados</div>
+            </div>
           </div>
         </div>
 
@@ -1006,8 +983,33 @@ document.addEventListener('mousemove',e=>{CU.style.left=e.clientX+'px';CU.style.
 
 /* ══ CONFIG ══ */
 const KIE_BASE='https://api.kie.ai';
-function getKieKey(){return localStorage.getItem('cliender_kie_key')||'';}
-function getClaudeKey(){return localStorage.getItem('cliender_claude_key')||'';}
+const AI_PROXY='/api/ai';
+let _kieKey='',_claudeKey='',_keysLoaded=false;
+function getKieKey(){return localStorage.getItem('cliender_kie_key')||_kieKey||'';}
+function getClaudeKey(){return localStorage.getItem('cliender_claude_key')||_claudeKey||'';}
+// Llamada a Claude via proxy backend (evita CORS)
+async function callClaude(body){
+  const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error('Claude '+r.status+': '+(e.error||''));}
+  return r.json();
+}
+// Llamada a KIE via proxy backend
+async function callKieMessages(body){
+  const r=await fetch(AI_PROXY+'/kie/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error('KIE '+r.status+': '+(e.error||''));}
+  return r.json();
+}
+async function loadServerKeys(){
+  if(_keysLoaded)return;
+  try{
+    const r=await fetch('/api/config');
+    if(!r.ok)return;
+    const cfg=await r.json();
+    if(cfg.kieKey)_kieKey=cfg.kieKey;
+    if(cfg.claudeKey)_claudeKey=cfg.claudeKey;
+    _keysLoaded=true;
+  }catch{}
+}
 const FORMATS=[
   {key:'square_1_1',label:'1:1',sub:'Feed',w:1,h:1,px:1080,py:1080,g:'s'},
   {key:'portrait_4_5',label:'4:5',sub:'Retrato',w:4,h:5,px:1080,py:1350,g:'s'},
@@ -1025,18 +1027,14 @@ const KIE_AR={
 /* GPT Image 2 only supports these ratios — map unsupported to nearest */
 const GPT_AR_MAP={'4:5':'3:4','2:3':'3:4','3:2':'16:9'};
 const MF={
-  'nano-banana-2':['square_1_1','portrait_4_5','social_story_9_16','portrait_2_3','widescreen_16_9','classic_4_3','standard_3_2'],
-  'nano-banana-pro':['square_1_1','portrait_4_5','social_story_9_16','portrait_2_3','widescreen_16_9','classic_4_3','standard_3_2'],
-  'gpt-image-2-text-to-image':['square_1_1','portrait_4_5','social_story_9_16','portrait_2_3','widescreen_16_9','classic_4_3'],
+  'gpt-image-2-text-to-image':['square_1_1','portrait_4_5','social_story_9_16','portrait_2_3','widescreen_16_9','classic_4_3','standard_3_2'],
 };
 const MODELS={
-  'nano-banana-2':{label:'NB2',hint:'<b>Asíncrono</b> · Google · Texto a imagen · Multi-referencia',sync:false},
-  'nano-banana-pro':{label:'NB Pro',hint:'<b>Asíncrono</b> · Google · Imagen a imagen · Referencias',sync:false},
-  'gpt-image-2-text-to-image':{label:'GPT-2',hint:'<b>Asíncrono</b> · OpenAI · Alta coherencia de texto',sync:false},
+  'gpt-image-2-text-to-image':{label:'GPT Image 2',hint:'<b>OpenAI</b> · GPT Image 2 · Alta coherencia de texto',sync:false},
 };
 
 /* ══ STATE ══ */
-let AM='nano-banana-2',AF='square_1_1',AT='all',AA='all',GC=0;
+let AM='gpt-image-2-text-to-image',AF='square_1_1',AT='all',AA='all',GC=0;
 let activeCal=null,activeClient=null;
 const imgSrcs={};
 let selRefs=new Set();
@@ -1086,7 +1084,7 @@ const DC={id:'default_v4',name:'Cliender — SALES & TECH',desc:'Calendario base
 
 async function ensureDefault(){
   const cals=await getCals();
-  if(!cals.find(x=>x.id===DC.id)){try{await fetch('/api/calendars',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:DC.id,name:DC.name,description:DC.desc,client_id:DC.client_id})});_invalidate('cals');}catch{}}
+  if(!cals.find(x=>x.id===DC.id)){try{await fetch('/api/calendars',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:DC.id,name:DC.name,description:DC.desc,clientId:DC.client_id})});_invalidate('cals');}catch{}}
 }
 
 /* ══ NAVIGATION ══ */
@@ -1155,12 +1153,29 @@ async function renderCalBar(){
   const add=document.createElement('button');add.className='ctab add';add.title='Nuevo';add.textContent='＋';add.onclick=openNewCal;bar.appendChild(add);
 }
 async function openCal(id){
-  const cals=await getCals();const cal=cals.find(c=>c.id===id);if(!cal)return;
+  // Fetch directo para no depender de caché al abrir un calendario recién creado
+  let cal;
+  try{
+    const r=await fetch('/api/calendars/'+id,{headers:{'Content-Type':'application/json'}});
+    if(r.ok){const raw=await r.json();cal={...normCal(raw),desc:raw.description};}
+  }catch{}
+  if(!cal){const cals=await getCals();cal=cals.find(c=>c.id===id);}
+  if(!cal){toast('Calendario no encontrado','terr');return;}
   activeCal=id;await renderCalBar();
   document.getElementById('chdr').style.display='flex';document.getElementById('filtrow').style.display='flex';
   document.getElementById('cname').textContent=cal.name;
   document.getElementById('cdesctxt').textContent=cal.description||'';
-  try{const pr=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});if(!pr.ok){toast('Error: '+pr.statusText,'terr');return;}const posts=await pr.json();document.getElementById('ccnt').textContent=posts.length+' posts';const ct=document.getElementById('ctag');if(cal.client_id){const cl=await getClient(cal.client_id);ct.style.display='block';ct.textContent=cl?'🏢 '+cl.name:'sin cliente';}else ct.style.display='none';renderGrid(posts);renderAngleFilter(posts);}catch{}}
+  try{
+    const pr=await fetch('/api/calendars/'+id+'/posts',{headers:{'Content-Type':'application/json'}});
+    if(!pr.ok){toast('Error: '+pr.statusText,'terr');return;}
+    const posts=normPosts(await pr.json());
+    document.getElementById('ccnt').textContent=posts.length+' posts';
+    const ct=document.getElementById('ctag');
+    if(cal.client_id){const cl=await getClient(cal.client_id);ct.style.display='block';ct.textContent=cl?'🏢 '+cl.name:'sin cliente';}
+    else ct.style.display='none';
+    renderGrid(posts);
+    renderAngleFilter(posts);
+  }catch(e){console.error('openCal error:',e);}
 }
 function renderAngleFilter(posts){
   const angles=[...new Set(posts.map(p=>p.a))];
@@ -1235,7 +1250,7 @@ async function gP(id){
   let uc=buildUC(p);
   if(refCtx.images.length>0){uc=[...refCtx.images.map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:buildUC(p)+'\nInspírate en el estilo de las referencias visuales para el FONDO.'}];}
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:280,system:sys,messages:[{role:'user',content:uc}]})});
+    const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:280,system:sys,messages:[{role:'user',content:uc}]})});
     if(!r.ok){toast('Error: '+r.statusText,'terr');dot(id,'er');btn.disabled=false;return;}
     const dd=await r.json();const txt=dd.content?.[0]?.text?.trim()||fbP(p,clCtx);
     pt.textContent=txt;pt.dataset.prompt=txt;
@@ -1289,7 +1304,7 @@ async function startGenAll(){
     let uc=buildUC(p);
     if(refCtx.images.length>0){uc=[...refCtx.images.slice(0,1).map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:buildUC(p)+'\nInspírate en el estilo visual de la referencia.'}];}
     try{
-      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:260,system:sys,messages:[{role:'user',content:uc}]})});
+      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:260,system:sys,messages:[{role:'user',content:uc}]})});
       if(!r.ok){logEl.innerHTML+='<span style="color:var(--er)">✕</span> '+esc(p.hook.replace(/\n/g,' ').slice(0,38))+' (HTTP '+r.status+')<br>';dot(p.id,'er');continue;}
       const dd=await r.json();const txt=dd.content?.[0]?.text?.trim()||fbP(p,clCtx);
       const ptEl=document.getElementById('pt-'+p.id);if(ptEl){ptEl.textContent=txt;ptEl.dataset.prompt=txt;}
@@ -1326,7 +1341,7 @@ async function gI(id){
   area.innerHTML=mkL(MODELS[AM].label+'…',id);
   try{
     const body=buildKieBody(AM,pr,AF);
-    const r=await fetch(`${KIE_BASE}/api/v1/jobs/createTask`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+getKieKey()},body:JSON.stringify(body)});
+    const r=await fetch(AI_PROXY+'/kie/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const raw=await r.text();let dd;try{dd=JSON.parse(raw);}catch{throw new Error(`No-JSON (${r.status}): ${raw.slice(0,250)}`);}
     if(!r.ok)throw new Error(`HTTP ${r.status} — ${dd.msg||JSON.stringify(dd).slice(0,250)}`);
     const tid=dd.data?.taskId;if(!tid)throw new Error('Sin taskId: '+JSON.stringify(dd).slice(0,250));
@@ -1340,7 +1355,7 @@ async function pollKie(id,taskId,btn,n=0){
   const pf=document.getElementById('pf-'+id);if(pf)pf.style.width=pct+'%';
   const sl=document.getElementById('sl-'+id);if(sl)sl.innerHTML=`Generando <b>${pct}%</b> (~${Math.round(n*INT/1000)}s)`;
   try{
-    const r=await fetch(`${KIE_BASE}/api/v1/jobs/recordInfo?taskId=${taskId}`,{headers:{'Authorization':'Bearer '+getKieKey()}});
+    const r=await fetch(AI_PROXY+'/kie/image/status?taskId='+taskId);
     const raw=await r.text();let dd;try{dd=JSON.parse(raw);}catch{throw new Error(raw.slice(0,200));}
     if(!r.ok)throw new Error(`Poll ${r.status}: ${dd.msg||JSON.stringify(dd).slice(0,200)}`);
     const data=dd.data,state=data?.state;
@@ -1471,7 +1486,7 @@ async function saveCal(){
   const name=document.getElementById('cal-nm').value.trim();if(!name){toast('El nombre es obligatorio','terr');return;}
   const selOpt=document.querySelector('.cs-opt.sel');const client_id=selOpt?.dataset?.id||null;
   try{
-    const cal={name,description:document.getElementById('cal-ds').value.trim(),client_id};
+    const cal={name,description:document.getElementById('cal-ds').value.trim(),clientId:client_id||null};
     const method=editCId?'PUT':'POST',endpoint=editCId?'/api/calendars/'+editCId:'/api/calendars';
     const r=await fetch(endpoint,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(cal)});
     if(!r.ok){toast('Error al guardar','terr');return;}
@@ -1576,6 +1591,21 @@ async function renderClientDetail(id){
   document.getElementById('cl-info-disp').innerHTML=[['Sector',cl.industry],['Descripción',cl.desc],['Público',cl.audience],['Tono',cl.tone],['Color 1','<span style="width:12px;height:12px;border-radius:50%;background:'+cl.color+';display:inline-block;vertical-align:middle;margin-right:4px"></span>'+cl.color],['Color 2','<span style="width:12px;height:12px;border-radius:50%;background:'+cl.color2+';display:inline-block;vertical-align:middle;margin-right:4px"></span>'+cl.color2],['Estilo',cl.style]].filter(r=>r[1]).map(r=>`<div class="det-row"><span class="dk">${r[0]}</span><span class="dv">${r[1]}</span></div>`).join('');
   let clDocs=[];try{const dr=await fetch('/api/clients/'+id+'/docs',{headers:{'Content-Type':'application/json'}});if(dr.ok)clDocs=await dr.json();}catch{}
   renderDocsList(cl,clDocs);
+
+  // Tipos psicológicos
+  const types=getClientTypes(cl);
+  let typesEl=document.getElementById('cl-types-section');
+  if(!typesEl){typesEl=document.createElement('div');typesEl.id='cl-types-section';typesEl.className='det-card';document.querySelector('#panel-client-detail .det-grid').appendChild(typesEl);}
+  typesEl.innerHTML=`<div class="dct" style="justify-content:space-between;align-items:center"><span>TIPOS PSICOLÓGICOS</span><div style="display:flex;gap:5px"><button onclick="addClientType('${id}')" class="bba bba-p" style="padding:3px 9px;font-size:7.5px;border:none">+ Añadir</button>${cl.custom_types?.length?`<button onclick="saveClientField('${id}','custom_types',[]);_invalidate('clients');renderClientDetail('${id}')" style="padding:3px 8px;font-size:7.5px;border:1px solid var(--bd);background:transparent;color:var(--dm);border-radius:3px;cursor:pointer" title="Restaurar predeterminados">⟳ Reset</button>`:''}</div></div>
+  <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px">${types.map(t=>`<div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:20px;overflow:hidden"><span style="font-size:8.5px;font-family:var(--m);padding:3px 10px;color:var(--tx)">${esc(t)}</span><button onclick="delClientType('${id}','${esc(t)}')" style="font-size:9px;background:transparent;border:none;color:var(--dm);cursor:pointer;padding:2px 7px" title="Eliminar" onmouseover="this.style.color='var(--er)'" onmouseout="this.style.color='var(--dm)'">×</button></div>`).join('')}</div>`;
+
+  // Ángulos de contenido
+  const angles=getClientAngles(cl);
+  let anglesEl=document.getElementById('cl-angles-section');
+  if(!anglesEl){anglesEl=document.createElement('div');anglesEl.id='cl-angles-section';anglesEl.className='det-card';document.querySelector('#panel-client-detail .det-grid').appendChild(anglesEl);}
+  anglesEl.innerHTML=`<div class="dct" style="justify-content:space-between;align-items:center"><span>ÁNGULOS DE CONTENIDO</span><div style="display:flex;gap:5px"><button onclick="addClientAngle('${id}')" class="bba bba-p" style="padding:3px 9px;font-size:7.5px;border:none">+ Añadir</button>${cl.custom_angles?.length?`<button onclick="saveClientField('${id}','custom_angles',[]);_invalidate('clients');renderClientDetail('${id}')" style="padding:3px 8px;font-size:7.5px;border:1px solid var(--bd);background:transparent;color:var(--dm);border-radius:3px;cursor:pointer" title="Restaurar predeterminados">⟳ Reset</button>`:''}</div></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:5px;margin-top:8px">${angles.map(a=>`<div style="background:rgba(255,255,255,.02);border:1px solid var(--bd);border-radius:var(--rs);padding:6px 8px;display:flex;align-items:flex-start;justify-content:space-between;gap:4px"><div><div style="font-size:8px;font-weight:700;color:var(--tx)">${esc(a.key)}</div><div style="font-size:7.5px;font-family:var(--m);color:var(--mt)">${esc(a.label||'')}</div></div><button onclick="delClientAngle('${id}','${esc(a.key)}')" style="font-size:9px;background:transparent;border:none;color:var(--dm);cursor:pointer;padding:1px 4px;flex-shrink:0" title="Eliminar" onmouseover="this.style.color='var(--er)'" onmouseout="this.style.color='var(--dm)'">×</button></div>`).join('')}</div>`;
+
   const cals=(await getCals()).filter(c=>c.client_id===id);
   const cg=document.getElementById('cl-cals-grid'),ce=document.getElementById('cl-cals-empty');
   if(cals.length===0){cg.style.display='none';ce.style.display='block';}
@@ -1596,7 +1626,7 @@ async function handleDocs(e){
       let content;
       if(mtype.startsWith('image/')){content=[{type:'image',source:{type:'base64',media_type:mtype,data:base64}},{type:'text',text:'Analiza este documento/imagen de marca en 2-3 frases: estilo visual, paleta de colores, tipografía y mood. Solo el análisis.'}];}
       else content='Analiza este documento de cliente. Extrae en 2-3 frases: propuesta de valor, tono de comunicación y estilo visual.';
-      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,messages:[{role:'user',content}]})});
+      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:200,messages:[{role:'user',content}]})});
       if(!r.ok){toast('Error: '+r.statusText,'terr');}else{const dd=await r.json();doc.analysis=dd.content?.[0]?.text?.trim()||'';}
     }catch{}
     try{await fetch('/api/clients/'+activeClient+'/docs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(doc)});}catch{toast('Error al guardar doc','terr');}
@@ -1627,7 +1657,7 @@ async function handleRefsFiles(files){
     const b64=await toB64(file);const base64=b64.split(',')[1];const mtype=file.type;
     const ref={id:'ref_'+Date.now()+'_'+Math.random().toString(36).slice(2),name:file.name,base64,mimeType:mtype,tags:[],analysis:''};
     try{
-      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:160,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mtype,data:base64}},{type:'text',text:'Describe el estilo visual en 2 frases (paleta, iluminación, mood, estilo fotográfico). Solo la descripción.'}]}]})});
+      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:160,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mtype,data:base64}},{type:'text',text:'Describe el estilo visual en 2 frases (paleta, iluminación, mood, estilo fotográfico). Solo la descripción.'}]}]})});
       if(!r.ok){toast('Error: '+r.statusText,'terr');}else{const dd=await r.json();ref.analysis=dd.content?.[0]?.text?.trim()||'';}
       const tw=['oscuro','claro','minimalista','editorial','cinematográfico','premium','vintage','moderno','abstracto','neon','tech','gradiente'];
       ref.tags=tw.filter(w=>ref.analysis.toLowerCase().includes(w)).slice(0,4);
@@ -1665,14 +1695,85 @@ ${c.desc?`<div class="cc-desc">${esc(c.desc.slice(0,65))}</div>`:''}
 
 /* ══ PROMPT STUDIO ══ */
 let studioGenCalId = null;
-const STUDIO_STYLE_PRESETS = {
-  'dark-editorial':'dark moody editorial, deep shadows, navy background, volumetric purple light, 3D glass objects floating, cinematic depth of field',
-  'light-minimal':'clean bright minimal, white and light gray tones, soft shadows, geometric shapes, premium product photography',
-  'cinematic':'cinematic widescreen, dramatic lighting, rich colors, film grain, bokeh background, storytelling composition',
-  'neon-tech':'futuristic tech, neon light streaks, dark background, glowing elements, cyber aesthetic, holographic effects',
-  'natural-warm':'natural warm tones, golden hour light, organic textures, soft focus, lifestyle photography',
-  'premium-luxury':'luxury premium, dark gold accents, marble textures, high-end product photography, exclusive atmosphere'
-};
+const STYLE_PRESETS_KEY = 'cliender_style_presets';
+function getStylePresets(){try{const r=localStorage.getItem(STYLE_PRESETS_KEY);return r?JSON.parse(r):[];}catch{return[];}}
+function saveStylePresets(p){localStorage.setItem(STYLE_PRESETS_KEY,JSON.stringify(p));}
+function renderStylePresets(){
+  const list=document.getElementById('style-presets-list');if(!list)return;
+  const presets=getStylePresets();
+  if(presets.length===0){list.innerHTML='<span style="font-size:8px;color:var(--dm);font-family:var(--m)">Sin presets — pulsa "+ Añadir preset" para crear uno</span>';return;}
+  list.innerHTML=presets.map(p=>`<div style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:20px;overflow:hidden">
+    <button onclick="applyStylePreset('${esc(p.id)}')" title="${esc(p.prompt)}" style="padding:4px 10px;font-size:8.5px;font-weight:600;background:transparent;border:none;color:var(--mt);cursor:pointer;font-family:var(--f)" onmouseover="this.style.color='var(--v3)'" onmouseout="this.style.color='var(--mt)'">${esc(p.name)}</button>
+    <button onclick="editStylePreset('${esc(p.id)}')" title="Editar" style="font-size:9px;background:transparent;border:none;color:var(--dm);cursor:pointer;padding:2px 5px" onmouseover="this.style.color='var(--v3)'" onmouseout="this.style.color='var(--dm)'">✎</button>
+    <button onclick="delStylePreset('${esc(p.id)}')" title="Eliminar" style="font-size:9px;background:transparent;border:none;color:var(--dm);cursor:pointer;padding:2px 7px" onmouseover="this.style.color='var(--er)'" onmouseout="this.style.color='var(--dm)'">×</button>
+  </div>`).join('');
+}
+function applyStylePreset(id){const p=getStylePresets().find(x=>x.id===id);if(p)document.getElementById('studio-img-style').value=p.prompt;}
+function openAddStylePreset(){
+  const name=prompt('Nombre del preset:');if(!name?.trim())return;
+  const prompt_=prompt('Prompt del estilo (en inglés):');if(!prompt_?.trim())return;
+  const presets=getStylePresets();
+  presets.push({id:'sp_'+Date.now(),name:name.trim(),prompt:prompt_.trim()});
+  saveStylePresets(presets);renderStylePresets();toast('Preset guardado ✓','tok');
+}
+function editStylePreset(id){
+  const presets=getStylePresets();const i=presets.findIndex(x=>x.id===id);if(i<0)return;
+  const name=prompt('Nombre:',presets[i].name);if(!name?.trim())return;
+  const pr=prompt('Prompt:',presets[i].prompt);if(!pr?.trim())return;
+  presets[i]={...presets[i],name:name.trim(),prompt:pr.trim()};
+  saveStylePresets(presets);renderStylePresets();toast('Preset actualizado ✓','tok');
+}
+function delStylePreset(id){
+  if(!confirm('¿Eliminar este preset?'))return;
+  saveStylePresets(getStylePresets().filter(x=>x.id!==id));renderStylePresets();
+}
+
+/* ══ TIPOS Y ÁNGULOS POR CLIENTE ══ */
+const DEFAULT_TYPES=['Dolor','Miedo','Resultado','Prueba','Deseo'];
+function parseArr(v){try{return Array.isArray(v)?v:(typeof v==='string'?JSON.parse(v):[]);}catch{return[];}}
+function getClientTypes(cl){
+  const t=parseArr(cl?.custom_types);
+  if(t.length)return t;
+  return [...DEFAULT_TYPES];
+}
+function getClientAngles(cl){
+  const a=parseArr(cl?.custom_angles);
+  if(a.length)return a.map(x=>({...x,sel:x.sel!==false}));
+  return DEFAULT_ANGLES.map(a=>({...a}));
+}
+async function saveClientField(clientId,field,value){
+  try{const r=await fetch('/api/clients/'+clientId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({[field]:value})});if(!r.ok){toast('Error al guardar','terr');return false;}_invalidate('clients');return true;}catch{toast('Error de conexión','terr');return false;}
+}
+async function addClientType(clientId){
+  const name=prompt('Nombre del tipo psicológico:');if(!name?.trim())return;
+  const cl=await getClient(clientId);if(!cl)return;
+  const types=getClientTypes(cl);
+  if(types.includes(name.trim())){toast('Ese tipo ya existe','terr');return;}
+  types.push(name.trim());
+  if(await saveClientField(clientId,'custom_types',types))renderClientDetail(clientId);
+}
+async function delClientType(clientId,name){
+  if(!confirm('¿Eliminar tipo "'+name+'"?'))return;
+  const cl=await getClient(clientId);if(!cl)return;
+  const types=getClientTypes(cl).filter(t=>t!==name);
+  if(await saveClientField(clientId,'custom_types',types))renderClientDetail(clientId);
+}
+async function addClientAngle(clientId){
+  const key=prompt('Nombre del ángulo:');if(!key?.trim())return;
+  const label=prompt('Etiqueta descriptiva:');if(!label?.trim())return;
+  const desc=prompt('Descripción breve (opcional):','Posts sobre...')||'';
+  const cl=await getClient(clientId);if(!cl)return;
+  const angles=getClientAngles(cl);
+  if(angles.find(a=>a.key===key.trim())){toast('Ese ángulo ya existe','terr');return;}
+  angles.push({key:key.trim(),label:label.trim(),desc,sel:true});
+  if(await saveClientField(clientId,'custom_angles',angles))renderClientDetail(clientId);
+}
+async function delClientAngle(clientId,key){
+  if(!confirm('¿Eliminar ángulo "'+key+'"?'))return;
+  const cl=await getClient(clientId);if(!cl)return;
+  const angles=getClientAngles(cl).filter(a=>a.key!==key);
+  if(await saveClientField(clientId,'custom_angles',angles))renderClientDetail(clientId);
+}
 
 async function calSubtab(sub, btn){
   document.querySelectorAll('#panel-cals .ctab').forEach(b=>b.classList.remove('act'));
@@ -1699,16 +1800,16 @@ async function renderStudio(){
       </div>`)
     ].join('');
   }
-  // Angles
-  renderStudioAngles();
+  // Angles (use client's custom angles if client selected)
+  const initCl = activeClient ? await getClient(activeClient) : null;
+  renderStudioAngles(initCl);
+  // Style presets
+  renderStylePresets();
   // Refs preview
   updateStudioRefs();
   // Pre-fill prompt if client selected
-  if(activeClient){
-    const cl = await getClient(activeClient);
-    if(cl && !document.getElementById('studio-prompt').value){
-      prefillStudioPrompt(cl);
-    }
+  if(activeClient && initCl && !document.getElementById('studio-prompt').value){
+    prefillStudioPrompt(initCl);
   }
 }
 
@@ -1720,7 +1821,9 @@ async function studioSelClient(el){
   const cid = el.dataset.id;
   if(cid){
     const cl=await getClient(cid);
-    if(cl) prefillStudioPrompt(cl);
+    if(cl){prefillStudioPrompt(cl);renderStudioAngles(cl);}
+  } else {
+    renderStudioAngles(null);
   }
 }
 
@@ -1742,33 +1845,29 @@ function prefillStudioPrompt(cl){
   if(!styleInp.value && cl.color) styleInp.value = `Primary color ${cl.color}, secondary ${cl.color2||'#00d9ff'}, dark premium photography`;
 }
 
-function renderStudioAngles(){
+let _studioAngles = null;
+function renderStudioAngles(cl){
+  _studioAngles = getClientAngles(cl||null);
   const grid = document.getElementById('studio-angles');
-  grid.innerHTML = DEFAULT_ANGLES.map((a,i)=>`
+  grid.innerHTML = _studioAngles.map((a,i)=>`
     <div class="studio-angle${a.sel?' sel':''}" id="sa-${i}" onclick="toggleStudioAngle(${i})">
       <div class="sa-chk">${a.sel?'<span style="font-size:9px;color:#fff;line-height:1">✓</span>':''}</div>
-      <div><div class="sa-key">${a.key}</div><div class="sa-lbl">${a.label}</div></div>
+      <div><div class="sa-key">${esc(a.key)}</div><div class="sa-lbl">${esc(a.label||'')}</div></div>
     </div>`).join('');
 }
 
 function toggleStudioAngle(i){
-  DEFAULT_ANGLES[i].sel = !DEFAULT_ANGLES[i].sel;
+  if(!_studioAngles)return;
+  _studioAngles[i].sel = !_studioAngles[i].sel;
   const el = document.getElementById('sa-'+i);
   const chk = el.querySelector('.sa-chk');
-  el.classList.toggle('sel', DEFAULT_ANGLES[i].sel);
-  chk.innerHTML = DEFAULT_ANGLES[i].sel ? '<span style="font-size:9px;color:#fff;line-height:1">✓</span>' : '';
+  el.classList.toggle('sel', _studioAngles[i].sel);
+  chk.innerHTML = _studioAngles[i].sel ? '<span style="font-size:9px;color:#fff;line-height:1">✓</span>' : '';
 }
 
 function selectAllAngles(val){
-  DEFAULT_ANGLES.forEach((a,i)=>{a.sel=val;});
-  renderStudioAngles();
-}
-
-function selStyle(btn){
-  document.querySelectorAll('.style-pill').forEach(b=>b.classList.remove('act'));
-  btn.classList.add('act');
-  const preset = STUDIO_STYLE_PRESETS[btn.dataset.style]||'';
-  document.getElementById('studio-img-style').value = preset;
+  if(!_studioAngles)return;
+  _studioAngles.forEach((a,i)=>{a.sel=val;document.getElementById('sa-'+i)?.classList.toggle('sel',val);const c=document.querySelector('#sa-'+i+' .sa-chk');if(c)c.innerHTML=val?'<span style="font-size:9px;color:#fff;line-height:1">✓</span>':'';});
 }
 
 function updateStudioRefs(){
@@ -1785,163 +1884,184 @@ function updateStudioRefs(){
 }
 
 async function launchStudio(){
-  const name = document.getElementById('studio-cal-name').value.trim();
-  const prompt = document.getElementById('studio-prompt').value.trim();
-  if(!name){toast('Pon un nombre al calendario','terr');return;}
-  if(!prompt){toast('Escribe el prompt principal','terr');return;}
+  await loadServerKeys();
 
-  const selAngles = DEFAULT_ANGLES.filter(a=>a.sel);
-  if(selAngles.length===0){toast('Selecciona al menos un ángulo','terr');return;}
+  const name=document.getElementById('studio-cal-name').value.trim();
+  const studioPrompt=document.getElementById('studio-prompt').value.trim();
+  if(!name){toast('Pon nombre al calendario','terr');return;}
+  if(!studioPrompt){toast('Escribe el prompt principal','terr');return;}
 
-  const autoPrompts = document.getElementById('opt-auto-prompts').checked;
-  const autoImages = document.getElementById('opt-auto-images').checked;
+  const angles=(_studioAngles||DEFAULT_ANGLES).filter(a=>a.sel);
+  if(!angles.length){toast('Selecciona al menos un ángulo','terr');return;}
 
-  // Get selected client
-  const selClientEl = document.querySelector('#studio-client-sel .cs-opt.sel');
-  const client_id = selClientEl?.dataset?.id||null;
-  const cl = client_id ? await getClient(client_id) : null;
+  const nTotal=Math.min(30,Math.max(1,parseInt(document.getElementById('opt-posts-count').value)||10));
+  const nPerAngle=Math.max(1,Math.floor(nTotal/angles.length));
 
-  // Get image style
-  const imgStyle = document.getElementById('studio-img-style').value.trim();
+  const selEl=document.querySelector('#studio-client-sel .cs-opt.sel');
+  const clientId=selEl?.dataset?.id||null;
+  const cl=clientId?await getClient(clientId):null;
+  const imgStyle=document.getElementById('studio-img-style').value.trim();
 
-  // Hide form, show progress
-  document.getElementById('studio-launch-btn').style.opacity='0.5';
-  document.getElementById('studio-launch-btn').style.pointerEvents='none';
+  // UI
+  const btn=document.getElementById('studio-launch-btn');
+  btn.style.opacity='0.5';btn.style.pointerEvents='none';
   document.getElementById('studio-progress').style.display='block';
   document.getElementById('studio-progress').scrollIntoView({behavior:'smooth',block:'nearest'});
-
   const fillEl=document.getElementById('studio-prog-fill');
   const pctEl=document.getElementById('studio-prog-pct');
   const lblEl=document.getElementById('studio-prog-lbl');
   const logEl=document.getElementById('studio-prog-log');
-
-  // Create calendar via API
-  const newCalId='cal_studio_'+Date.now();
-  studioGenCalId=newCalId;
-  try{const cr=await fetch('/api/calendars',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:newCalId,name,description:prompt.slice(0,120),client_id:client_id||null})});if(!cr.ok){toast('Error al crear calendario','terr');document.getElementById('studio-launch-btn').style.opacity='1';document.getElementById('studio-launch-btn').style.pointerEvents='';return;}_invalidate('cals');}catch{toast('Error de conexión','terr');document.getElementById('studio-launch-btn').style.opacity='1';document.getElementById('studio-launch-btn').style.pointerEvents='';return;}
-
-  // Build context
-  let clCtx='';
-  if(cl){
-    clCtx=`CLIENTE: ${cl.name}\n`;
-    if(cl.industry)clCtx+=`Sector: ${cl.industry}\n`;
-    if(cl.desc)clCtx+=`Descripción: ${cl.desc}\n`;
-    if(cl.audience)clCtx+=`Público objetivo: ${cl.audience}\n`;
-    if(cl.tone)clCtx+=`Tono: ${cl.tone}\n`;
-    if(cl.color)clCtx+=`Color principal: ${cl.color}\n`;
-    if(cl.color2)clCtx+=`Color secundario: ${cl.color2}\n`;
-    if(cl.style)clCtx+=`Estilo visual: ${cl.style}\n`;
-    if(cl.docs?.length){const a=cl.docs.filter(d=>d.analysis);if(a.length){clCtx+='\nDocs de marca:\n';a.forEach(d=>{clCtx+=`- ${d.name}: ${d.analysis.slice(0,130)}\n`;});}}
-  }
-  const refCtx=buildRefCtx();
-  const imgStyleCtx=imgStyle||'dark editorial premium photography, volumetric lighting, 3D glass objects';
-
-  const sys=`Eres experto en marketing de contenidos y copywriting premium para Instagram B2B.
-CONTEXTO PRINCIPAL: ${prompt}
-${clCtx?'PERFIL DEL CLIENTE:\n'+clCtx:''}
-ESTILO VISUAL DE IMÁGENES: ${imgStyleCtx}
-${refCtx.text?'REFERENCIAS VISUALES: '+refCtx.text:''}
-
-Crea posts de Instagram con garra: hooks cortos con saltos de línea, cuerpo directo, CTA claro.
-Responde SOLO con JSON válido, sin markdown, sin texto adicional:
-{"posts":[{"hora":"10:00","tipo":"Dolor|Miedo|Resultado|Prueba|Deseo","hook":"línea1\\nlínea2\\nlínea3","sub":"subtítulo","body":"párrafo1\\n\\npárrafo2","cta":"Texto CTA","visual":"english visual description for AI image generation"}]}`;
-
-  let totalPosts=0;
-  const totalAngles=selAngles.length;
-  const totalSteps=totalAngles+(autoPrompts?1:0)+(autoImages?1:0);
-  let step=0;
-
-  // PHASE 1: Generate posts per angle
-  lblEl.innerHTML='📝 Fase 1/'+totalSteps+': Creando posts con IA...';
   logEl.innerHTML='';
 
-  for(let ai=0;ai<selAngles.length;ai++){
-    const angle=selAngles[ai];
-    const pct=Math.round((ai/totalAngles)*Math.floor(100/totalSteps));
-    fillEl.style.width=pct+'%';pctEl.textContent=pct+'%';
-    lblEl.innerHTML=`📝 Creando posts: <b>${angle.key}</b> (${ai+1}/${totalAngles})`;
+  // Info cliente
+  const cName=cl?.name||'';
+  const cIndustry=cl?.industry||'';
+  const cTone=cl?.tone||'profesional';
+  const cColor=cl?.color||'#6b82ff';
+  const cColor2=cl?.color2||'#00d9ff';
+  const cStyle=cl?.style||imgStyle||'dark editorial premium photography';
+  const cDesc=cl?.desc||'';
+  const cAudience=cl?.audience||'';
+  const cTypes=getClientTypes(cl);
+  const HORAS=['09:00','11:00','14:00','16:00','19:00','21:00'];
 
-    let uc=`Genera 3 posts para el ángulo "${angle.key}" (${angle.label}).
-${angle.desc}
-Los 3 deben tener enfoques, hooks y estructuras distintos dentro del mismo ángulo.
-Responde SOLO con el JSON {"posts":[...]} sin markdown.`;
+  logEl.innerHTML=`<b>Cliente:</b> ${cName||'ninguno'} · <b>Ángulos:</b> ${angles.length} · <b>Posts:</b> ${nTotal}<br>`;
 
-    if(refCtx.images.length>0){
-      uc=[...refCtx.images.slice(0,1).map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:uc+'\nInspírate en el estilo visual de la imagen de referencia.'}];
-    }
+  // Crear calendario
+  const calId='cal_'+Date.now();
+  studioGenCalId=calId;
+  lblEl.innerHTML='Creando calendario...';
+  const crResp=await fetch('/api/calendars',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:calId,name,description:studioPrompt.slice(0,120),clientId:clientId||null})});
+  if(!crResp.ok){toast('Error creando calendario','terr');btn.style.opacity='1';btn.style.pointerEvents='';return;}
+  _invalidate('cals');
+  logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> Calendario creado<br>`;
 
-    try{
-      const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2000,system:sys,messages:[{role:'user',content:uc}]})});
-      if(!r.ok){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${angle.key} — HTTP ${r.status}<br>`;continue;}
-      const dd=await r.json();let txt=dd.content?.[0]?.text?.trim()||'';
-      txt=txt.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
-      const fb=txt.indexOf('{');const lb=txt.lastIndexOf('}');if(fb>=0&&lb>fb)txt=txt.slice(fb,lb+1);
-      const parsed=JSON.parse(txt);
-      let idx=0;
-      const newPosts=(parsed.posts||[]).map(p=>({
-        id:'p_'+newCalId+'_'+angle.key.replace(/\s/g,'')+'_'+(idx++),
-        h:p.hora||'10:00',a:angle.key,t:p.tipo||'Dolor',
-        hook:p.hook||'',sub:p.sub||'',body:p.body||'',cta:p.cta||'',v:p.visual||'',_prompt:''
-      }));
-      try{const sr=await fetch('/api/calendars/'+newCalId+'/posts/bulk',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({posts:newPosts.map(p=>({hour:p.h,angle:p.a,type:p.t,hook:p.hook,sub_title:p.sub,body:p.body,cta:p.cta,visual:p.v}))})});if(sr.ok){totalPosts+=newPosts.length;logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> ${angle.key} — ${newPosts.length} posts<br>`;}else{logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> ${angle.key} — error al guardar<br>`;}}catch(se){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${angle.key} — ${esc(se.message.slice(0,50))}<br>`;}
-      _invalidate('cals');
-    }catch(e){
-      logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${angle.key} — ${esc(e.message.slice(0,50))}<br>`;
-    }
-    logEl.scrollTop=logEl.scrollHeight;
-    await W(300);
-  }
-  step++;
+  // Claude key
+  const claudeKey=getClaudeKey();
+  if(claudeKey) logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> Claude API activa<br>`;
+  else logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> Sin API key — posts de ejemplo<br>`;
 
-  // PHASE 2: Generate image prompts
-  if(autoPrompts){
-    fillEl.style.width=Math.floor(step/totalSteps*100)+'%';
-    lblEl.innerHTML='⬡ Fase 2/'+totalSteps+': Generando prompts de imagen...';
-    // Switch to gen panel to render cards first
-    activeCal=newCalId;renderCalBar();
-    const cal2=await getCal(newCalId);
-    if(cal2){
-      renderGrid(cal2.posts);
-      const cards=[...document.querySelectorAll('.card')];
-      for(let i=0;i<cards.length;i++){
-        const pid=cards[i].id.replace('card-','');
-        await gP(pid);
-        const pct2=Math.floor(step/totalSteps*100)+Math.floor((i/cards.length)*(100/totalSteps));
-        fillEl.style.width=pct2+'%';pctEl.textContent=pct2+'%';
-        lblEl.innerHTML=`⬡ Prompts: <b>${i+1}/${cards.length}</b>`;
-        logEl.innerHTML+=`<span style="color:var(--c1)">⬡</span> Prompt generado: ${cards[i].querySelector('.chook')?.textContent?.slice(0,35)||'post'}<br>`;
-        logEl.scrollTop=logEl.scrollHeight;
-        await W(280);
+  // System prompt Claude
+  const sys=[
+    'Eres experto en copywriting premium para Instagram B2B.',
+    'Genera posts con hooks impactantes en 3 líneas, cuerpo directo y CTA claro.',
+    cName?'CLIENTE: '+cName:'',
+    cIndustry?'Sector: '+cIndustry:'',
+    cDesc?'Descripción: '+cDesc:'',
+    cAudience?'Público objetivo: '+cAudience:'',
+    cTone?'Tono: '+cTone:'',
+    studioPrompt?'CONTEXTO: '+studioPrompt:'',
+    'TIPOS DISPONIBLES: '+cTypes.join(', '),
+    'RESPONDE SOLO con JSON válido sin markdown:',
+    '{"posts":[{"hora":"HH:MM","tipo":"'+cTypes[0]+'","hook":"linea1\\nlinea2\\nlinea3","sub":"subtitulo","body":"parrafo1\\n\\nparrafo2","cta":"texto","visual":"english prompt"}]}'
+  ].filter(Boolean).join('\n');
+
+  let total=0;
+
+  for(let i=0;i<angles.length;i++){
+    const ang=angles[i];
+    fillEl.style.width=Math.round(i/angles.length*100)+'%';
+    pctEl.textContent=Math.round(i/angles.length*100)+'%';
+    lblEl.innerHTML=`Ángulo ${i+1}/${angles.length}: <b>${esc(ang.key)}</b>`;
+
+    let posts=[];
+
+    // Intentar con Claude
+    if(claudeKey){
+      try{
+        const msg=`Genera ${nPerAngle} posts para el ángulo "${ang.key}" (${ang.label||''}).`
+          +`\nCliente: ${cName}, ${cIndustry}. Tono: ${cTone}.`
+          +`\nPrompt visual en inglés: estilo ${cStyle}, colores ${cColor} y ${cColor2}.`
+          +`\nRESPONDE SOLO con JSON {"posts":[...]}`;
+
+        const r=await fetch(AI_PROXY+'/claude',{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:2000,system:sys,messages:[{role:'user',content:msg}]})
+        });
+        if(r.ok){
+          const d=await r.json();
+          let t=(d.content?.[0]?.text||'').trim()
+            .replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+          const a=t.indexOf('{'),b=t.lastIndexOf('}');
+          if(a>=0&&b>a)t=t.slice(a,b+1);
+          const p=JSON.parse(t);
+          posts=(p.posts||[]).map(x=>({
+            hour:x.hora||HORAS[i%HORAS.length],
+            angle:ang.key,
+            type:x.tipo||cTypes[i%cTypes.length],
+            hook:x.hook||ang.key,
+            sub_title:x.sub||ang.label||ang.key,
+            body:x.body||cDesc||ang.key,
+            cta:x.cta||(cName?'Ver '+cName:'Ver más'),
+            visual:x.visual||cStyle+', '+cColor
+          }));
+          logEl.innerHTML+=`<span style="color:var(--ok)">✓ Claude</span> ${esc(ang.key)}: ${posts.length} posts<br>`;
+        }else{
+          logEl.innerHTML+=`<span style="color:var(--wn)">⚠ Claude ${r.status}</span> — usando demo<br>`;
+        }
+      }catch(err){
+        logEl.innerHTML+=`<span style="color:var(--wn)">⚠ Error Claude</span> — usando demo<br>`;
       }
     }
-    step++;
-  }
 
-  // PHASE 3: Generate images
-  if(autoImages){
-    fillEl.style.width=Math.floor(step/totalSteps*100)+'%';
-    lblEl.innerHTML='🖼 Fase 3/'+totalSteps+': Generando imágenes...';
-    const cards=[...document.querySelectorAll('.card')];
-    for(let i=0;i<cards.length;i++){
-      const pid=cards[i].id.replace('card-','');
-      await gI(pid);
-      const pct3=Math.floor(step/totalSteps*100)+Math.floor((i/cards.length)*(100/totalSteps));
-      fillEl.style.width=pct3+'%';pctEl.textContent=pct3+'%';
-      lblEl.innerHTML=`🖼 Imágenes: <b>${i+1}/${cards.length}</b>`;
-      logEl.innerHTML+=`<span style="color:var(--g1)">✦</span> Imagen creada<br>`;
-      logEl.scrollTop=logEl.scrollHeight;
+    // Fallback si no hay posts
+    if(!posts.length){
+      posts=Array.from({length:nPerAngle},(_,j)=>({
+        hour:HORAS[(i*nPerAngle+j)%HORAS.length],
+        angle:ang.key,
+        type:cTypes[(i+j)%cTypes.length],
+        hook:(ang.key+(cName?' — '+cName:''))+'\n'+(ang.label||ang.key)+(cIndustry?'\n'+cIndustry:''),
+        sub_title:ang.label||ang.key,
+        body:[cDesc,cAudience?'Público: '+cAudience:''].filter(Boolean).join('\n\n')||ang.key,
+        cta:cName?'Descubre '+cName:'Ver más',
+        visual:cStyle+', '+cColor+', no text'
+      }));
+      if(!claudeKey) logEl.innerHTML+=`<span style="color:var(--dm)">○ Demo</span> ${esc(ang.key)}: ${posts.length} posts<br>`;
     }
-    step++;
+
+    // Guardar posts
+    try{
+      const s=await fetch('/api/calendars/'+calId+'/posts/bulk',{
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({posts})
+      });
+      if(s.ok){
+        total+=posts.length;
+      }else{
+        const er=await s.json().catch(()=>({}));
+        logEl.innerHTML+=`<span style="color:var(--er)">✕ Error BD: ${esc((er.error||s.status)+'')}</span><br>`;
+      }
+    }catch(e){
+      logEl.innerHTML+=`<span style="color:var(--er)">✕ Red: ${esc(e.message.slice(0,40))}</span><br>`;
+    }
+
+    logEl.scrollTop=logEl.scrollHeight;
+    await W(claudeKey?250:20);
   }
 
+  _invalidate('cals');
   fillEl.style.width='100%';pctEl.textContent='100%';
-  lblEl.innerHTML=`✓ Listo — <b>${totalPosts} posts</b> creados${autoPrompts?' + prompts':''}${autoImages?' + imágenes':''}`;
+  lblEl.innerHTML=`✓ ${total} posts creados`;
+  logEl.innerHTML+=`<br><b>Total: ${total} posts en "${name}"</b>`;
+  logEl.scrollTop=logEl.scrollHeight;
+  btn.style.opacity='1';btn.style.pointerEvents='';
   document.getElementById('studio-go-cal-btn').style.display='block';
-  document.getElementById('studio-launch-btn').style.opacity='1';
-  document.getElementById('studio-launch-btn').style.pointerEvents='';
-  // Refresh cal tabs
-  renderCalBar();
-  toast(`¡${totalPosts} posts creados con IA! ✦`,'tok');
+
+  if(!total){toast('No se crearon posts — revisa el log','terr');return;}
+
+  // Navegar al generador
+  activeCal=calId;
+  document.querySelectorAll('.nt').forEach(b=>b.classList.remove('act'));
+  const gb=document.querySelector('[data-p=gen]');
+  if(gb)gb.classList.add('act');
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('act'));
+  document.getElementById('panel-gen').classList.add('act');
+  await W(200);
+  await renderCalBar();
+  await openCal(calId);
+  toast(`✦ ${total} posts listos en el generador`,'tok');
 }
 
 function goToGeneratedCal(){
@@ -2124,7 +2244,7 @@ async function saveCalWithAI(){
 
   // Create the calendar first via API
   const newCalId = 'cal_'+Date.now();
-  const nc = {id:newCalId, name, description:document.getElementById('cal-ds').value.trim(), client_id:client_id||null};
+  const nc = {id:newCalId, name, description:document.getElementById('cal-ds').value.trim(), clientId:client_id||null};
   try{const r=await fetch('/api/calendars',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(nc)});if(!r.ok){toast('Error al crear calendario','terr');return;}_invalidate('cals');}catch{toast('Error de conexión','terr');return;}
   activeCal = newCalId;
 
@@ -2154,7 +2274,7 @@ async function saveCalWithAI(){
   }
 
   // Build refs context
-  const refCtx = buildRefCtx();
+  const refCtx = await buildRefCtx();
 
   const sys = `Eres un experto en marketing de contenidos y copywriting premium para redes sociales.
 Creas posts de Instagram con garra, directos y con impacto psicológico para marcas B2B.
@@ -2199,9 +2319,9 @@ Responde SOLO con el JSON. Sin markdown ni backticks.`;
       if(refCtx.images.length > 0){
         content = [...refCtx.images.slice(0,1).map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:userMsg+'\nEl estilo visual debe inspirarse en las imágenes de referencia.'}];
       }
-      const r = await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1800,system:sys,messages:[{role:'user',content}]})
+      const r = await fetch(AI_PROXY+'/claude',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:1800,system:sys,messages:[{role:'user',content}]})
       });
       if(!r.ok){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${esc(angle.key)} — HTTP ${r.status}<br>`;continue;}
       const dd = await r.json();
@@ -2272,12 +2392,12 @@ Genera 1 post de Instagram con garra, directo e impactante.
 Responde SOLO con JSON válido sin markdown:
 {"hora":"10:00","tipo":"${tipo}","hook":"línea1\\nlínea2\\nlínea3","sub":"subtítulo corto","body":"párrafo1\\n\\npárrafo2","cta":"Texto CTA","visual":"english visual concept for AI image"}`;
 
-  const refCtx=buildRefCtx();
+  const refCtx=await buildRefCtx();
   let content=`Post para ángulo "${angle}", tipo psicológico "${tipo}". Genera el JSON.`;
   if(refCtx.images.length>0){content=[{type:'image',source:{type:'base64',media_type:refCtx.images[0].mimeType,data:refCtx.images[0].base64}},{type:'text',text:`Post para ángulo "${angle}", tipo "${tipo}". Inspírate en la imagen de referencia para el concepto visual. Genera el JSON.`}];}
 
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:sys,messages:[{role:'user',content}]})});
+    const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:600,system:sys,messages:[{role:'user',content}]})});
     if(!r.ok){toast('Error: '+r.statusText,'terr');return;}
     const dd=await r.json();let txt=dd.content?.[0]?.text?.trim()||'';
     txt=txt.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
@@ -2317,6 +2437,7 @@ function openAddPostHandler(){openAddPost();}
 /* ══ INIT ══ */
 async function init(){
   try{
+    await loadServerKeys();
     document.getElementById('app').style.display='flex';
     document.getElementById('user-nm').textContent='RStudio';
     renderFmtPicker();

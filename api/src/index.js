@@ -12,6 +12,7 @@ const clientsRouter = require('./routes/clients');
 const calendarsRouter = require('./routes/calendars');
 const postsRouter = require('./routes/posts');
 const refsRouter = require('./routes/refs');
+const aiRouter = require('./routes/ai');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -34,10 +35,19 @@ app.use('/api/clients', clientsRouter);
 app.use('/api/calendars', calendarsRouter);
 app.use('/api/calendars', postsRouter);
 app.use('/api/refs', refsRouter);
+app.use('/api/ai', aiRouter);
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
+});
+
+// Config: expone keys del servidor al frontend
+app.get('/api/config', (req, res) => {
+  res.json({
+    kieKey: process.env.KIE_API_KEY || '',
+    claudeKey: process.env.CLAUDE_API_KEY || ''
+  });
 });
 
 // 404
