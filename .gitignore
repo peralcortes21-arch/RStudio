@@ -24,6 +24,7 @@ Thumbs.db
 # Temp
 *.tmp
 .cache/
+src/extracted.js
 
 # Keep examples and config folder structure
 !config/
