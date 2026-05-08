@@ -10,31 +10,35 @@
 <style>
 :root{
   /* Surface stack — neutral cool grays */
-  --bg-0:#07070c;
-  --bg-1:#0d0d14;
-  --bg-2:#13131c;
-  --bg-3:#1a1a26;
-  --bg-4:#22222f;
+  --bg-0:#06060b;
+  --bg-1:#0c0c13;
+  --bg-2:#12121b;
+  --bg-3:#191924;
+  --bg-4:#21212e;
 
-  /* Accent — electric indigo with saturation curve */
-  --ac-50:#eef2ff;
-  --ac-300:#8ea3ff;
-  --ac-400:#6b82ff;
-  --ac-500:#4a63f5;
-  --ac-600:#3a4fd9;
-  --ac-700:#2d3eb0;
-  --ac-glow:rgba(74,99,245,.35);
+  /* Accent — electric indigo, pushed warmer */
+  --ac-50:#eef1ff;
+  --ac-300:#93aaff;
+  --ac-400:#6e88ff;
+  --ac-500:#4c65f6;
+  --ac-600:#3b50db;
+  --ac-700:#2d3eb2;
+  --ac-glow:rgba(76,101,246,.4);
+
+  /* Amber accent — for warmth & contrast */
+  --am-400:#f5a623;
+  --am-glow:rgba(245,166,35,.25);
 
   /* Gradients */
-  --grad-accent:linear-gradient(135deg,#5b73ff 0%,#7c4dff 100%);
-  --grad-accent-soft:linear-gradient(135deg,rgba(91,115,255,.18),rgba(124,77,255,.10));
-  --grad-surface:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0));
+  --grad-accent:linear-gradient(135deg,#5876ff 0%,#7a4dff 100%);
+  --grad-accent-soft:linear-gradient(135deg,rgba(88,118,255,.20),rgba(122,77,255,.12));
+  --grad-surface:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));
 
-  /* Text scale */
-  --tx-1:#f4f4f8;
-  --tx-2:#b8b8c8;
-  --tx-3:#7a7a8e;
-  --tx-4:#4a4a5c;
+  /* Text scale — slightly brighter for readability */
+  --tx-1:#f5f5fa;
+  --tx-2:#c4c4d6;
+  --tx-3:#8c8ca0;
+  --tx-4:#52526a;
 
   /* Borders — slightly stronger */
   --bd-1:rgba(255,255,255,.06);
@@ -102,7 +106,7 @@
 }
 *,::before,::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{background:var(--bg-0);color:var(--tx-1);font-family:var(--ff-display);font-size:13px;letter-spacing:-.005em;overflow:hidden;cursor:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{background:var(--bg-0);color:var(--tx-1);font-family:var(--ff-display);font-size:13.5px;letter-spacing:-.01em;overflow:hidden;cursor:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 ::-webkit-scrollbar{width:10px;height:10px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.06);border-radius:999px;border:3px solid transparent;background-clip:padding-box}
@@ -132,7 +136,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 /* ─── TOPBAR ─── */
 .topbar{height:56px;background:linear-gradient(180deg,rgba(13,13,20,.95),rgba(8,8,14,.92));backdrop-filter:blur(40px) saturate(140%);border-bottom:1px solid var(--bd-1);padding:0 1.5rem;display:flex;align-items:center;gap:14px;flex-shrink:0;z-index:50;box-shadow:0 1px 0 rgba(255,255,255,.03) inset}
 .logo{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.lm{width:30px;height:30px;border-radius:8px;background:var(--grad-accent);display:flex;align-items:center;justify-content:center;font-family:var(--ff-serif);font-weight:700;font-size:12px;color:#fff;box-shadow:var(--el-1),0 0 16px rgba(91,115,255,.35)}
+.lm{width:30px;height:30px;border-radius:8px;background:var(--grad-accent);display:flex;align-items:center;justify-content:center;font-family:var(--ff-serif);font-weight:700;font-size:13px;color:#fff;box-shadow:var(--el-2),0 0 20px rgba(76,101,246,.45),0 1px 0 rgba(255,255,255,.18) inset}
 .ln{font-size:13px;font-weight:800;letter-spacing:.06em;color:var(--tx-1);font-family:var(--ff-display)}
 .lt{font-size:9px;color:var(--tx-3);font-family:var(--ff-mono);letter-spacing:.18em;text-transform:uppercase}
 .nav{background:rgba(255,255,255,.02);border:1px solid var(--bd-1);border-radius:var(--r-pill);padding:3px;box-shadow:var(--el-1);display:flex;gap:1px}
@@ -220,44 +224,48 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 .fb.tde{border-color:var(--bd);color:var(--mt);background:transparent}.fb.act.tde{background:var(--v1);color:#fff;border-color:var(--v1)}
 
 /* ─── GRID ─── */
-.gsec{padding:1.5rem 1.75rem;flex:1;overflow-y:auto}
-.gttl{font-size:10px;font-family:var(--ff-mono);color:var(--tx-3);letter-spacing:.18em;text-transform:uppercase;margin-bottom:1.1rem;display:flex;align-items:center;gap:14px;font-weight:500}
-.gttl::before{content:'';width:18px;height:1px;background:var(--ac-500);box-shadow:0 0 8px var(--ac-glow)}
+.gsec{padding:1.75rem 2rem;flex:1;overflow-y:auto}
+.gttl{font-size:9.5px;font-family:var(--ff-mono);color:var(--tx-4);letter-spacing:.2em;text-transform:uppercase;margin-bottom:1.25rem;display:flex;align-items:center;gap:16px;font-weight:500}
+.gttl::before{content:'';width:14px;height:1px;background:var(--ac-500);box-shadow:0 0 6px var(--ac-glow);flex-shrink:0}
 .gttl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--bd-2),transparent)}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:16px}
 
 /* ─── CARD ─── */
-.card{background:linear-gradient(180deg,rgba(26,26,38,.85),rgba(19,19,28,.85));border:1px solid var(--bd-1);border-radius:var(--r-md);overflow:hidden;position:relative;display:flex;flex-direction:column;animation:cin .55s var(--ease-out) both;transition:transform var(--dur-2) var(--ease-out),border-color var(--dur-2) var(--ease-out),box-shadow var(--dur-3) var(--ease-out),background var(--dur-2) var(--ease-out);will-change:transform;box-shadow:var(--el-1)}
-@keyframes cin{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.card:hover{transform:translateY(-3px);border-color:var(--bd-3);box-shadow:var(--el-3);background:linear-gradient(180deg,rgba(30,30,44,.9),rgba(22,22,32,.9))}
-.card:active{transform:translateY(-1px);transition-duration:var(--dur-1)}
-.card[data-tipo="Dolor"]::before{content:'';position:absolute;top:0;left:12px;right:12px;height:2px;border-radius:0 0 2px 2px;opacity:.85;background:linear-gradient(90deg,transparent,#ff5a5a,transparent);box-shadow:0 0 12px #ff5a5a;color:#ff5a5a}
-.card[data-tipo="Miedo"]::before{content:'';position:absolute;top:0;left:12px;right:12px;height:2px;border-radius:0 0 2px 2px;opacity:.85;background:linear-gradient(90deg,transparent,#ffb547,transparent);box-shadow:0 0 12px #ffb547;color:#ffb547}
-.card[data-tipo="Resultado"]::before{content:'';position:absolute;top:0;left:12px;right:12px;height:2px;border-radius:0 0 2px 2px;opacity:.85;background:linear-gradient(90deg,transparent,#3ddc8a,transparent);box-shadow:0 0 12px #3ddc8a;color:#3ddc8a}
-.card[data-tipo="Prueba"]::before{content:'';position:absolute;top:0;left:12px;right:12px;height:2px;border-radius:0 0 2px 2px;opacity:.85;background:linear-gradient(90deg,transparent,#6b82ff,transparent);box-shadow:0 0 12px #6b82ff;color:#6b82ff}
-.card[data-tipo="Deseo"]::before{content:'';position:absolute;top:0;left:12px;right:12px;height:2px;border-radius:0 0 2px 2px;opacity:.85;background:linear-gradient(90deg,transparent,#c4a5ff,transparent);box-shadow:0 0 12px #c4a5ff;color:#c4a5ff}
+.card{background:linear-gradient(170deg,rgba(26,26,40,.95) 0%,rgba(15,15,24,.95) 100%);border:1px solid rgba(255,255,255,.07);border-radius:16px;overflow:hidden;position:relative;display:flex;flex-direction:column;animation:cin .5s var(--ease-out) both;transition:transform var(--dur-2) var(--ease-out),border-color var(--dur-2) var(--ease-out),box-shadow var(--dur-3) var(--ease-out);will-change:transform;box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 2px 8px rgba(0,0,0,.35)}
+@keyframes cin{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card:hover{transform:translateY(-5px);border-color:rgba(255,255,255,.13);box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 16px 40px rgba(0,0,0,.5),0 4px 12px rgba(0,0,0,.3)}
+.card:active{transform:translateY(-2px);transition-duration:var(--dur-1)}
+/* Type accent lines — thinner, more refined */
+.card[data-tipo="Dolor"]::before,.card[data-tipo="Miedo"]::before,.card[data-tipo="Resultado"]::before,.card[data-tipo="Prueba"]::before,.card[data-tipo="Deseo"]::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;border-radius:16px 16px 0 0;opacity:.9}
+.card[data-tipo="Dolor"]::before{background:linear-gradient(90deg,transparent 10%,#ff5a5a 50%,transparent 90%);box-shadow:0 0 10px rgba(255,90,90,.5)}
+.card[data-tipo="Miedo"]::before{background:linear-gradient(90deg,transparent 10%,#ffb547 50%,transparent 90%);box-shadow:0 0 10px rgba(255,181,71,.5)}
+.card[data-tipo="Resultado"]::before{background:linear-gradient(90deg,transparent 10%,#3ddc8a 50%,transparent 90%);box-shadow:0 0 10px rgba(61,220,138,.5)}
+.card[data-tipo="Prueba"]::before{background:linear-gradient(90deg,transparent 10%,#6b82ff 50%,transparent 90%);box-shadow:0 0 10px rgba(107,130,255,.5)}
+.card[data-tipo="Deseo"]::before{background:linear-gradient(90deg,transparent 10%,#c4a5ff 50%,transparent 90%);box-shadow:0 0 10px rgba(196,165,255,.5)}
 .card.hidden{display:none}
-.ch{padding:8px 11px 6px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:4px}
-.cbs{display:flex;gap:3px;flex-wrap:wrap}
-.bdg{font-size:7.5px;font-family:var(--m);font-weight:500;padding:2px 5px;border-radius:4px;border:1px solid}
-.bcat{background:var(--pa);color:var(--v3);border-color:rgba(58,92,158,.18)}
-.btd{background:rgba(224,64,64,.07);color:#e07070;border-color:rgba(224,64,64,.18)}
-.btm{background:rgba(224,152,0,.07);color:#e09800;border-color:rgba(224,152,0,.18)}
-.btr{background:rgba(26,184,84,.07);color:#1ab854;border-color:rgba(26,184,84,.18)}
-.btp{background:var(--pa);color:var(--v3);border-color:rgba(58,92,158,.18)}
-.btde{background:var(--pa);color:var(--v3);border-color:rgba(58,92,158,.18)}
-.btime{background:transparent;color:var(--dm);border-color:var(--bd)}
+/* Card header — cleaner */
+.ch{padding:10px 13px 8px;border-bottom:1px solid rgba(255,255,255,.055);display:flex;align-items:center;justify-content:space-between;gap:4px}
+.cbs{display:flex;gap:3px;flex-wrap:wrap;align-items:center}
+.bdg{font-size:7px;font-family:var(--m);font-weight:500;padding:2px 6px;border-radius:5px;border:1px solid;letter-spacing:.04em}
+.bcat{background:rgba(76,101,246,.1);color:var(--ac-300);border-color:rgba(76,101,246,.2)}
+.btd{background:rgba(255,90,90,.07);color:#ff7a7a;border-color:rgba(255,90,90,.2)}
+.btm{background:rgba(255,181,71,.07);color:#ffb547;border-color:rgba(255,181,71,.2)}
+.btr{background:rgba(61,220,138,.07);color:#3ddc8a;border-color:rgba(61,220,138,.2)}
+.btp{background:rgba(76,101,246,.1);color:var(--ac-300);border-color:rgba(76,101,246,.2)}
+.btde{background:rgba(196,165,255,.07);color:#c4a5ff;border-color:rgba(196,165,255,.2)}
+.btime{background:transparent;color:var(--tx-4);border-color:rgba(255,255,255,.07);letter-spacing:.02em}
 .sdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.si{background:var(--dm)}.sl{background:var(--wn);animation:bk .8s infinite}.sd{background:var(--ok)}.se{background:var(--er)}
+.si{background:rgba(255,255,255,.15)}.sl{background:var(--wn);animation:bk .8s infinite}.sd{background:var(--ok)}.se{background:var(--er)}
 @keyframes bk{0%,100%{opacity:1}50%{opacity:.2}}
-.cmb{background:none;border:none;color:var(--dm);cursor:pointer;font-size:11px;padding:0 2px;transition:color .14s}.cmb:hover{color:var(--mt)}.cmb.del:hover{color:var(--er)}
-.cbody{padding:11px 13px;flex:1;display:flex;flex-direction:column;gap:7px}
-.chook{font-size:14px;font-weight:700;line-height:1.35;color:var(--tx-1);letter-spacing:-.015em}
-.cmeta{display:flex;flex-direction:column;gap:4px}
-.cmr{display:flex;gap:6px}
-.cmk{font-size:8.5px;font-family:var(--ff-mono);color:var(--tx-4);width:44px;flex-shrink:0;padding-top:2px;letter-spacing:.04em;text-transform:uppercase}
-.cmv{font-size:9px;color:var(--tx-3);line-height:1.5}
+.cmb{background:none;border:none;color:rgba(255,255,255,.2);cursor:pointer;font-size:11px;padding:0 2px;transition:color .14s;line-height:1}.cmb:hover{color:var(--tx-3)}.cmb.del:hover{color:var(--er)}
+/* Card body — more breathing room */
+.cbody{padding:14px 15px;flex:1;display:flex;flex-direction:column;gap:9px}
+.chook{font-size:15px;font-weight:600;line-height:1.32;color:var(--tx-1);letter-spacing:-.022em;font-family:var(--ff-serif)}
+.cmeta{display:flex;flex-direction:column;gap:5px}
+.cmr{display:flex;gap:8px;align-items:baseline}
+.cmk{font-size:8px;font-family:var(--ff-mono);color:var(--tx-4);width:46px;flex-shrink:0;padding-top:1px;letter-spacing:.06em;text-transform:uppercase}
+.cmv{font-size:9.5px;color:var(--tx-3);line-height:1.55}
 
 /* ─── PROMPT BOX ─── */
 .pbox{margin:0 11px 7px;background:rgba(8,8,14,.6);border:1px solid var(--bd);border-radius:var(--rs);overflow:hidden}
@@ -278,9 +286,8 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 .ovsp{flex:1}
 .ovh{font-weight:900;line-height:1.04;letter-spacing:-.03em;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.85)}
 .ovs{font-size:8px;font-style:italic;color:rgba(255,255,255,.5);margin-top:2px}
-.ovc{margin-top:6px;background:rgba(4,6,12,.86);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:6px 9px;backdrop-filter:blur(16px)}
-.ovc p{font-size:8.5px;color:rgba(255,255,255,.88);line-height:1.55;margin-bottom:2px}.ovc p:last-child{margin-bottom:0}
-.ovct{margin-top:6px;font-size:7.5px;color:rgba(255,255,255,.36);text-align:center;letter-spacing:.05em}
+.ovc{display:none}
+.ovct{position:absolute;bottom:8%;right:6%;font-size:8px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.04em;text-align:right;text-shadow:0 1px 6px rgba(0,0,0,.9)}
 .ovtog{position:absolute;top:5px;right:5px;z-index:10;padding:2px 6px;border-radius:4px;background:rgba(4,6,12,.88);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55);font-size:7.5px;font-family:var(--m);cursor:pointer;transition:all .14s}
 .ovtog:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
 
@@ -315,7 +322,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 /* ─── BOTTOM BAR ─── */
 .botbar{padding:.58rem 1.25rem;border-top:1px solid var(--bd);display:flex;gap:5px;flex-wrap:wrap;align-items:center;background:rgba(8,8,14,.93);backdrop-filter:blur(18px);flex-shrink:0}
 .bba{padding:7px 14px;border-radius:var(--rs);font-family:var(--f);font-size:9px;font-weight:700;cursor:pointer;transition:all .15s var(--ease);display:flex;align-items:center;gap:4px;border:none;white-space:nowrap}
-.bba-p{background:var(--v1);color:#fff}.bba-p:hover{background:var(--v2);transform:translateY(-1px)}
+.bba-p{background:var(--grad-accent);color:#fff;box-shadow:0 2px 10px var(--ac-glow),0 1px 0 rgba(255,255,255,.1) inset}.bba-p:hover{box-shadow:0 4px 16px var(--ac-glow),0 1px 0 rgba(255,255,255,.1) inset;transform:translateY(-1px)}
 .bba-s{background:transparent;color:var(--mt);border:1px solid var(--bd)!important}.bba-s:hover{border-color:var(--bdh)!important;color:var(--tx);background:rgba(255,255,255,.03)!important}
 .bba-c{background:rgba(26,184,84,.1);color:var(--ok);border:1px solid rgba(26,184,84,.24)!important}.bba-c:hover{background:rgba(26,184,84,.16)}
 .gprog{font-size:8px;color:var(--dm);font-family:var(--m);margin-left:auto}
@@ -323,17 +330,17 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 /* ─── SEC PANEL (shared) ─── */
 .sec-panel{padding:1.5rem 1.75rem;flex:1;overflow-y:auto}
 .phdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;gap:10px}
-.pttl{font-size:24px;font-family:var(--ff-serif);font-weight:600;color:var(--tx-1);letter-spacing:-.02em;line-height:1.1}
+.pttl{font-size:26px;font-family:var(--ff-serif);font-weight:600;color:var(--tx-1);letter-spacing:-.03em;line-height:1.08}
 .psub{font-size:11px;color:var(--tx-3);margin-top:4px;font-family:var(--ff-mono)}
 .pgrid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 
 /* ─── CLIENT CARD ─── */
-.ccard{background:linear-gradient(180deg,rgba(26,26,38,.85),rgba(19,19,28,.85));border:1px solid var(--bd-1);border-radius:var(--r-md);padding:1.25rem;cursor:pointer;transition:all var(--dur-2) var(--ease-out);animation:cin .55s var(--ease-out) both;position:relative;overflow:hidden;box-shadow:var(--el-1)}
+.ccard{background:linear-gradient(160deg,rgba(28,28,42,.9),rgba(17,17,27,.9));border:1px solid var(--bd-1);border-radius:var(--r-md);padding:1.35rem;cursor:pointer;transition:all var(--dur-2) var(--ease-out);animation:cin .55s var(--ease-out) both;position:relative;overflow:hidden;box-shadow:var(--el-1),0 0 0 1px rgba(255,255,255,.025) inset}
 .ccard::before{content:'';position:absolute;top:0;left:12px;right:12px;height:2px;background:linear-gradient(90deg,transparent,var(--ac-500),transparent);opacity:0;transition:opacity var(--dur-2);border-radius:0 0 2px 2px;box-shadow:0 0 12px var(--ac-glow)}
 .ccard:hover{border-color:var(--bd-3);transform:translateY(-3px);box-shadow:var(--el-3);background:linear-gradient(180deg,rgba(30,30,44,.9),rgba(22,22,32,.9))}.ccard:hover::before{opacity:.8}
 .cc-hd{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
 .cc-av{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
-.cc-nm{font-size:13px;font-weight:800;color:#fff;line-height:1.2}
+.cc-nm{font-size:14px;font-weight:800;color:#fff;line-height:1.2;letter-spacing:-.02em;font-family:var(--ff-display)}
 .cc-in{font-size:9px;color:var(--mt);margin-top:2px}
 .cc-desc{font-size:9px;color:var(--mt);line-height:1.5;margin-bottom:7px}
 .cc-bgs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
@@ -367,6 +374,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 .di-st{font-size:7.5px;font-family:var(--m);padding:2px 6px;border-radius:4px;flex-shrink:0}
 .dst-ok{background:rgba(26,184,84,.08);color:var(--ok);border:1px solid rgba(26,184,84,.2)}
 .dst-p{background:rgba(224,152,0,.08);color:var(--wn);border:1px solid rgba(224,152,0,.2)}
+.dst-img{background:rgba(74,99,245,.08);color:#4a63f5;border:1px solid rgba(74,99,245,.25)}
 .di-del{background:none;border:none;color:var(--dm);cursor:pointer;font-size:11px;transition:color .14s;padding:0 2px;flex-shrink:0}.di-del:hover{color:var(--er)}
 .di-an{font-size:7.5px;font-family:var(--m);color:var(--mt);margin-top:3px;line-height:1.5;padding-left:24px}
 
@@ -394,19 +402,31 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 .rb-cnt{font-size:8px;font-family:var(--m);color:var(--dm)}
 .rb-clr{font-size:8px;font-family:var(--m);padding:2px 8px;border-radius:4px;background:transparent;border:1px solid rgba(224,64,64,.28);color:var(--er);cursor:pointer;transition:all .14s}.rb-clr:hover{background:rgba(224,64,64,.07)}
 .rb-use{font-size:9px;font-weight:700;padding:5px 12px;border-radius:var(--rs);background:var(--v1);border:none;color:#fff;cursor:pointer;transition:background .2s;font-family:var(--f);margin-left:auto}.rb-use:hover{background:var(--v2)}
+.ref-section-lbl{font-size:8px;font-weight:700;font-family:var(--m);color:var(--dm);letter-spacing:.12em;text-transform:uppercase;padding:4px 0 6px;margin-top:.6rem;border-bottom:1px solid var(--bd)}
+.ref-folder{margin-bottom:4px}
+.ref-folder-hd{display:flex;align-items:center;gap:7px;padding:7px 8px;border-radius:var(--rs);border:1px solid var(--bd);background:rgba(255,255,255,.02);cursor:pointer;transition:all .15s;user-select:none}
+.ref-folder-hd:hover{border-color:var(--bdh);background:rgba(255,255,255,.04)}
+.ref-folder-icon{font-size:10px;color:var(--v3);width:12px;text-align:center;flex-shrink:0}
+.ref-folder-name{font-size:9.5px;font-weight:700;color:var(--tx);flex:1}
+.ref-folder-cnt{font-size:8px;font-family:var(--m);color:var(--mt);background:var(--pa);padding:2px 7px;border-radius:10px}
+.ref-folder-selall{font-size:7.5px;font-family:var(--m);color:var(--v3);padding:2px 7px;border-radius:4px;border:1px solid rgba(58,92,158,.2);cursor:pointer;transition:all .14s}
+.ref-folder-selall:hover{background:rgba(58,92,158,.1)}
+.ref-folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:7px;padding:8px 0 4px}
+.refs-global-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px;padding-top:8px}
+.refs-grid{display:block;margin-top:1rem}
 
 /* ─── MODALS ─── */
 .modal-bg{position:fixed;inset:0;background:rgba(4,4,10,.7);backdrop-filter:blur(20px) saturate(140%);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
 .modal-bg.open{display:flex}
-.modal{background:linear-gradient(180deg,rgba(26,26,38,.98),rgba(19,19,28,.98));border:1px solid var(--bd-2);border-radius:var(--r-lg);padding:1.75rem;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:var(--el-4),0 0 0 1px rgba(255,255,255,.04) inset;animation:modalIn .35s var(--ease-spring)}
+.modal{background:linear-gradient(170deg,rgba(24,24,37,.99) 0%,rgba(14,14,22,.99) 100%);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:2rem;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 0 0 1px rgba(255,255,255,.04) inset,0 32px 80px rgba(0,0,0,.65),0 8px 24px rgba(0,0,0,.4);animation:modalIn .3s var(--ease-spring)}
 @keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 .mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
-.mttl{font-size:18px;font-family:var(--ff-serif);font-weight:600;color:var(--tx-1);letter-spacing:-.02em;line-height:1.15}
+.mttl{font-size:20px;font-family:var(--ff-serif);font-weight:600;color:var(--tx-1);letter-spacing:-.025em;line-height:1.12}
 .mcls{background:none;border:none;color:var(--tx-3);font-size:20px;cursor:pointer;transition:color var(--dur-2);padding:4px 6px}.mcls:hover{color:var(--tx-1)}
 .mfield{margin-bottom:1rem}
 .mfield label{display:block;font-size:9px;font-family:var(--ff-mono);color:var(--tx-4);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;font-weight:500}
-.mfield input,.mfield textarea,.mfield select{width:100%;background:rgba(7,7,12,.6);border:1px solid var(--bd-1);border-radius:var(--r-sm);padding:10px 12px;font-size:13px;color:var(--tx-1);font-family:var(--ff-display);outline:none;transition:border-color var(--dur-2),box-shadow var(--dur-2),background var(--dur-2)}
-.mfield input:focus,.mfield textarea:focus,.mfield select:focus{border-color:var(--bd-ac);box-shadow:0 0 0 3px var(--ac-glow);background:rgba(7,7,12,.85)}
+.mfield input,.mfield textarea,.mfield select{width:100%;background:rgba(6,6,10,.7);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-sm);padding:10px 13px;font-size:13px;color:var(--tx-1);font-family:var(--ff-display);outline:none;transition:border-color var(--dur-2),box-shadow var(--dur-2),background var(--dur-2)}
+.mfield input:focus,.mfield textarea:focus,.mfield select:focus{border-color:rgba(76,101,246,.5);box-shadow:0 0 0 3px rgba(76,101,246,.15);background:rgba(6,6,10,.9)}
 .mfield textarea{resize:vertical;min-height:64px;line-height:1.6}
 .mrow{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .type-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:4px}
@@ -415,7 +435,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 
 .mbtns{display:flex;gap:7px;justify-content:flex-end;margin-top:1rem}
 .mbtn-c{padding:8px 16px;border-radius:var(--rs);background:transparent;border:1px solid var(--bd);color:var(--mt);cursor:pointer;font-family:var(--f);font-size:9.5px;font-weight:600;transition:all .14s}.mbtn-c:hover{border-color:var(--bdh);color:var(--tx);background:rgba(255,255,255,.03)}
-.mbtn-ok{padding:8px 18px;border-radius:var(--rs);background:var(--v1);border:none;color:#fff;cursor:pointer;font-family:var(--f);font-size:9.5px;font-weight:700;transition:background .14s;letter-spacing:.02em}.mbtn-ok:hover{background:var(--v2)}
+.mbtn-ok{padding:9px 20px;border-radius:var(--rs);background:var(--grad-accent);border:none;color:#fff;cursor:pointer;font-family:var(--f);font-size:10px;font-weight:700;transition:all .18s var(--ease-out);letter-spacing:.02em;box-shadow:0 2px 12px var(--ac-glow),0 1px 0 rgba(255,255,255,.12) inset}.mbtn-ok:hover{transform:translateY(-1px);box-shadow:0 4px 18px var(--ac-glow),0 1px 0 rgba(255,255,255,.12) inset}
 .cs-lst{display:flex;flex-direction:column;gap:5px;margin-top:4px;max-height:150px;overflow-y:auto}
 .cs-opt{padding:7px 10px;border-radius:var(--rs);border:1px solid var(--bd);background:transparent;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:8px}
 .cs-opt:hover{border-color:var(--bdh)}.cs-opt.sel{border-color:var(--v1);background:var(--pa)}
@@ -823,7 +843,7 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
         <div style="font-size:9px;font-family:var(--m);color:var(--v3);letter-spacing:.12em;text-transform:uppercase">✦ Generar con IA</div>
         <div style="flex:1;height:1px;background:linear-gradient(90deg,var(--bd),transparent)"></div>
       </div>
-      <div style="font-size:9.5px;color:var(--mt);line-height:1.6;margin-bottom:.75rem">Claude creará <b style="color:var(--tx)">todos los posts automáticamente</b> basándose en el perfil del cliente, sus documentos y las referencias visuales activas.</div>
+      <div style="font-size:9.5px;color:var(--mt);line-height:1.6;margin-bottom:.75rem">Claude creará <b style="color:var(--tx)">todos los posts automáticamente</b> — cuerpos, hooks, CTAs y prompts de imagen únicos para cada post, basándose en el perfil del cliente y sus documentos.</div>
 
       <!-- Client brief preview -->
       <div id="ai-cal-brief" style="background:rgba(4,6,10,.5);border:1px solid var(--bd);border-radius:var(--rs);padding:.65rem;margin-bottom:.75rem;display:none">
@@ -831,10 +851,20 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
         <div id="ai-cal-brief-txt" style="font-size:8.5px;color:var(--mt);line-height:1.55"></div>
       </div>
 
+      <!-- Post count -->
+      <div class="mfield">
+        <label>Número de posts a generar</label>
+        <div style="display:flex;align-items:center;gap:10px">
+          <input type="range" id="ai-cal-count" min="1" max="30" value="9" style="flex:1;accent-color:var(--ac-500)" oninput="document.getElementById('ai-cal-count-lbl').textContent=this.value+' posts'">
+          <span id="ai-cal-count-lbl" style="font-size:11px;font-weight:700;color:var(--tx-1);font-family:var(--ff-mono);min-width:56px;text-align:right">9 posts</span>
+        </div>
+        <div style="font-size:8px;font-family:var(--m);color:var(--tx-4);margin-top:4px">Máximo 30. La IA crea cuerpo, hook, CTA y prompt de imagen único para cada uno.</div>
+      </div>
+
       <!-- Angles config -->
       <div class="mfield">
-        <label>Ángulos / Series a generar</label>
-        <div style="font-size:8px;font-family:var(--m);color:var(--dm);margin-bottom:6px">Selecciona qué series quieres. Claude generará 3 posts por ángulo.</div>
+        <label>Ángulos / Series a usar</label>
+        <div style="font-size:8px;font-family:var(--m);color:var(--tx-4);margin-bottom:6px">Los posts se distribuyen entre los ángulos seleccionados.</div>
         <div id="angles-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:5px"></div>
       </div>
 
@@ -989,13 +1019,13 @@ function getKieKey(){return localStorage.getItem('cliender_kie_key')||_kieKey||'
 function getClaudeKey(){return localStorage.getItem('cliender_claude_key')||_claudeKey||'';}
 // Llamada a Claude via proxy backend (evita CORS)
 async function callClaude(body){
-  const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},body:JSON.stringify(body)});
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error('Claude '+r.status+': '+(e.error||''));}
   return r.json();
 }
 // Llamada a KIE via proxy backend
 async function callKieMessages(body){
-  const r=await fetch(AI_PROXY+'/kie/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const r=await fetch(AI_PROXY+'/kie/messages',{method:'POST',headers:{'Content-Type':'application/json','x-kie-key':getKieKey()},body:JSON.stringify(body)});
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error('KIE '+r.status+': '+(e.error||''));}
   return r.json();
 }
@@ -1034,10 +1064,12 @@ const MODELS={
 };
 
 /* ══ STATE ══ */
-let AM='gpt-image-2-text-to-image',AF='square_1_1',AT='all',AA='all',GC=0;
+let AM='gpt-image-2-text-to-image',AF='portrait_4_5',AT='all',AA='all',GC=0;
 let activeCal=null,activeClient=null;
 const imgSrcs={};
 let selRefs=new Set();
+let clientDocMap={};
+let openClientFolders=new Set();
 let selTipoV=null,editPId=null,editCId=null,editClId=null;
 
 /* ══ NO AUTHENTICATION ══ */
@@ -1233,11 +1265,39 @@ async function buildClientCtx(){
   return ctx;
 }
 async function buildRefCtx(){
-  if(selRefs.size===0)return{text:'',images:[]};
-  const refs=(await getRefs()).filter(r=>selRefs.has(r.id));
-  const text=refs.map(r=>{let t='Ref visual';if(r.tags?.length)t+=` (${r.tags.join(',')})`;if(r.analysis)t+=`: ${r.analysis}`;return t;}).join('\n');
-  const images=refs.filter(r=>r.base64&&r.mimeType).slice(0,2).map(r=>({base64:r.base64,mimeType:r.mimeType}));
-  return{text,images};
+  // Selected global refs
+  const globalRefs=selRefs.size>0?(await getRefs()).filter(r=>selRefs.has(r.id)):[];
+
+  // Client doc refs: use clientDocMap (populated by renderRefs)
+  // If refs explicitly selected, only include selected cdoc_ keys
+  // If nothing selected, auto-include up to 2 images from active client
+  let clientDocRefs=[];
+  if(selRefs.size>0){
+    for(const key of selRefs){
+      if(key.startsWith('cdoc_')&&clientDocMap[key]){
+        clientDocRefs.push({...clientDocMap[key],id:key});
+      }
+    }
+  } else if(activeClient){
+    // Auto-include up to 2 images from active client
+    const activeEntries=Object.entries(clientDocMap)
+      .filter(([,v])=>v.clientId===activeClient)
+      .slice(0,2)
+      .map(([k,v])=>({...v,id:k}));
+    clientDocRefs=activeEntries;
+  }
+
+  const imgPool=selRefs.size>0
+    ?[...globalRefs.filter(r=>r.base64&&(r.mimeType||r.mime_type)).map(r=>({base64:r.base64,mimeType:r.mimeType||r.mime_type})),
+       ...clientDocRefs.map(r=>({base64:r.base64,mimeType:r.mimeType}))]
+    :clientDocRefs.map(r=>({base64:r.base64,mimeType:r.mimeType}));
+
+  const text=[
+    ...globalRefs.map(r=>{let t='Ref visual';if(r.tags?.length)t+=` (${r.tags.join(',')})`;if(r.analysis)t+=`: ${r.analysis}`;return t;}),
+    ...(clientDocRefs.length>0?[`Estilo visual de ${clientDocRefs[0]?.clientName||'cliente'} (${clientDocRefs.length} imagen${clientDocRefs.length>1?'es':''})`]:[])
+  ].join('\n');
+
+  return{text,images:imgPool.slice(0,3)};
 }
 
 /* ══ GENERATE SINGLE PROMPT ══ */
@@ -1250,7 +1310,7 @@ async function gP(id){
   let uc=buildUC(p);
   if(refCtx.images.length>0){uc=[...refCtx.images.map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:buildUC(p)+'\nInspírate en el estilo de las referencias visuales para el FONDO.'}];}
   try{
-    const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:280,system:sys,messages:[{role:'user',content:uc}]})});
+    const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:280,system:sys,messages:[{role:'user',content:uc}]})});
     if(!r.ok){toast('Error: '+r.statusText,'terr');dot(id,'er');btn.disabled=false;return;}
     const dd=await r.json();const txt=dd.content?.[0]?.text?.trim()||fbP(p,clCtx);
     pt.textContent=txt;pt.dataset.prompt=txt;
@@ -1261,18 +1321,148 @@ async function gP(id){
 }
 
 function buildSys(clCtx,refTxt){
-  return`Eres director creativo premium para redes sociales B2B. Generas prompts de imagen en inglés para KIE.AI.
-Solo el prompt del FONDO VISUAL (sin texto ni tipografía en la imagen).
-Formato: 2-3 frases densas en inglés. Sin JSON, sin título, sin explicación.
-Estilo base: fotografía editorial oscura premium, objetos 3D glass/crystal, luz volumétrica.
-${clCtx?'CONTEXTO DEL CLIENTE:\n'+clCtx:''}
-${refTxt?'REFERENCIAS VISUALES:\n'+refTxt:''}`;
+  return`You are a creative director for a disruptive advertising agency. You generate image prompts in English for AI image generators (KIE.AI / GPT Image 2).
+
+MANDATORY STYLE — hyperrealistic, photographic, campaign-quality:
+• Hyperrealistic photography style — looks like a real photograph shot by a professional photographer, NOT AI-generated looking
+• Real human characters or animals in real dramatic situations that METAPHORICALLY represent the post message
+• Black and white or heavily desaturated with subtle dark indigo overlay (#0d0820 tint at 60% opacity)
+• Cinematic lighting: dramatic chiaroscuro, hard shadows, strong directional light
+• Editorial composition: leave upper-left area clear for headline text overlay
+• No text, no watermarks, no logos in the image
+• The scene must visually TELL the story of the post without words
+
+OUTPUT: 2-3 dense descriptive sentences in English only. No JSON, no title, no explanation.
+${clCtx?'\nCLIENT CONTEXT:\n'+clCtx:''}
+${refTxt?'\nVISUAL REFERENCES:\n'+refTxt:''}`;
 }
-function buildUC(p){return`Post Instagram. Tipo: ${p.t} | Ángulo: ${p.a} | Hook: "${p.hook.replace(/\n/g,' ')}"${p.v?' | Visual: '+p.v:''}\nGenera el prompt del FONDO en inglés.`;}
+
+const ANGLE_SCENES={
+  'SALES 01':{ // Dolor — Leads perdidos
+    Dolor:'exhausted businessman in dark suit sitting on office floor surrounded by ringing phones nobody answers, dramatic low-key lighting, B&W, shallow depth of field',
+    Miedo:'sprint race where one runner stops to check phone while others accelerate ahead, motion blur on runners, sharp on distracted figure, B&W',
+    Resultado:'confident executive standing alone in spotlight while empty chairs surround a meeting table, victorious posture, dramatic lighting, B&W',
+    Prueba:'two businesspeople signing a contract across a desk, close handshake shot from above, sharp details, B&W with dramatic shadows',
+    Deseo:'business professional walking through large glass doors into bright light, silhouette, cinematic B&W'
+  },
+  'SALES 02':{ // Miedo — Velocidad
+    Dolor:'businessman frozen mid-step watching competitor sprint past him blurred, cinematic B&W, dramatic contrast',
+    Miedo:'empty restaurant table being cleared while competitor gets seated and served, narrative B&W photography',
+    Resultado:'person crossing a finish line alone, tape breaking, crowd cheering in blurred background, B&W motion',
+    Prueba:'two identical alarm clocks side by side, one smashed and one pristine, dramatic product photography B&W',
+    Deseo:'executive running through airport terminal, purposeful motion blur, cinematic B&W, dramatic lighting'
+  },
+  'SALES 03':{ // Resultado — Agenda llena
+    Dolor:'empty calendar pinned to wall in dark office, single light beam illuminating it, dramatic B&W',
+    Miedo:'person sitting at empty desk while phone sits silent, contemplative mood, editorial B&W',
+    Resultado:'business calendar completely covered in handwritten appointments and sticky notes, overhead flat lay, B&W',
+    Prueba:'executive pointing at metrics on a screen, colleagues reacting with surprise and satisfaction, B&W editorial',
+    Deseo:'confident professional reviewing fully booked calendar on phone, slight smile, window light, editorial B&W'
+  },
+  'SALES 04':{ // Dolor — Seguimiento
+    Dolor:'long row of unanswered message notifications on smartphone screen in dark room, dramatic close-up, B&W',
+    Miedo:'person watching money literally fall from their hands to the ground in slow motion freeze, B&W dramatic',
+    Resultado:'salesperson reviewing a thick stack of completed deals, satisfied expression, office environment, B&W',
+    Prueba:'whiteboard showing follow-up sequence numbers 1 through 7 with checkmarks, hand holding marker, B&W',
+    Deseo:'business professional confidently closing laptop after final sale, relaxed posture, warm editorial B&W'
+  },
+  'SALES 05':{ // Prueba — Casos reales
+    Dolor:'client frustrated at their desk surrounded by papers and tools that aren\'t working, B&W editorial',
+    Miedo:'group of identical-looking professionals at a conference, one person standing visibly different, B&W',
+    Resultado:'before/after split composition: chaotic messy left half, organized clean right half, B&W dramatic',
+    Prueba:'executive presenting chart to boardroom with impressive upward trend, engaged audience, B&W editorial',
+    Deseo:'team celebrating around a table, genuine joy and high-fives, candid moment, editorial B&W photography'
+  },
+  'TECH 01':{ // Dolor — Dependencia SaaS
+    Dolor:'person trapped under a pile of subscription receipts and software boxes, dramatic editorial B&W',
+    Miedo:'multiple screens showing different apps all demanding payment notifications, overwhelmed user, B&W',
+    Resultado:'single clean laptop screen glowing in dark room, freedom and simplicity, dramatic B&W',
+    Prueba:'side-by-side: complex messy multi-app setup vs single clean screen, B&W editorial contrast',
+    Deseo:'professional working from laptop in minimalist space, total control and calm, editorial B&W'
+  },
+  'TECH 02':{ // Miedo — IA competencia
+    Dolor:'businessperson watching competitor\'s rocket launch while standing with a bicycle, editorial B&W',
+    Miedo:'athlete running against robotic competitor with clear speed advantage, dramatic B&W motion',
+    Resultado:'executive at the front of a pack while others fall behind, clear leader, cinematic B&W',
+    Prueba:'split scene: one professional with AI tools crushing metrics, other struggling manually, B&W',
+    Deseo:'person and AI interface working in perfect harmony, futuristic but grounded, editorial B&W'
+  },
+  'TECH 03':{ // Dolor — Tareas repetitivas
+    Dolor:'worker pushing same large boulder up hill like Sisyphus, dramatic editorial B&W, symbolic',
+    Miedo:'rows of identical workers doing identical repetitive motions, factory line metaphor, B&W editorial',
+    Resultado:'single automated machine doing work of many, efficiency visualized, dramatic industrial B&W',
+    Prueba:'stopwatch close-up next to stack of papers representing hours wasted, B&W product editorial',
+    Deseo:'professional relaxing confidently while machines work in background, freedom, editorial B&W'
+  },
+  'TECH 04':{ // Deseo — IA propia
+    Dolor:'generic robot serving multiple different businesses, commoditized, editorial B&W',
+    Miedo:'business without AI watching competitors race ahead with clear advantage, dramatic B&W',
+    Resultado:'custom AI assistant interface glowing on screen, executive impressed, dramatic B&W editorial',
+    Prueba:'custom-branded AI answering customer queries 24/7, screens showing activity at night, B&W',
+    Deseo:'executive and personalized AI working as partners, future-forward editorial B&W photography'
+  },
+  'TECH 05':{ // Resultado — Desarrollo
+    Dolor:'developer buried under technical debt and legacy code printouts, frustrated, editorial B&W',
+    Miedo:'slow construction site with single worker while competition builds skyscraper at speed, B&W',
+    Resultado:'MVP product launching to excited users, team celebration, genuine emotion, editorial B&W',
+    Prueba:'whiteboard with timeline showing compressed delivery: week 1 to week 4 done, B&W editorial',
+    Deseo:'sleek product on screen, team proud in background blurred, achievement moment, editorial B&W'
+  },
+  'BRAND 01':{ // Identidad de marca
+    Dolor:'generic faceless crowd of identical suits, one figure standing apart with identity, B&W editorial',
+    Miedo:'brand being lost in noise of competing messages, visual chaos, editorial B&W',
+    Resultado:'single distinctive figure commanding attention in crowd, magnetic presence, editorial B&W',
+    Prueba:'loyal customers returning, warmth and recognition in interaction, B&W street photography style',
+    Deseo:'iconic brand moment: product and person in perfect visual harmony, aspirational B&W editorial'
+  },
+  'BRAND 02':{ // Social proof
+    Dolor:'empty venue that should be full, unused product, missed potential, dramatic B&W',
+    Miedo:'reviews being ignored while customers leave, narrative B&W photography',
+    Resultado:'crowd of satisfied customers giving standing ovation, genuine emotion, editorial B&W',
+    Prueba:'testimonial moment: customer telling friend about experience, authentic candid B&W',
+    Deseo:'brand ambassador moment: person proudly using product, organic authentic B&W editorial'
+  },
+  'EDU 01':{ // Educación — Tips
+    Dolor:'professional making obvious mistake that has expensive consequences, dramatic B&W editorial',
+    Miedo:'person ignoring road sign leading to obvious danger, metaphorical B&W photography',
+    Resultado:'mentor sharing insight with eager student, knowledge transfer moment, editorial B&W',
+    Prueba:'expert with credentials and experience visible in environment, authority, editorial B&W',
+    Deseo:'person having breakthrough insight, lightbulb moment, dramatic editorial B&W lighting'
+  },
+  'EDU 02':{ // Educación — Errores
+    Dolor:'professional realizing expensive mistake too late, hands on head, dramatic B&W editorial',
+    Miedo:'mistake spreading like dominos falling, cause and effect visual metaphor, B&W editorial',
+    Resultado:'person stopping domino effect at last moment, prevention, dramatic B&W editorial',
+    Prueba:'case study: error vs correct approach side by side, educational editorial B&W',
+    Deseo:'professional confidently avoiding pitfall others fall into, composed expert, editorial B&W'
+  },
+  'PROMO 01':{ // Oferta / Lanzamiento
+    Dolor:'person missing limited opportunity, door closing on them, dramatic B&W editorial',
+    Miedo:'countdown clock with urgency, person rushing to decide, dramatic B&W photography',
+    Resultado:'product launch moment, excitement and reveal, crowd reaction, editorial B&W',
+    Prueba:'early adopter success story, first person with new solution, editorial B&W documentary',
+    Deseo:'exclusive access moment, VIP treatment, aspirational opportunity, editorial B&W'
+  }
+};
+
+function buildUC(p){
+  const angleScenes=ANGLE_SCENES[p.a]||ANGLE_SCENES['SALES 01'];
+  const scene=angleScenes[p.t]||angleScenes['Dolor']||'dramatic B&W editorial scene with real human characters representing the post message metaphorically';
+  return`Instagram post visual prompt.
+Angle: ${p.a} | Emotional type: ${p.t}
+Hook: "${p.hook.replace(/\n/g,' ')}"
+${p.v?'Visual concept from copywriter: '+p.v:''}
+
+Generate a hyperrealistic photographic image prompt based on this scene: ${scene}
+
+Style requirements: dark indigo overlay (#0d0820 at 60%), upper-left clear for text, no text/watermarks/logos, cinematic B&W with dramatic chiaroscuro lighting, photorealistic NOT AI-looking, real human or animal subjects, strong visual metaphor.
+
+Output: 2-3 dense descriptive sentences in English only.`;
+}
 function fbP(p,ctx){
-  const mood={Dolor:'dramatic dark moody shadows, tension, deep chiaroscuro',Miedo:'cold urgency, competitive race, speed differential',Resultado:'clean sharp achievement, organized premium success',Prueba:'data-driven proof, before-after contrast',Deseo:'aspirational futuristic glow, premium desire'};
-  const col=(ctx.match(/Color principal:\s*(#[0-9a-fA-F]+)/)?.[1])||'#8F7EE9';
-  return`Ultra-premium editorial photography, ${p.v||'dark abstract tech scene'}, ${mood[p.t]||'modern premium dark'}, deep navy #14181E background, ${col} volumetric light beams, floating 3D glass crystal objects, cinematic depth of field, no text no watermarks, photorealistic sharp.`;
+  const angleScenes=ANGLE_SCENES[p.a]||ANGLE_SCENES['SALES 01'];
+  const scene=angleScenes[p.t]||angleScenes['Dolor'];
+  return`${scene}, dark indigo-violet overlay (#0d0820 tint), upper-left composition space for headline text, no text no watermarks no logos, hyperrealistic photographic quality, cinematic chiaroscuro lighting, high contrast B&W, professional editorial photography style, 4:5 portrait format.`;
 }
 
 /* ══ GENERATE ALL PROMPTS ══ */
@@ -1304,7 +1494,7 @@ async function startGenAll(){
     let uc=buildUC(p);
     if(refCtx.images.length>0){uc=[...refCtx.images.slice(0,1).map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:buildUC(p)+'\nInspírate en el estilo visual de la referencia.'}];}
     try{
-      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:260,system:sys,messages:[{role:'user',content:uc}]})});
+      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:260,system:sys,messages:[{role:'user',content:uc}]})});
       if(!r.ok){logEl.innerHTML+='<span style="color:var(--er)">✕</span> '+esc(p.hook.replace(/\n/g,' ').slice(0,38))+' (HTTP '+r.status+')<br>';dot(p.id,'er');continue;}
       const dd=await r.json();const txt=dd.content?.[0]?.text?.trim()||fbP(p,clCtx);
       const ptEl=document.getElementById('pt-'+p.id);if(ptEl){ptEl.textContent=txt;ptEl.dataset.prompt=txt;}
@@ -1341,7 +1531,7 @@ async function gI(id){
   area.innerHTML=mkL(MODELS[AM].label+'…',id);
   try{
     const body=buildKieBody(AM,pr,AF);
-    const r=await fetch(AI_PROXY+'/kie/image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const r=await fetch(AI_PROXY+'/kie/image',{method:'POST',headers:{'Content-Type':'application/json','x-kie-key':getKieKey()},body:JSON.stringify(body)});
     const raw=await r.text();let dd;try{dd=JSON.parse(raw);}catch{throw new Error(`No-JSON (${r.status}): ${raw.slice(0,250)}`);}
     if(!r.ok)throw new Error(`HTTP ${r.status} — ${dd.msg||JSON.stringify(dd).slice(0,250)}`);
     const tid=dd.data?.taskId;if(!tid)throw new Error('Sin taskId: '+JSON.stringify(dd).slice(0,250));
@@ -1355,7 +1545,7 @@ async function pollKie(id,taskId,btn,n=0){
   const pf=document.getElementById('pf-'+id);if(pf)pf.style.width=pct+'%';
   const sl=document.getElementById('sl-'+id);if(sl)sl.innerHTML=`Generando <b>${pct}%</b> (~${Math.round(n*INT/1000)}s)`;
   try{
-    const r=await fetch(AI_PROXY+'/kie/image/status?taskId='+taskId);
+    const r=await fetch(AI_PROXY+'/kie/image/status?taskId='+taskId,{headers:{'x-kie-key':getKieKey()}});
     const raw=await r.text();let dd;try{dd=JSON.parse(raw);}catch{throw new Error(raw.slice(0,200));}
     if(!r.ok)throw new Error(`Poll ${r.status}: ${dd.msg||JSON.stringify(dd).slice(0,200)}`);
     const data=dd.data,state=data?.state;
@@ -1374,14 +1564,16 @@ const OVS={};
 async function showImg(id,src,isUrl){
   const p=await getPost(id);if(!p)return;
   const area=document.getElementById('ia-'+id),fi=getFI();
-  const hookHtml=p.hook.split('\n').join('<br>'),bodyHtml=p.body.split('\n\n').map(para=>'<p>'+para.replace(/\n/g,'<br>')+'</p>').join('');
+  const hookLines=p.hook.split('\n');
+  const hookHtml=hookLines.map((l,i)=>i===hookLines.length-1?`<span style="color:#4a63f5">${l}</span>`:l).join('<br>');
+  const bodyHtml=p.body.split('\n\n').map(para=>'<p>'+para.replace(/\n/g,'<br>')+'</p>').join('');
   const hs=fi.w>=fi.h?'clamp(12px,2.8vw,18px)':'clamp(16px,4.2vw,26px)';
   imgSrcs[id]={src,isUrl};
   area.innerHTML=`<div class="pw" style="aspect-ratio:${fi.w}/${fi.h}">
 <img src="${src}" alt="" id="img-${id}" ${isUrl?'crossorigin="anonymous"':''}>
 <div class="ov" id="ov-${id}"><div class="ovb">CLIENDER</div><div class="ovsp"></div>
 <div class="ovh" style="font-size:${hs}">${hookHtml}</div><div class="ovs">${p.sub||''}</div>
-<div class="ovc">${bodyHtml}</div><div class="ovct">${p.cta||''}</div></div>
+<div class="ovct">${p.cta||'Hablamos'} → <span style="color:#4a63f5">CLIENDER</span></div></div>
 <button class="ovtog" id="ovt-${id}" onclick="togOv('${id}')">texto ON</button></div>
 <div class="dl-row" style="margin-top:5px">
 <button class="bdl comp" onclick="dlComp('${id}')">↓ PNG compuesto</button>
@@ -1407,18 +1599,29 @@ async function dlComp(id){
   const pd=Math.round(W2*.065);ctx.textBaseline='top';
   ctx.font='800 '+Math.round(W2*.022)+'px Syne,sans-serif';ctx.fillStyle='#ffffff';ctx.fillText('CLIENDER',pd,pd);
   const lines=p.hook.split('\n');const hkSz=Math.round(W2*(fi.w>=fi.h?.058:.074));
-  ctx.font='900 '+hkSz+'px Syne,sans-serif';ctx.fillStyle='#ffffff';ctx.shadowColor='rgba(0,0,0,.7)';ctx.shadowBlur=20;
-  const cardH=Math.round(H2*.21),ctaH=Math.round(H2*.036),subH=Math.round(H2*.027),gap=Math.round(H2*.01);
-  let hy=H2-pd-ctaH-gap*2-cardH-gap-subH-gap-lines.length*hkSz*1.06;
-  lines.forEach(l=>{ctx.fillText(l,pd,hy);hy+=hkSz*1.06;});ctx.shadowBlur=0;
+  ctx.font='900 '+hkSz+'px Syne,sans-serif';ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=24;
+  const cardH=0,ctaH=Math.round(H2*.04),subH=Math.round(H2*.027),gap=Math.round(H2*.012);
+  let hy=H2-pd*1.6-ctaH-gap-subH-gap-lines.length*hkSz*1.1;
+  lines.forEach((l,i)=>{
+    ctx.fillStyle=i===lines.length-1?'#4a63f5':'#ffffff';
+    ctx.fillText(l,pd,hy);hy+=hkSz*1.1;
+  });ctx.shadowBlur=0;
   const sy=hy+gap;ctx.font='italic 400 '+Math.round(W2*.019)+'px Syne,sans-serif';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText(p.sub||'',pd,sy);
-  const cy=sy+subH+gap,cw=W2-pd*2;
-  rRect(ctx,pd,cy,cw,cardH,Math.round(W2*.018));ctx.fillStyle='rgba(4,6,12,.86)';ctx.fill();ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=Math.round(W2*.003);ctx.stroke();
-  ctx.font='400 '+Math.round(W2*.025)+'px Syne,sans-serif';ctx.fillStyle='rgba(255,255,255,.88)';
-  const blines=p.body.replace(/\n\n/g,'\n').split('\n');let by=cy+Math.round(W2*.026);
-  blines.forEach(bl=>{if(bl.trim())ctx.fillText(bl,pd+Math.round(W2*.026),by);by+=Math.round(W2*.034);});
-  ctx.font='500 '+Math.round(W2*.019)+'px Syne,sans-serif';ctx.fillStyle='rgba(255,255,255,.38)';
-  const ctaW=ctx.measureText(p.cta||'').width;ctx.fillText(p.cta||'',(W2-ctaW)/2,H2-pd-ctaH);
+  // CTA bottom-right — CLIENDER style: "Hablamos → " white + "CLIENDER" purple
+  const ctaSz = Math.round(W2*.021);
+  ctx.font = '700 '+ctaSz+'px Syne,sans-serif';
+  ctx.shadowBlur=0;
+  const ctaLabel = (p.cta||'Hablamos') + ' → ';
+  const brandName = 'CLIENDER';
+  const ctaLabelW = ctx.measureText(ctaLabel).width;
+  const brandW = ctx.measureText(brandName).width;
+  const totalW = ctaLabelW + brandW;
+  const ctaX = W2 - pd - totalW;
+  const ctaY = H2 - pd;
+  ctx.fillStyle = 'rgba(255,255,255,.92)';
+  ctx.fillText(ctaLabel, ctaX, ctaY);
+  ctx.fillStyle = '#4a63f5';
+  ctx.fillText(brandName, ctaX + ctaLabelW, ctaY);
   canvas.toBlob(blob=>{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`cliender-${id}-${fi.label.replace(':','x')}-${W2}x${H2}.png`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast(`PNG ${W2}×${H2} listo ✓`,'tok');},'image/png');
 }
 function ldImg(src,isUrl){return new Promise((res,rej)=>{const img=new Image();if(isUrl)img.crossOrigin='anonymous';img.onload=()=>res(img);img.onerror=()=>rej(new Error('img load error'));img.src=src;});}
@@ -1441,14 +1644,14 @@ async function openNewCal(preClientId){
   const none=document.createElement('div');none.className='cs-opt'+(preClientId?'':' sel');none.dataset.id='';
   none.innerHTML='<div><div class="cs-nm">Sin cliente</div><div class="cs-in">Calendario independiente</div></div>';
   none.onclick=function(){
-    document.querySelectorAll('.cs-opt').forEach(o=>o.classList.remove('sel'));this.classList.add('sel');
+    document.querySelectorAll('#cal-cl-sel .cs-opt').forEach(o=>o.classList.remove('sel'));this.classList.add('sel');
     updateAICalSection('');
   };
   sel.appendChild(none);
   (await getClients()).forEach(cl=>{
     const opt=document.createElement('div');opt.className='cs-opt'+(cl.id===preClientId?' sel':'');opt.dataset.id=cl.id;
     opt.innerHTML=`<div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,${cl.color||'#3a5c9e'},${cl.color2||'#6a8fc8'});display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0">${(cl.name||'?')[0]}</div><div><div class="cs-nm">${esc(cl.name)}</div><div class="cs-in">${esc(cl.industry||'')}</div></div>`;
-    opt.onclick=function(){document.querySelectorAll('.cs-opt').forEach(o=>o.classList.remove('sel'));this.classList.add('sel');updateAICalSection(cl.id);};
+    opt.onclick=function(){document.querySelectorAll('#cal-cl-sel .cs-opt').forEach(o=>o.classList.remove('sel'));this.classList.add('sel');updateAICalSection(cl.id);};
     sel.appendChild(opt);
   });
   renderAnglesGrid(preClientId);
@@ -1484,7 +1687,7 @@ async function openEditCal(){
 }
 async function saveCal(){
   const name=document.getElementById('cal-nm').value.trim();if(!name){toast('El nombre es obligatorio','terr');return;}
-  const selOpt=document.querySelector('.cs-opt.sel');const client_id=selOpt?.dataset?.id||null;
+  const selOpt=document.querySelector('#cal-cl-sel .cs-opt.sel');const client_id=selOpt?.dataset?.id||null;
   try{
     const cal={name,description:document.getElementById('cal-ds').value.trim(),clientId:client_id||null};
     const method=editCId?'PUT':'POST',endpoint=editCId?'/api/calendars/'+editCId:'/api/calendars';
@@ -1614,7 +1817,7 @@ async function renderClientDetail(id){
 async function openCalAndGo(id){activeCal=id;await tab('gen',document.querySelector('[data-p=gen]'));await renderCalBar();await openCal(id);}
 function renderDocsList(cl,docs){
   const list=document.getElementById('docs-list');
-  list.innerHTML=(docs||[]).map(d=>`<div class="di"><span class="di-ico">${d.mime_type?.startsWith('image/')||d.mimeType?.startsWith('image/')?'🖼':'📄'}</span><div style="flex:1;min-width:0"><div class="di-nm">${esc(d.name)}</div>${d.analysis?'<div class="di-an">'+esc(d.analysis.slice(0,90))+'…</div>':''}</div><span class="di-st ${d.analysis?'dst-ok':'dst-p'}">${d.analysis?'Analizado':'Pendiente'}</span><button class="di-del" onclick="delDoc('${cl.id}','${d.id}')">×</button></div>`).join('');
+  list.innerHTML=(docs||[]).map(d=>{const isImg=d.mime_type?.startsWith('image/')||d.mimeType?.startsWith('image/');const stLabel=d.analysis?'Analizado':isImg?'Imagen':'Pendiente';const stCls=d.analysis?'dst-ok':isImg?'dst-img':'dst-p';return`<div class="di"><span class="di-ico">${isImg?'🖼':'📄'}</span><div style="flex:1;min-width:0"><div class="di-nm">${esc(d.name)}</div>${d.analysis?'<div class="di-an">'+esc(d.analysis.slice(0,90))+'…</div>':isImg?'<div class="di-an" style="color:var(--ac)">Referencia visual disponible</div>':''}</div><span class="di-st ${stCls}">${stLabel}</span><button class="di-del" onclick="delDoc('${cl.id}','${d.id}')">×</button></div>`}).join('');
 }
 async function handleDocs(e){
   const files=[...e.target.files];if(!files.length||!activeClient)return;
@@ -1626,7 +1829,7 @@ async function handleDocs(e){
       let content;
       if(mtype.startsWith('image/')){content=[{type:'image',source:{type:'base64',media_type:mtype,data:base64}},{type:'text',text:'Analiza este documento/imagen de marca en 2-3 frases: estilo visual, paleta de colores, tipografía y mood. Solo el análisis.'}];}
       else content='Analiza este documento de cliente. Extrae en 2-3 frases: propuesta de valor, tono de comunicación y estilo visual.';
-      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:200,messages:[{role:'user',content}]})});
+      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:200,messages:[{role:'user',content}]})});
       if(!r.ok){toast('Error: '+r.statusText,'terr');}else{const dd=await r.json();doc.analysis=dd.content?.[0]?.text?.trim()||'';}
     }catch{}
     try{await fetch('/api/clients/'+activeClient+'/docs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(doc)});}catch{toast('Error al guardar doc','terr');}
@@ -1637,15 +1840,84 @@ async function delDoc(client_id,docId){showConfirm('Eliminar documento','Este do
 
 /* ══ REFERENCES ══ */
 async function renderRefs(){
-  const refs=await getRefs();const grid=document.getElementById('refs-grid');const empty=document.getElementById('refs-empty');
-  document.getElementById('str').textContent=selRefs.size;document.getElementById('btn-rcnt').textContent=selRefs.size;
-  if(refs.length===0){grid.style.display='none';empty.style.display='flex';document.getElementById('ref-bar').style.display='none';return;}
-  grid.style.display='grid';empty.style.display='none';
-  grid.innerHTML=refs.map((r,i)=>`<div class="rcard${selRefs.has(r.id)?' sel':''}" id="rc-${r.id}" style="animation-delay:${i*25}ms" onclick="toggleRef('${r.id}')">
+  const refs=await getRefs();
+  const clients=await getClients();
+  const grid=document.getElementById('refs-grid');
+  const empty=document.getElementById('refs-empty');
+  document.getElementById('str').textContent=selRefs.size;
+  document.getElementById('btn-rcnt').textContent=selRefs.size;
+
+  // Build clientDocMap: fetch image docs from all clients
+  clientDocMap={};
+  const clientFolders=[];
+  for(const cl of clients){
+    try{
+      const dr=await fetch('/api/clients/'+cl.id+'/docs',{headers:{'Content-Type':'application/json'}});
+      if(!dr.ok)continue;
+      const docs=await dr.json();
+      const imgDocs=docs.filter(d=>(d.mime_type||d.mimeType||'').startsWith('image/')&&d.base64);
+      if(!imgDocs.length)continue;
+      clientFolders.push({cl,imgDocs});
+      for(const d of imgDocs){
+        const key='cdoc_'+d.id;
+        clientDocMap[key]={base64:d.base64,mimeType:d.mime_type||d.mimeType,name:d.name||'Ref.',clientName:cl.name,clientId:cl.id};
+      }
+    }catch{}
+  }
+
+  const hasContent=refs.length>0||clientFolders.length>0;
+  if(!hasContent){grid.style.display='none';empty.style.display='flex';document.getElementById('ref-bar').style.display='none';return;}
+  grid.style.display='block';empty.style.display='none';
+
+  let html='';
+
+  // ── Carpetas de cliente ──
+  if(clientFolders.length>0){
+    html+=`<div class="ref-section-lbl">CARPETAS DE CLIENTE</div>`;
+    for(const {cl,imgDocs} of clientFolders){
+      const isOpen=openClientFolders.has(cl.id);
+      const allKeys=imgDocs.map(d=>'cdoc_'+d.id);
+      html+=`<div class="ref-folder">
+<div class="ref-folder-hd" onclick="toggleRefFolder('${cl.id}')">
+  <span class="ref-folder-icon">${isOpen?'▾':'▸'}</span>
+  <span class="ref-folder-name">${esc(cl.name)}</span>
+  <span class="ref-folder-cnt">${imgDocs.length} img</span>
+  ${isOpen?`<span class="ref-folder-selall" onclick="event.stopPropagation();selectAllClientDocs(${JSON.stringify(allKeys)})">sel. todo</span>`:''}
+</div>
+${isOpen?`<div class="ref-folder-grid">${imgDocs.map(d=>{
+  const key='cdoc_'+d.id;
+  const mime=d.mime_type||d.mimeType;
+  return`<div class="rcard${selRefs.has(key)?' sel':''}" id="rc-${key}" onclick="toggleRef('${key}')">
+<img class="rimg" src="data:${mime};base64,${d.base64}" alt="">
+<div class="ri"><div class="rnm">${esc(d.name||'Ref.')}</div></div>
+</div>`;}).join('')}</div>`:''}
+</div>`;
+    }
+  }
+
+  // ── Referencias globales ──
+  if(refs.length>0){
+    html+=`<div class="ref-section-lbl"${clientFolders.length>0?' style="margin-top:1.4rem"':''}>REFERENCIAS GLOBALES</div>
+<div class="refs-global-grid">${refs.map((r,i)=>{
+  const mime=r.mime_type||r.mimeType;
+  return`<div class="rcard${selRefs.has(r.id)?' sel':''}" id="rc-${r.id}" style="animation-delay:${i*25}ms" onclick="toggleRef('${r.id}')">
 <button class="rdel" onclick="delRef(event,'${r.id}')">× eliminar</button>
-<img class="rimg" src="data:${r.mime_type};base64,${r.base64}" alt="">
+<img class="rimg" src="data:${mime};base64,${r.base64}" alt="">
 <div class="ri"><div class="rnm">${esc(r.name)}</div><div class="rtags">${(r.tags||[]).map(t=>'<span class="rtag">'+esc(t)+'</span>').join('')}</div></div>
-</div>`).join('');
+</div>`;}).join('')}</div>`;
+  }
+
+  grid.innerHTML=html;
+  updateRefBar();
+}
+function toggleRefFolder(clientId){
+  if(openClientFolders.has(clientId))openClientFolders.delete(clientId);
+  else openClientFolders.add(clientId);
+  renderRefs();
+}
+function selectAllClientDocs(keys){
+  keys.forEach(k=>selRefs.add(k));
+  renderRefs();
   updateRefBar();
 }
 async function handleRefs(e){await handleRefsFiles([...e.target.files]);e.target.value='';}
@@ -1657,7 +1929,7 @@ async function handleRefsFiles(files){
     const b64=await toB64(file);const base64=b64.split(',')[1];const mtype=file.type;
     const ref={id:'ref_'+Date.now()+'_'+Math.random().toString(36).slice(2),name:file.name,base64,mimeType:mtype,tags:[],analysis:''};
     try{
-      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:160,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mtype,data:base64}},{type:'text',text:'Describe el estilo visual en 2 frases (paleta, iluminación, mood, estilo fotográfico). Solo la descripción.'}]}]})});
+      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:160,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:mtype,data:base64}},{type:'text',text:'Describe el estilo visual en 2 frases (paleta, iluminación, mood, estilo fotográfico). Solo la descripción.'}]}]})});
       if(!r.ok){toast('Error: '+r.statusText,'terr');}else{const dd=await r.json();ref.analysis=dd.content?.[0]?.text?.trim()||'';}
       const tw=['oscuro','claro','minimalista','editorial','cinematográfico','premium','vintage','moderno','abstracto','neon','tech','gradiente'];
       ref.tags=tw.filter(w=>ref.analysis.toLowerCase().includes(w)).slice(0,4);
@@ -1819,6 +2091,7 @@ async function studioSelClient(el){
   });
   el.classList.add('sel');el.style.borderColor='var(--v1)';el.style.background='rgba(58,92,158,.09)';
   const cid = el.dataset.id;
+  activeClient = cid || null;
   if(cid){
     const cl=await getClient(cid);
     if(cl){prefillStudioPrompt(cl);renderStudioAngles(cl);}
@@ -1829,13 +2102,10 @@ async function studioSelClient(el){
 
 function prefillStudioPrompt(cl){
   const existing = document.getElementById('studio-prompt').value;
-  if(existing && existing.length > 20) return; // Don't overwrite user's text
-  let prompt = '';
-  if(cl.desc) prompt += cl.desc+'\n\n';
-  if(cl.audience) prompt += `Público objetivo: ${cl.audience}.\n`;
-  if(cl.tone) prompt += `Tono: ${cl.tone}.\n`;
-  if(cl.style) prompt += `Estilo visual: ${cl.style}.`;
-  document.getElementById('studio-prompt').value = prompt.trim();
+  if(existing && existing.length > 20) return;
+  // Leave prompt empty — client profile is passed to AI separately
+  // User can add extra instructions here if needed
+  document.getElementById('studio-prompt').value = '';
   // Set calendar name suggestion
   const nm = document.getElementById('studio-cal-name');
   if(!nm.value) nm.value = cl.name + ' — ' + new Date().toLocaleDateString('es',{month:'long',year:'numeric'});
@@ -1889,7 +2159,6 @@ async function launchStudio(){
   const name=document.getElementById('studio-cal-name').value.trim();
   const studioPrompt=document.getElementById('studio-prompt').value.trim();
   if(!name){toast('Pon nombre al calendario','terr');return;}
-  if(!studioPrompt){toast('Escribe el prompt principal','terr');return;}
 
   const angles=(_studioAngles||DEFAULT_ANGLES).filter(a=>a.sel);
   if(!angles.length){toast('Selecciona al menos un ángulo','terr');return;}
@@ -1941,104 +2210,114 @@ async function launchStudio(){
   if(claudeKey) logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> Claude API activa<br>`;
   else logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> Sin API key — posts de ejemplo<br>`;
 
-  // System prompt Claude
-  const sys=[
-    'Eres experto en copywriting premium para Instagram B2B.',
-    'Genera posts con hooks impactantes en 3 líneas, cuerpo directo y CTA claro.',
-    cName?'CLIENTE: '+cName:'',
-    cIndustry?'Sector: '+cIndustry:'',
-    cDesc?'Descripción: '+cDesc:'',
-    cAudience?'Público objetivo: '+cAudience:'',
-    cTone?'Tono: '+cTone:'',
-    studioPrompt?'CONTEXTO: '+studioPrompt:'',
-    'TIPOS DISPONIBLES: '+cTypes.join(', '),
-    'RESPONDE SOLO con JSON válido sin markdown:',
-    '{"posts":[{"hora":"HH:MM","tipo":"'+cTypes[0]+'","hook":"linea1\\nlinea2\\nlinea3","sub":"subtitulo","body":"parrafo1\\n\\nparrafo2","cta":"texto","visual":"english prompt"}]}'
-  ].filter(Boolean).join('\n');
+  // Build client context string
+  let clCtxS = '';
+  if(cName)     clCtxS += `MARCA: ${cName}\n`;
+  if(cIndustry) clCtxS += `Sector: ${cIndustry}\n`;
+  if(cDesc)     clCtxS += `Descripción: ${cDesc}\n`;
+  if(cAudience) clCtxS += `Público objetivo: ${cAudience}\n`;
+  if(cTone)     clCtxS += `Tono: ${cTone}\n`;
+  if(cl?.docs?.length){
+    const ad=cl.docs.filter(d=>d.analysis);
+    if(ad.length){clCtxS+='\nDOCUMENTOS:\n';ad.forEach(d=>{clCtxS+=`[${d.name}]\n${d.analysis.slice(0,500)}\n`;});}
+  }
+
+  const sys=`Eres copywriter experto en Instagram. Creas posts persuasivos únicos — el "body" es texto de anuncio creativo dirigido AL cliente, NO una descripción del cliente ni del perfil.
+
+━━━ CONTEXTO DE LA MARCA ━━━
+${clCtxS||'Sin cliente — tono genérico premium.'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${studioPrompt?'\nINSTRUCCIONES ADICIONALES: '+studioPrompt:''}
+
+ESTILO VISUAL OBLIGATORIO para el campo "visual":
+Cada prompt DEBE seguir este estilo: dark near-black background, cinematic black and white photography with dramatic editorial scene (crowds, people in motion, strong emotion), deep purple-violet (#4a63f5) color accent, bold white display typography overlay left-aligned, high contrast moody premium feel, portrait 4:5 format. Escena fotográfica ÚNICA y específica al tema del post.
+
+LEYES:
+1. El "body" es copy persuasivo en 2 párrafos que habla AL público — no describes la empresa.
+2. El nombre de la marca en MAYÚSCULAS una vez en el body.
+3. Cada post tiene tema único — cero repetición.
+4. "visual" sigue el estilo obligatorio de arriba — mín. 25 palabras, escena única por post.`;
+
+  const TEMAS_S={
+    'Dolor':   ['el error más costoso antes de resolverlo','la señal de alerta que ignoran','por qué el problema empeora','qué se pierde cada semana sin esto'],
+    'Miedo':   ['qué pasa si lo pospones otro mes','el riesgo de seguir igual','cómo la competencia ya actúa','lo que se acumula con el tiempo'],
+    'Resultado':['el cambio en los primeros 30 días','cómo se mide el éxito','el primer resultado visible','el impacto en ingresos reales'],
+    'Prueba':  ['un caso real con datos','la comparativa antes/después','el número que lo demuestra','lo que dicen los que ya lo hicieron'],
+    'Deseo':   ['cómo se verá el negocio resuelto','la sensación de control total','qué se puede hacer cuando se resuelve','el estado ideal al que llegan'],
+  };
 
   let total=0;
 
-  for(let i=0;i<angles.length;i++){
-    const ang=angles[i];
-    fillEl.style.width=Math.round(i/angles.length*100)+'%';
-    pctEl.textContent=Math.round(i/angles.length*100)+'%';
-    lblEl.innerHTML=`Ángulo ${i+1}/${angles.length}: <b>${esc(ang.key)}</b>`;
-
-    let posts=[];
-
-    // Intentar con Claude
-    if(claudeKey){
-      try{
-        const msg=`Genera ${nPerAngle} posts para el ángulo "${ang.key}" (${ang.label||''}).`
-          +`\nCliente: ${cName}, ${cIndustry}. Tono: ${cTone}.`
-          +`\nPrompt visual en inglés: estilo ${cStyle}, colores ${cColor} y ${cColor2}.`
-          +`\nRESPONDE SOLO con JSON {"posts":[...]}`;
-
-        const r=await fetch(AI_PROXY+'/claude',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:2000,system:sys,messages:[{role:'user',content:msg}]})
-        });
-        if(r.ok){
-          const d=await r.json();
-          let t=(d.content?.[0]?.text||'').trim()
-            .replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
-          const a=t.indexOf('{'),b=t.lastIndexOf('}');
-          if(a>=0&&b>a)t=t.slice(a,b+1);
-          const p=JSON.parse(t);
-          posts=(p.posts||[]).map(x=>({
-            hour:x.hora||HORAS[i%HORAS.length],
-            angle:ang.key,
-            type:x.tipo||cTypes[i%cTypes.length],
-            hook:x.hook||ang.key,
-            sub_title:x.sub||ang.label||ang.key,
-            body:x.body||cDesc||ang.key,
-            cta:x.cta||(cName?'Ver '+cName:'Ver más'),
-            visual:x.visual||cStyle+', '+cColor
-          }));
-          logEl.innerHTML+=`<span style="color:var(--ok)">✓ Claude</span> ${esc(ang.key)}: ${posts.length} posts<br>`;
-        }else{
-          logEl.innerHTML+=`<span style="color:var(--wn)">⚠ Claude ${r.status}</span> — usando demo<br>`;
-        }
-      }catch(err){
-        logEl.innerHTML+=`<span style="color:var(--wn)">⚠ Error Claude</span> — usando demo<br>`;
-      }
+  // Build all post specs flat, then batch like saveCalWithAI
+  const OPENERS_S=['¿Cuánto','Mientras tú','Imagina que','Nadie te cuenta','Ya lo intentaste','Ponlo en números','Tus clientes','Paso 1:','¿Sabes cuánto','La mayoría','El error más caro','Sin darte cuenta','Hace 6 meses','Lo que nadie dice','La diferencia entre'];
+  const allSpecsS=[];
+  angles.forEach((ang,ai)=>{
+    for(let pi=0;pi<nPerAngle;pi++){
+      const idx=allSpecsS.length;
+      const tipo=cTypes[idx%cTypes.length];
+      const tPool=TEMAS_S[tipo]||TEMAS_S['Dolor'];
+      allSpecsS.push({ang,tipo,hora:HORAS[idx%HORAS.length],opener:OPENERS_S[idx%OPENERS_S.length],tema:tPool[idx%tPool.length]});
     }
+  });
 
-    // Fallback si no hay posts
-    if(!posts.length){
-      posts=Array.from({length:nPerAngle},(_,j)=>({
-        hour:HORAS[(i*nPerAngle+j)%HORAS.length],
-        angle:ang.key,
-        type:cTypes[(i+j)%cTypes.length],
-        hook:(ang.key+(cName?' — '+cName:''))+'\n'+(ang.label||ang.key)+(cIndustry?'\n'+cIndustry:''),
-        sub_title:ang.label||ang.key,
-        body:[cDesc,cAudience?'Público: '+cAudience:''].filter(Boolean).join('\n\n')||ang.key,
-        cta:cName?'Descubre '+cName:'Ver más',
-        visual:cStyle+', '+cColor+', no text'
-      }));
-      if(!claudeKey) logEl.innerHTML+=`<span style="color:var(--dm)">○ Demo</span> ${esc(ang.key)}: ${posts.length} posts<br>`;
-    }
+  const BATCH_S=10;
+  for(let bi=0;bi<allSpecsS.length;bi+=BATCH_S){
+    const batch=allSpecsS.slice(bi,bi+BATCH_S);
+    fillEl.style.width=Math.round(bi/allSpecsS.length*100)+'%';
+    pctEl.textContent=Math.round(bi/allSpecsS.length*100)+'%';
+    lblEl.innerHTML=`Generando posts ${bi+1}–${Math.min(bi+BATCH_S,allSpecsS.length)} de ${allSpecsS.length}…`;
 
-    // Guardar posts
+    const specsS=batch.map((s,i)=>{
+      const n=bi+i+1;
+      return `── POST ${n} ──\nÁngulo: ${s.ang.label||s.ang.key} | Tipo: ${s.tipo}\nHook empieza con: "${s.opener}"\nTema exclusivo del body: ${s.tema}\nVisual: prompt inglés para ${s.ang.label||s.ang.key} + "${s.tema}"`;
+    }).join('\n\n');
+
+    const msg=`Genera EXACTAMENTE ${batch.length} posts de Instagram distintos.\n\n${specsS}\n\nDIFERENCIACIÓN OBLIGATORIA:\n• Cada body desarrolla su propio tema exclusivo — sin repetir ideas.\n• Hook empieza EXACTAMENTE con la frase indicada.\n• Visual: prompt detallado en inglés, mín. 20 palabras, diferente por post.\n• CTA variado: mezcla directos, suaves y conversacionales.\n• Nombre de la marca en MAYÚSCULAS en el body.\n\nJSON exacto sin markdown:\n{"posts":[{"hook":"l1\\nl2\\nl3","sub":"subtítulo","body":"párrafo1\\n\\npárrafo2","cta":"texto","visual":"english prompt"}]}`;
+
     try{
-      const s=await fetch('/api/calendars/'+calId+'/posts/bulk',{
-        method:'PUT',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({posts})
+      const r=await fetch(AI_PROXY+'/claude',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:batch.length*900+600,system:sys,messages:[{role:'user',content:msg}]})
       });
-      if(s.ok){
-        total+=posts.length;
-      }else{
-        const er=await s.json().catch(()=>({}));
-        logEl.innerHTML+=`<span style="color:var(--er)">✕ Error BD: ${esc((er.error||s.status)+'')}</span><br>`;
+      if(!r.ok){logEl.innerHTML+=`<span style="color:var(--er)">✕ HTTP ${r.status}</span><br>`;logEl.scrollTop=logEl.scrollHeight;continue;}
+      const d=await r.json();
+      if(d.error){logEl.innerHTML+=`<span style="color:var(--er)">✕ ${esc(String(d.error.message||d.error).slice(0,100))}</span><br>`;logEl.scrollTop=logEl.scrollHeight;continue;}
+      let t=(d.content?.[0]?.text||'').trim().replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+      // Extract outermost JSON
+      const fa=t.indexOf('{'),fb=t.lastIndexOf('}');
+      if(fa>=0&&fb>fa)t=t.slice(fa,fb+1);
+      // Repair common truncation: close unclosed arrays/objects
+      const opens=(t.match(/\[/g)||[]).length-(t.match(/\]/g)||[]).length;
+      const openo=(t.match(/\{/g)||[]).length-(t.match(/\}/g)||[]).length;
+      if(opens>0)t+=']'.repeat(opens);
+      if(openo>0)t+='}}'.repeat(openo);
+      let parsed;
+      try{parsed=JSON.parse(t);}catch(je){
+        logEl.innerHTML+=`<span style="color:var(--er)">✕ JSON inválido — reintentando post a post…</span><br>`;
+        logEl.scrollTop=logEl.scrollHeight;
+        // Fallback: extract individual post objects
+        const indivMatches=[...t.matchAll(/\{[^{}]*"hook"[^{}]*\}/g)];
+        if(!indivMatches.length){logEl.innerHTML+=`<span style="color:var(--er)">✕ Sin posts recuperables</span><br>`;logEl.scrollTop=logEl.scrollHeight;continue;}
+        parsed={posts:indivMatches.map(m=>{try{return JSON.parse(m[0]);}catch{return null;}}).filter(Boolean)};
       }
-    }catch(e){
-      logEl.innerHTML+=`<span style="color:var(--er)">✕ Red: ${esc(e.message.slice(0,40))}</span><br>`;
-    }
+      const results=Array.isArray(parsed)?parsed:(parsed.posts||[]);
 
+      if(!results.length){logEl.innerHTML+=`<span style="color:var(--wn)">⚠ 0 posts parseados</span><br>`;logEl.scrollTop=logEl.scrollHeight;continue;}
+
+      const posts=results.map((x,i)=>{
+        const s=batch[i]||batch[0];
+        return {hour:s.hora,angle:s.ang.key,type:s.tipo,hook:x.hook||'',sub_title:x.sub||'',body:x.body||'',cta:x.cta||'',visual:x.visual||''};
+      });
+
+      const sr=await fetch('/api/calendars/'+calId+'/posts/bulk',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({posts})});
+      if(sr.ok){total+=posts.length;logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> ${posts.length} posts únicos<br>`;}
+      else{const e2=await sr.text().catch(()=>'');logEl.innerHTML+=`<span style="color:var(--wn)">⚠ guardar: ${esc(e2.slice(0,60))}</span><br>`;}
+    }catch(e){
+      logEl.innerHTML+=`<span style="color:var(--er)">✕ ${esc(String(e.message||e).slice(0,100))}</span><br>`;
+    }
     logEl.scrollTop=logEl.scrollHeight;
-    await W(claudeKey?250:20);
+    await W(300);
   }
 
   _invalidate('cals');
@@ -2235,12 +2514,13 @@ async function updateAICalSection(client_id){
 async function saveCalWithAI(){
   const name = document.getElementById('cal-nm').value.trim();
   if(!name){toast('El nombre es obligatorio','terr');return;}
-  const selOpt = document.querySelector('.cs-opt.sel');
+  const selOpt = document.querySelector('#cal-cl-sel .cs-opt.sel');
   const client_id = selOpt?.dataset?.id||'';
   const cl = client_id ? await getClient(client_id) : null;
   const selectedAngles = DEFAULT_ANGLES.filter(a=>a.sel);
   if(selectedAngles.length===0){toast('Selecciona al menos un ángulo','terr');return;}
   const extra = document.getElementById('ai-cal-extra').value.trim();
+  const totalCount = Math.min(30, Math.max(1, parseInt(document.getElementById('ai-cal-count').value)||9));
 
   // Create the calendar first via API
   const newCalId = 'cal_'+Date.now();
@@ -2259,110 +2539,211 @@ async function saveCalWithAI(){
   // Build client context
   let clCtx = '';
   if(cl){
-    clCtx = `CLIENTE: ${cl.name}\n`;
+    clCtx = `MARCA: ${cl.name}\n`;
     if(cl.industry) clCtx += `Sector: ${cl.industry}\n`;
-    if(cl.desc) clCtx += `Descripción: ${cl.desc}\n`;
+    if(cl.desc)     clCtx += `Descripción: ${cl.desc}\n`;
     if(cl.audience) clCtx += `Público objetivo: ${cl.audience}\n`;
-    if(cl.tone) clCtx += `Tono de comunicación: ${cl.tone}\n`;
-    if(cl.color) clCtx += `Color principal: ${cl.color}\n`;
-    if(cl.color2) clCtx += `Color secundario: ${cl.color2}\n`;
-    if(cl.style) clCtx += `Estilo visual: ${cl.style}\n`;
+    if(cl.tone)     clCtx += `Tono: ${cl.tone}\n`;
+    if(cl.color)    clCtx += `Color principal: ${cl.color}\n`;
+    if(cl.color2)   clCtx += `Color secundario: ${cl.color2}\n`;
+    if(cl.style)    clCtx += `Estilo visual: ${cl.style}\n`;
     if(cl.docs?.length){
       const analyzed = cl.docs.filter(d=>d.analysis);
-      if(analyzed.length){clCtx += '\nDOCUMENTOS DE MARCA:\n';analyzed.forEach(d=>{clCtx += `- ${d.name}: ${d.analysis.slice(0,150)}\n`;});}
+      if(analyzed.length){
+        clCtx += '\nDOCUMENTOS DE MARCA:\n';
+        analyzed.forEach(d=>{clCtx += `\n[${d.name}]\n${d.analysis.slice(0,600)}\n`;});
+      }
     }
   }
 
-  // Build refs context
   const refCtx = await buildRefCtx();
 
-  const sys = `Eres un experto en marketing de contenidos y copywriting premium para redes sociales.
-Creas posts de Instagram con garra, directos y con impacto psicológico para marcas B2B.
-Cada post que generas tiene: hook potente, subtítulo, cuerpo con párrafos, y CTA.
-${clCtx ? 'CONTEXTO DEL CLIENTE:\n'+clCtx : 'MARCA GENÉRICA — estilo serio, premium, directo.'}
-${extra ? 'INSTRUCCIONES ADICIONALES: '+extra : ''}
-${refCtx.text ? 'REFERENCIAS VISUALES: '+refCtx.text : ''}
+  const sys = `Eres copywriter experto en Instagram. Creas posts persuasivos únicos — el "body" de cada post es texto de anuncio creativo dirigido AL cliente, NO una descripción del cliente.
 
-FORMATO DE RESPUESTA — responde SOLO con JSON válido, sin markdown, sin explicación:
-{
-  "posts": [
-    {
-      "hora": "10:00",
-      "tipo": "Dolor|Miedo|Resultado|Prueba|Deseo",
-      "hook": "línea 1\\nlínea 2\\nlínea 3",
-      "sub": "subtítulo corto en minúsculas",
-      "body": "párrafo 1 breve\\n\\npárrafo 2 con MARCA en mayúsculas si aplica.",
-      "cta": "Texto del CTA sin puntos",
-      "visual": "descripción del concepto visual en inglés para IA de imágenes"
+${clCtx ? '━━━ CONTEXTO DE LA MARCA (úsalo como base creativa, no lo copies) ━━━\n'+clCtx+'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━' : '⚠️ SIN CLIENTE — tono genérico premium.'}
+${extra ? '\nINSTRUCCIONES ADICIONALES: '+extra : ''}${refCtx.text ? '\nREFERENCIAS VISUALES: '+refCtx.text : ''}
+
+ESTILO VISUAL OBLIGATORIO para el campo "visual":
+Cada prompt describe UNA ESCENA FOTOGRÁFICA CONCEPTUAL en inglés — igual que las campañas disruptivas de publicidad en Instagram: B&W editorial photography, sujeto humano o animal real que es METÁFORA del mensaje del post (ej: oveja negra=diferenciarse, hombre en el suelo=derrota, multitud sin cara=clientes perdidos), iluminación dramática con vignette oscuro, overlay violeta oscuro sutil, espacio superior izquierdo para texto. NO fondos abstractos, NO objetos 3D, NO cristales. Escena única y específica al tema.
+
+LEYES INQUEBRANTABLES:
+1. El "body" es copy persuasivo que habla AL público objetivo — 2 párrafos que enganchan y convencen.
+2. NUNCA pongas en el body datos descriptivos de la empresa (público objetivo, descripción, etc.) — eso es el brief, no el post.
+3. El nombre de la marca va en MAYÚSCULAS una vez en el body.
+4. Cada post trata un TEMA ÚNICO — cero repetición entre posts.
+5. El "visual" sigue el estilo visual obligatorio de arriba — mín. 25 palabras, escena única por post.`;
+
+  const TIPOS   = ['Dolor','Miedo','Resultado','Prueba','Deseo'];
+  const HORAS   = ['09:00','11:00','13:00','15:00','17:00','19:00','21:00'];
+
+  // Unique content seed per tipo — each post gets a different specific angle to develop
+  const TEMAS_TIPO = {
+    'Dolor':    ['el error más costoso que cometen antes de resolverlo','la señal de alerta que casi todos ignoran','por qué el problema empeora si no se actúa','qué se pierde cada semana sin esta solución','el punto de dolor que nadie menciona en voz alta'],
+    'Miedo':    ['qué pasa si lo pospones otro trimestre','el escenario que ningún empresario quiere','el riesgo real de seguir haciendo lo mismo','cómo la competencia ya está tomando ventaja','lo que se acumula silenciosamente con el tiempo'],
+    'Resultado':['el cambio concreto que ocurre en los primeros 30 días','cómo se mide el éxito en números reales','el primer resultado visible que notan los clientes','qué tiene de diferente la empresa que lo logró','el impacto directo en ingresos o tiempo'],
+    'Prueba':   ['un caso real de transformación con datos','la comparativa antes/después que habla sola','el número concreto que lo demuestra todo','lo que dicen los clientes que ya lo hicieron','la evidencia que elimina la duda'],
+    'Deseo':    ['cómo se verá el negocio cuando esto esté resuelto','la sensación de tener el control total','qué se puede hacer cuando el problema desaparece','el estado ideal al que llegan los mejores clientes','la libertad que da tener este sistema funcionando'],
+  };
+
+  // 30 openers — forced first word per post slot, cycling
+  const OPENERS = [
+    '¿Cuánto','Mientras tú','Imagina que','Hay una conversación','Nadie te cuenta',
+    'Ya lo intentaste','Cada día que','Ponlo en números','Dos empresas','Si esta semana',
+    'El primer signo','Tus clientes','Tu equipo','Paso 1:','Gestionar no es',
+    '¿Sabes cuánto','La mayoría','No es un problema','El error más caro','En 90 días',
+    'Sin darte cuenta','El negocio que','Hace 6 meses','Lo que nadie dice','Cuando miras',
+    'Hay negocios que','El dato que','Cada cliente que','No necesitas más','La diferencia entre',
+  ];
+
+  // Build flat list of all post specs upfront
+  const base2 = Math.floor(totalCount / selectedAngles.length);
+  const extra2 = totalCount % selectedAngles.length;
+  const allSpecs = [];
+  selectedAngles.forEach((angle, ai) => {
+    const n = base2 + (ai < extra2 ? 1 : 0);
+    for(let pi = 0; pi < n; pi++){
+      const idx = allSpecs.length;
+      const tipoBase = angle.key.includes('Dolor')?'Dolor':angle.key.includes('Miedo')?'Miedo':angle.key.includes('Resultado')?'Resultado':angle.key.includes('Prueba')?'Prueba':'Deseo';
+      allSpecs.push({
+        angle, pi,
+        hora  : HORAS[idx % HORAS.length],
+        tipo  : pi===0 ? tipoBase : TIPOS[idx % TIPOS.length],
+        opener: OPENERS[idx % OPENERS.length],
+      });
     }
-  ]
-}`;
+  });
 
+  // Generate in batches of 10 — Sonnet sees all posts in a batch at once → can't repeat
+  const BATCH = 10;
   let totalGenerated = 0;
-  const totalToGen = selectedAngles.length * 3;
 
-  for(let ai = 0; ai < selectedAngles.length; ai++){
-    const angle = selectedAngles[ai];
-    const pct = Math.round((ai/selectedAngles.length)*100);
-    fillEl.style.width = pct+'%';pctEl.textContent = pct+'%';
-    lblEl.innerHTML = `Generando ángulo ${ai+1}/${selectedAngles.length}: <b>${angle.key}</b>`;
+  for(let bi = 0; bi < allSpecs.length; bi += BATCH){
+    const batch = allSpecs.slice(bi, bi + BATCH);
+    fillEl.style.width = Math.round((bi/allSpecs.length)*100)+'%';
+    pctEl.textContent  = Math.round((bi/allSpecs.length)*100)+'%';
+    lblEl.innerHTML    = `Generando posts ${bi+1}–${Math.min(bi+BATCH, allSpecs.length)} de ${allSpecs.length}…`;
 
-    const userMsg = `Genera 3 posts de Instagram para el ángulo "${angle.key}" (${angle.label}).
-Descripción del ángulo: ${angle.desc}
-Tipo psicológico principal a usar: ${angle.key.includes('Dolor')?'Dolor':angle.key.includes('Miedo')?'Miedo':angle.key.includes('Resultado')?'Resultado':angle.key.includes('Prueba')?'Prueba':'Deseo'}
-Los 3 posts deben tener enfoques diferentes dentro del mismo ángulo.
-Horarios sugeridos: 10:00, 14:00, 20:00
-Responde SOLO con el JSON. Sin markdown ni backticks.`;
+    // Build one user message listing every post in this batch — each has a UNIQUE topic seed
+    const specsBlock = batch.map((s,i) => {
+      const n = bi + i + 1;
+      const temaPool = TEMAS_TIPO[s.tipo] || TEMAS_TIPO['Dolor'];
+      const temaSeed = temaPool[(bi + i) % temaPool.length];
+      return `── POST ${n} ──────────────────────────────
+Ángulo estratégico: ${s.angle.label} (${s.angle.desc})
+Tipo emocional: ${s.tipo}
+Hora publicación: ${s.hora}
+Hook — primera línea OBLIGATORIA empieza con: "${s.opener}"
+Tema exclusivo del body: ${temaSeed}
+Visual — prompt en inglés específico para: ${s.tipo} + ${s.angle.label} + "${temaSeed}"`;
+    }).join('\n\n');
+
+    const batchPrompt = `Genera EXACTAMENTE ${batch.length} posts de Instagram para este calendario de contenido. Cada post tiene un tema exclusivo — si dos posts se parecen en el body, lo has hecho mal.
+
+${specsBlock}
+
+DIFERENCIACIÓN OBLIGATORIA:
+• El body de cada post desarrolla SU PROPIO "Tema exclusivo" — no repitas ideas entre posts.
+• El hook EMPIEZA EXACTAMENTE con la frase indicada (copia esas palabras exactas como primera línea).
+• El visual es un prompt detallado en inglés (mín. 20 palabras) diferente para cada post, específico al tema.
+• El CTA varía: mezcla directos ("Escríbenos hoy"), suaves ("¿Te suena familiar?") y conversacionales ("¿Cuánto te cuesta esto?").
+• La MARCA aparece en MAYÚSCULAS dentro del body de cada post.
+
+FORMATO DE RESPUESTA — JSON exacto sin markdown, sin explicaciones:
+{"posts":[{"hook":"línea1\\nlínea2\\nlínea3","sub":"subtítulo corto","body":"párrafo1\\n\\npárrafo2","cta":"texto del cta","visual":"detailed english image generation prompt"}]}`;
+
+    const msgContent = (refCtx.images.length > 0)
+      ? [...refCtx.images.slice(0,1).map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:batchPrompt}]
+      : batchPrompt;
 
     try{
-      let content = userMsg;
-      if(refCtx.images.length > 0){
-        content = [...refCtx.images.slice(0,1).map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:userMsg+'\nEl estilo visual debe inspirarse en las imágenes de referencia.'}];
-      }
       const r = await fetch(AI_PROXY+'/claude',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:1800,system:sys,messages:[{role:'user',content}]})
+        method:'POST', headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},
+        body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens: batch.length * 900 + 600, system:sys, messages:[{role:'user',content:msgContent}]})
       });
-      if(!r.ok){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${esc(angle.key)} — HTTP ${r.status}<br>`;continue;}
+      if(!r.ok){
+        const errTxt = await r.text().catch(()=>'');
+        logEl.innerHTML+=`<span style="color:var(--er)">✕</span> HTTP ${r.status}: ${esc(errTxt.slice(0,120))}<br>`;
+        logEl.scrollTop=logEl.scrollHeight; continue;
+      }
       const dd = await r.json();
-      let txt = dd.content?.[0]?.text?.trim()||'';
-      // Robust JSON extraction
-      txt = txt.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
-      // If still has text before {, extract from first { to last }
-      const firstBrace = txt.indexOf('{');
-      const lastBrace = txt.lastIndexOf('}');
-      if(firstBrace > 0 && lastBrace > firstBrace) txt = txt.slice(firstBrace, lastBrace+1);
-      const parsed = JSON.parse(txt);
-      let postIdx = 0;
-      const newPosts = (parsed.posts||[]).map(p=>({
-        id:'p_'+newCalId+'_'+angle.key.replace(/\s/g,'')+'_'+(postIdx++),
-        h: p.hora||'10:00',
-        a: angle.key,
-        t: p.tipo||'Dolor',
-        hook: p.hook||'',
-        sub: p.sub||'',
-        body: p.body||'',
-        cta: p.cta||'',
-        v: p.visual||'',
-        _prompt: ''
-      }));
-      // Save posts via API bulk endpoint
-      try{const r=await fetch('/api/calendars/'+newCalId+'/posts/bulk',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({posts:newPosts.map(p=>({hour:p.h,angle:p.a,type:p.t,hook:p.hook,sub_title:p.sub,body:p.body,cta:p.cta,visual:p.v}))})});if(r.ok){totalGenerated+=newPosts.length;logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> ${esc(angle.key)} — ${newPosts.length} posts creados<br>`;}else{logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> ${esc(angle.key)} — error al guardar<br>`;}}catch(e){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${esc(angle.key)} — ${esc(e.message.slice(0,30))}<br>`;}
+
+      // Check for API-level error
+      if(dd.error){
+        logEl.innerHTML+=`<span style="color:var(--er)">✕</span> API error: ${esc(String(dd.error.message||dd.error).slice(0,120))}<br>`;
+        logEl.scrollTop=logEl.scrollHeight; continue;
+      }
+
+      let rawTxt = (dd.content?.[0]?.text||'').trim();
+      console.log('[saveCalWithAI] raw response:', rawTxt);
+
+      // Strip markdown fences
+      let txt = rawTxt.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();
+
+      // Extract outermost JSON object or array
+      const fb = txt.indexOf('{'); const fa = txt.indexOf('[');
+      const lb = txt.lastIndexOf('}'); const la = txt.lastIndexOf(']');
+      let results = [];
+
+      if(fb >= 0 && lb > fb){
+        let chunk = txt.slice(fb, lb+1);
+        // Repair truncated JSON
+        const opens=(chunk.match(/\[/g)||[]).length-(chunk.match(/\]/g)||[]).length;
+        const openo=(chunk.match(/\{/g)||[]).length-(chunk.match(/\}/g)||[]).length;
+        if(opens>0)chunk+=']'.repeat(opens);
+        if(openo>0)chunk+='}}'.repeat(openo);
+        try{
+          const parsed = JSON.parse(chunk);
+          if(Array.isArray(parsed)) results = parsed;
+          else if(Array.isArray(parsed.posts)) results = parsed.posts;
+          else if(parsed.hook) results = [parsed];
+        }catch{
+          // Last resort: extract individual post objects
+          const matches=[...chunk.matchAll(/\{[^{}]*"hook"[^{}]*\}/g)];
+          results=matches.map(m=>{try{return JSON.parse(m[0]);}catch{return null;}}).filter(Boolean);
+        }
+      } else if(fa >= 0 && la > fa){
+        try{ results = JSON.parse(txt.slice(fa, la+1)); }catch{}
+      }
+
+      if(results.length === 0){
+        logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> Lote ${bi/BATCH+1} — 0 posts parseados. Respuesta: ${esc(rawTxt.slice(0,200))}<br>`;
+        logEl.scrollTop=logEl.scrollHeight; continue;
+      }
+
+      // Group posts by angle for bulk save
+      const byAngle = {};
+      results.forEach((p, i) => {
+        const spec = batch[i]; if(!spec) return;
+        const key = spec.angle.key;
+        if(!byAngle[key]) byAngle[key] = [];
+        byAngle[key].push({hour:spec.hora, angle:key, type:spec.tipo, hook:p.hook||'', sub_title:p.sub||'', body:p.body||'', cta:p.cta||'', visual:p.visual||''});
+      });
+
+      for(const [angleKey, posts] of Object.entries(byAngle)){
+        try{
+          const r2=await fetch('/api/calendars/'+newCalId+'/posts/bulk',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({posts})});
+          if(r2.ok){ totalGenerated+=posts.length; logEl.innerHTML+=`<span style="color:var(--ok)">✓</span> ${posts.length} posts — ${esc(angleKey)}<br>`; }
+          else {
+            const e2=await r2.text().catch(()=>'');
+            logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> ${esc(angleKey)} — guardar falló: ${esc(e2.slice(0,80))}<br>`;
+          }
+        }catch(e){logEl.innerHTML+=`<span style="color:var(--er)">✕</span> ${esc(angleKey)} — ${esc(String(e.message||e).slice(0,60))}<br>`;}
+      }
     }catch(e){
-      logEl.innerHTML += `<span style="color:var(--er)">✕</span> ${esc(angle.key)} — error: ${esc(e.message.slice(0,50))}<br>`;
+      logEl.innerHTML+=`<span style="color:var(--er)">✕</span> Lote ${bi/BATCH+1} — ${esc(String(e.message||e).slice(0,150))}<br>`;
+      console.error('[saveCalWithAI] error:', e);
     }
     logEl.scrollTop = logEl.scrollHeight;
-    await W(400);
+    await W(300);
   }
 
-  fillEl.style.width='100%';pctEl.textContent='100%';
-  lblEl.innerHTML=`✓ Calendario generado — <b>${totalGenerated} posts creados</b>`;
+  fillEl.style.width='100%'; pctEl.textContent='100%';
+  lblEl.innerHTML=`✓ Listo — <b>${totalGenerated} posts únicos creados</b>`;
   document.getElementById('ai-cal-done-btns').style.display='block';
 
-  // Update UI
   _invalidate('cals');
-  await renderCalBar();await openCal(newCalId);
-  if(activeClient)await renderClientDetail(activeClient);
+  await renderCalBar(); await openCal(newCalId);
+  if(activeClient) await renderClientDetail(activeClient);
   await renderCalsAll();
   toast(`${totalGenerated} posts generados con IA ✦`,'tok');
 }
@@ -2378,26 +2759,38 @@ async function autoFillPost(){
   const angle=document.getElementById('p-a').value.trim()||'POST';
   const tipo=selTipoV||'Dolor';
 
-  let clCtx=`CLIENTE: ${cl.name}\n`;
+  let clCtx=`MARCA: ${cl.name}\n`;
   if(cl.industry)clCtx+=`Sector: ${cl.industry}\n`;
-  if(cl.desc)clCtx+=`Descripción: ${cl.desc}\n`;
-  if(cl.audience)clCtx+=`Público: ${cl.audience}\n`;
-  if(cl.tone)clCtx+=`Tono: ${cl.tone}\n`;
+  if(cl.desc)clCtx+=`Descripción del negocio: ${cl.desc}\n`;
+  if(cl.audience)clCtx+=`Público objetivo: ${cl.audience}\n`;
+  if(cl.tone)clCtx+=`Tono de comunicación: ${cl.tone}\n`;
   if(cl.style)clCtx+=`Estilo visual: ${cl.style}\n`;
-  if(cl.docs?.length){const a=cl.docs.filter(d=>d.analysis);if(a.length){clCtx+='\nDocs marca:\n';a.forEach(d=>{clCtx+=`- ${d.name}: ${d.analysis.slice(0,100)}\n`;});}}
+  if(cl.color)clCtx+=`Color principal: ${cl.color}\n`;
+  if(cl.docs?.length){const a=cl.docs.filter(d=>d.analysis);if(a.length){clCtx+='\nDOCUMENTOS DE MARCA:\n';a.forEach(d=>{clCtx+=`\n[${d.name}]\n${d.analysis.slice(0,500)}\n`;});}}
 
-  const sys=`Eres experto en copywriting premium para Instagram B2B.
-CLIENTE: ${clCtx}
-Genera 1 post de Instagram con garra, directo e impactante.
-Responde SOLO con JSON válido sin markdown:
-{"hora":"10:00","tipo":"${tipo}","hook":"línea1\\nlínea2\\nlínea3","sub":"subtítulo corto","body":"párrafo1\\n\\npárrafo2","cta":"Texto CTA","visual":"english visual concept for AI image"}`;
+  const sys=`Eres copywriter experto en Instagram. Tu trabajo es crear UN post de Instagram con copy persuasivo real — NO describas el cliente, ESCRIBE el post.
+
+━━━ DATOS DE LA MARCA (úsalos como inspiración, no los copies) ━━━
+${clCtx}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+INSTRUCCIONES:
+- El "hook" son 3 líneas impactantes que abren el post (la primera empieza con gancho fuerte).
+- El "body" es el texto del anuncio/post — 2 párrafos persuasivos que hablan AL cliente, no SOBRE el cliente.
+- El "cta" es la llamada a la acción final (1 frase).
+- El "visual" es un prompt en inglés para generar la imagen con IA (mín. 20 palabras, específico y cinematográfico).
+- Usa el nombre de la marca en MAYÚSCULAS UNA vez en el body.
+- NO copies datos del perfil como si fuera una descripción — ÚSALOS para crear copy creativo.
+
+Responde SOLO JSON válido sin markdown:
+{"hora":"10:00","tipo":"${tipo}","hook":"línea1\\nlínea2\\nlínea3","sub":"subtítulo corto","body":"párrafo persuasivo 1\\n\\npárrafo persuasivo 2","cta":"llamada a la acción","visual":"detailed english image prompt"}`;
 
   const refCtx=await buildRefCtx();
-  let content=`Post para ángulo "${angle}", tipo psicológico "${tipo}". Genera el JSON.`;
-  if(refCtx.images.length>0){content=[{type:'image',source:{type:'base64',media_type:refCtx.images[0].mimeType,data:refCtx.images[0].base64}},{type:'text',text:`Post para ángulo "${angle}", tipo "${tipo}". Inspírate en la imagen de referencia para el concepto visual. Genera el JSON.`}];}
+  let content=`Escribe un post de Instagram para ángulo "${angle}", tipo psicológico "${tipo}". Genera solo el JSON.`;
+  if(refCtx.images.length>0){content=[{type:'image',source:{type:'base64',media_type:refCtx.images[0].mimeType,data:refCtx.images[0].base64}},{type:'text',text:`Post de Instagram para ángulo "${angle}", tipo "${tipo}". Usa la imagen como referencia visual. Solo el JSON.`}];}
 
   try{
-    const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:600,system:sys,messages:[{role:'user',content}]})});
+    const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:700,system:sys,messages:[{role:'user',content}]})});
     if(!r.ok){toast('Error: '+r.statusText,'terr');return;}
     const dd=await r.json();let txt=dd.content?.[0]?.text?.trim()||'';
     txt=txt.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/\s*```$/,'').trim();

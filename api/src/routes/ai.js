@@ -3,7 +3,7 @@ const router = express.Router();
 
 // Proxy para Anthropic Claude — evita CORS en el browser
 router.post('/claude', async (req, res) => {
-  const apiKey = process.env.CLAUDE_API_KEY;
+  const apiKey = process.env.CLAUDE_API_KEY || req.headers['x-claude-key'];
   if (!apiKey) return res.status(503).json({ error: 'CLAUDE_API_KEY no configurada en el servidor' });
 
   try {
@@ -27,7 +27,7 @@ router.post('/claude', async (req, res) => {
 
 // Proxy para KIE.AI — evita posibles restricciones CORS
 router.post('/kie/messages', async (req, res) => {
-  const apiKey = process.env.KIE_API_KEY;
+  const apiKey = process.env.KIE_API_KEY || req.headers['x-kie-key'];
   if (!apiKey) return res.status(503).json({ error: 'KIE_API_KEY no configurada en el servidor' });
 
   try {
@@ -49,7 +49,7 @@ router.post('/kie/messages', async (req, res) => {
 });
 
 router.post('/kie/image', async (req, res) => {
-  const apiKey = process.env.KIE_API_KEY;
+  const apiKey = process.env.KIE_API_KEY || req.headers['x-kie-key'];
   if (!apiKey) return res.status(503).json({ error: 'KIE_API_KEY no configurada en el servidor' });
 
   try {
@@ -71,7 +71,7 @@ router.post('/kie/image', async (req, res) => {
 });
 
 router.get('/kie/image/status', async (req, res) => {
-  const apiKey = process.env.KIE_API_KEY;
+  const apiKey = process.env.KIE_API_KEY || req.headers['x-kie-key'];
   if (!apiKey) return res.status(503).json({ error: 'KIE_API_KEY no configurada en el servidor' });
 
   try {
