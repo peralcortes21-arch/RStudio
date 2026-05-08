@@ -1335,16 +1335,19 @@ async function gP(id){
 }
 
 function buildSys(clCtx,refTxt){
-  return`You are a creative director for a disruptive advertising agency. You generate image prompts in English for AI image generators (KIE.AI / GPT Image 2).
+  return`You are a creative director for CLIENDER — a disruptive AI/automation agency. Generate image prompts for AI image generators following the CLIENDER visual system EXACTLY.
 
-MANDATORY STYLE — hyperrealistic, photographic, campaign-quality:
-• Hyperrealistic photography style — looks like a real photograph shot by a professional photographer, NOT AI-generated looking
-• Real human characters or animals in real dramatic situations that METAPHORICALLY represent the post message
-• Black and white or heavily desaturated with subtle dark indigo overlay (#0d0820 tint at 60% opacity)
-• Cinematic lighting: dramatic chiaroscuro, hard shadows, strong directional light
-• Editorial composition: leave upper-left area clear for headline text overlay
-• No text, no watermarks, no logos in the image
-• The scene must visually TELL the story of the post without words
+CLIENDER VISUAL SYSTEM — NON-NEGOTIABLE:
+• Black and white TOTAL — zero saturation, fully desaturated
+• Documentary, vintage or archival aesthetic — NEVER clean stock photography
+• Dark overlay: #0D0D0D at 65% opacity across the full image
+• Subject positioned center-right or lower-right
+• Generous empty space in the LEFT THIRD for text overlay
+• High contrast: deep shadows, bright highlights, visible film grain
+• Cinematic and editorial mood — raw, unposed, real-world atmosphere
+• NO text, NO watermarks, NO logos, NO color, NO studio lighting, NO generic corporate aesthetics
+
+The image must AMPLIFY the message through cultural symbols and metaphors — NOT illustrate it literally. Think documentary film, press photography, archival footage.
 
 OUTPUT: 2-3 dense descriptive sentences in English only. No JSON, no title, no explanation.
 ${clCtx?'\nCLIENT CONTEXT:\n'+clCtx:''}
@@ -1461,17 +1464,22 @@ const ANGLE_SCENES={
 
 function buildUC(p){
   const angleScenes=ANGLE_SCENES[p.a]||ANGLE_SCENES['SALES 01'];
-  const scene=angleScenes[p.t]||angleScenes['Dolor']||'dramatic B&W editorial scene with real human characters representing the post message metaphorically';
-  return`Instagram post visual prompt.
+  const scene=angleScenes[p.t]||angleScenes['Dolor']||'dramatic B&W documentary photograph, vintage archival feel, real human subject representing the post message symbolically';
+  return`Instagram post image prompt — CLIENDER visual system.
 Angle: ${p.a} | Emotional type: ${p.t}
 Hook: "${p.hook.replace(/\n/g,' ')}"
-${p.v?'Visual concept from copywriter: '+p.v:''}
+${p.v?'Visual concept: '+p.v:''}
+Scene reference: ${scene}
 
-Generate a hyperrealistic photographic image prompt based on this scene: ${scene}
+Generate a complete image prompt following the CLIENDER system:
+- Dramatic black and white documentary photograph, fully desaturated
+- Dark overlay #0D0D0D at 65% opacity
+- Subject center-right or lower-right, generous empty space on the left third for text
+- Film grain, high contrast shadows and highlights, raw unposed feeling
+- Cultural symbol or metaphor — NOT literal illustration
+- No text, no watermarks, no studio lighting, no clean stock aesthetics
 
-Style requirements: dark indigo overlay (#0d0820 at 60%), upper-left clear for text, no text/watermarks/logos, cinematic B&W with dramatic chiaroscuro lighting, photorealistic NOT AI-looking, real human or animal subjects, strong visual metaphor.
-
-Output: 2-3 dense descriptive sentences in English only.`;
+Output: 2-3 dense descriptive sentences in English only. Ready to use as an image generation prompt.`;
 }
 function fbP(p,ctx){
   const angleScenes=ANGLE_SCENES[p.a]||ANGLE_SCENES['SALES 01'];
@@ -2236,21 +2244,22 @@ async function launchStudio(){
     if(ad.length){clCtxS+='\nDOCUMENTOS:\n';ad.forEach(d=>{clCtxS+=`[${d.name}]\n${d.analysis.slice(0,500)}\n`;});}
   }
 
-  const sys=`Eres copywriter experto en Instagram. Creas posts persuasivos únicos — el "body" es texto de anuncio creativo dirigido AL cliente, NO una descripción del cliente ni del perfil.
+  const sys=`Eres el agente de contenido de CLIENDER. Creas posts de Instagram disruptivos siguiendo el sistema de marca CLIENDER EXACTAMENTE.
 
-━━━ CONTEXTO DE LA MARCA ━━━
-${clCtxS||'Sin cliente — tono genérico premium.'}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${studioPrompt?'\nINSTRUCCIONES ADICIONALES: '+studioPrompt:''}
+━━━ MARCA ━━━
+${clCtxS||'Sin cliente — tono CLIENDER: directo, urgente, retador.'}
+━━━━━━━━━━━━
+${studioPrompt?'\nINSTRUCCIONES: '+studioPrompt:''}
 
-ESTILO VISUAL OBLIGATORIO para el campo "visual":
-Cada prompt DEBE seguir este estilo: dark near-black background, cinematic black and white photography with dramatic editorial scene (crowds, people in motion, strong emotion), deep purple-violet (#4a63f5) color accent, bold white display typography overlay left-aligned, high contrast moody premium feel, portrait 4:5 format. Escena fotográfica ÚNICA y específica al tema del post.
+━━━ ESTRUCTURA FIJA DEL COPY ━━━
+hook: Setup — el problema o pregunta provocadora (2-3 líneas cortas, dolor directo)
+sub: Línea de impacto — el diferenciador o giro clave (una línea)
+body: 2-3 párrafos persuasivos AL público. SIEMPRE incluye plazo concreto (En 15 días / En 30 días). Marca en MAYÚSCULAS.
+cta: Verbo → CLIENDER
+visual: Prompt inglés — B&W documentary, dark overlay #0D0D0D 65%, subject center-right, empty left third for text, film grain, no studio, no stock. Cultural metaphor, NOT literal. Mín. 25 palabras.
 
-LEYES:
-1. El "body" es copy persuasivo en 2 párrafos que habla AL público — no describes la empresa.
-2. El nombre de la marca en MAYÚSCULAS una vez en el body.
-3. Cada post tiene tema único — cero repetición.
-4. "visual" sigue el estilo obligatorio de arriba — mín. 25 palabras, escena única por post.`;
+TONO: directo, serio, levemente provocador. NUNCA amable ni suave.
+LEYES: body habla AL cliente, tema único por post.`;
 
   const TEMAS_S={
     'Dolor':   ['el error más costoso antes de resolverlo','la señal de alerta que ignoran','por qué el problema empeora','qué se pierde cada semana sin esto'],
@@ -2572,20 +2581,24 @@ async function saveCalWithAI(){
 
   const refCtx = await buildRefCtx();
 
-  const sys = `Eres copywriter experto en Instagram. Creas posts persuasivos únicos — el "body" de cada post es texto de anuncio creativo dirigido AL cliente, NO una descripción del cliente.
+  const sys = `Eres el agente de contenido de CLIENDER. Creas posts de Instagram disruptivos siguiendo el sistema de marca CLIENDER EXACTAMENTE.
 
-${clCtx ? '━━━ CONTEXTO DE LA MARCA (úsalo como base creativa, no lo copies) ━━━\n'+clCtx+'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━' : '⚠️ SIN CLIENTE — tono genérico premium.'}
-${extra ? '\nINSTRUCCIONES ADICIONALES: '+extra : ''}${refCtx.text ? '\nREFERENCIAS VISUALES: '+refCtx.text : ''}
+${clCtx ? '━━━ MARCA (úsalo como base creativa, no lo copies literalmente) ━━━\n'+clCtx+'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━' : '⚠️ SIN CLIENTE — tono CLIENDER genérico: directo, urgente, retador.'}
+${extra ? '\nINSTRUCCIONES: '+extra : ''}${refCtx.text ? '\nREFERENCIAS VISUALES: '+refCtx.text : ''}
 
-ESTILO VISUAL OBLIGATORIO para el campo "visual":
-Cada prompt describe UNA ESCENA FOTOGRÁFICA CONCEPTUAL en inglés — igual que las campañas disruptivas de publicidad en Instagram: B&W editorial photography, sujeto humano o animal real que es METÁFORA del mensaje del post (ej: oveja negra=diferenciarse, hombre en el suelo=derrota, multitud sin cara=clientes perdidos), iluminación dramática con vignette oscuro, overlay violeta oscuro sutil, espacio superior izquierdo para texto. NO fondos abstractos, NO objetos 3D, NO cristales. Escena única y específica al tema.
+━━━ ESTRUCTURA FIJA DEL COPY ━━━
+hook: Setup — el problema o pregunta provocadora (corto, nombra el dolor directamente, 2-3 líneas con saltos \\n)
+sub: Línea de impacto — el diferenciador o giro clave de CLIENDER (una línea directa)
+body: 2-3 párrafos persuasivos que hablan AL público. SIEMPRE incluye un plazo concreto (En 15 días / En 30 días / En una semana). Nombre de la marca en MAYÚSCULAS.
+cta: Verbo de acción → CLIENDER (ej: "Actívalo → CLIENDER", "Empieza → CLIENDER")
+visual: Prompt en inglés — SISTEMA VISUAL CLIENDER:
+  · Dramatic black and white documentary photograph, fully desaturated, vintage archival feel
+  · Dark overlay #0D0D0D at 65% opacity, subject center-right or lower-right
+  · Generous empty left third for text overlay, film grain, high contrast
+  · Cultural symbol or metaphor — real human subjects, no studio lighting, no stock aesthetics
 
-LEYES INQUEBRANTABLES:
-1. El "body" es copy persuasivo que habla AL público objetivo — 2 párrafos que enganchan y convencen.
-2. NUNCA pongas en el body datos descriptivos de la empresa (público objetivo, descripción, etc.) — eso es el brief, no el post.
-3. El nombre de la marca va en MAYÚSCULAS una vez en el body.
-4. Cada post trata un TEMA ÚNICO — cero repetición entre posts.
-5. El "visual" sigue el estilo visual obligatorio de arriba — mín. 25 palabras, escena única por post.`;
+TONO: directo, serio, levemente provocador. NUNCA amable ni suave.
+LEYES: body habla AL cliente, tema único por post, visual mín. 25 palabras.`;
 
   const TIPOS   = ['Dolor','Miedo','Resultado','Prueba','Deseo'];
   const HORAS   = ['09:00','11:00','13:00','15:00','17:00','19:00','21:00'];
@@ -2782,22 +2795,23 @@ async function autoFillPost(){
   if(cl.color)clCtx+=`Color principal: ${cl.color}\n`;
   if(cl.docs?.length){const a=cl.docs.filter(d=>d.analysis);if(a.length){clCtx+='\nDOCUMENTOS DE MARCA:\n';a.forEach(d=>{clCtx+=`\n[${d.name}]\n${d.analysis.slice(0,500)}\n`;});}}
 
-  const sys=`Eres copywriter experto en Instagram. Tu trabajo es crear UN post de Instagram con copy persuasivo real — NO describas el cliente, ESCRIBE el post.
+  const sys=`Eres el agente de contenido de CLIENDER. Crea UN post de Instagram disruptivo siguiendo el sistema de marca CLIENDER EXACTAMENTE.
 
-━━━ DATOS DE LA MARCA (úsalos como inspiración, no los copies) ━━━
+━━━ MARCA ━━━
 ${clCtx}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━
 
-INSTRUCCIONES:
-- El "hook" son 3 líneas impactantes que abren el post (la primera empieza con gancho fuerte).
-- El "body" es el texto del anuncio/post — 2 párrafos persuasivos que hablan AL cliente, no SOBRE el cliente.
-- El "cta" es la llamada a la acción final (1 frase).
-- El "visual" es un prompt en inglés para generar la imagen con IA (mín. 20 palabras, específico y cinematográfico).
-- Usa el nombre de la marca en MAYÚSCULAS UNA vez en el body.
-- NO copies datos del perfil como si fuera una descripción — ÚSALOS para crear copy creativo.
+ESTRUCTURA FIJA:
+hook: 3 líneas — setup del problema o pregunta provocadora. Corto, nombra el dolor directamente.
+sub: Línea de impacto — el diferenciador o giro clave de CLIENDER (una línea).
+body: 2 párrafos persuasivos que hablan AL cliente. INCLUYE plazo concreto (En 15 días / En 30 días). Marca en MAYÚSCULAS.
+cta: Verbo de acción → CLIENDER
+visual: Prompt inglés B&W documentary — dark overlay #0D0D0D 65%, subject center-right, empty left third for text, film grain, high contrast, no studio, no stock. Cultural metaphor NOT literal. Mín. 25 palabras.
+
+TONO: directo, serio, levemente provocador. NUNCA amable ni suave.
 
 Responde SOLO JSON válido sin markdown:
-{"hora":"10:00","tipo":"${tipo}","hook":"línea1\\nlínea2\\nlínea3","sub":"subtítulo corto","body":"párrafo persuasivo 1\\n\\npárrafo persuasivo 2","cta":"llamada a la acción","visual":"detailed english image prompt"}`;
+{"hora":"10:00","tipo":"${tipo}","hook":"línea1\\nlínea2\\nlínea3","sub":"subtítulo corto","body":"párrafo 1\\n\\npárrafo 2","cta":"Verbo → CLIENDER","visual":"detailed english B&W documentary image prompt"}`;
 
   const refCtx=await buildRefCtx();
   let content=`Escribe un post de Instagram para ángulo "${angle}", tipo psicológico "${tipo}". Genera solo el JSON.`;
