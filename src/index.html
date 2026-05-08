@@ -279,15 +279,39 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
 
 /* ─── IMAGE ─── */
 .iarea{margin:0 11px 7px}
-.pw{position:relative;border-radius:var(--rs);overflow:hidden;background:var(--s3);border:1px solid var(--bd)}
+.pw{position:relative;border-radius:var(--rs);overflow:hidden;background:var(--s3);border:1px solid var(--bd);container-type:inline-size}
 .pw img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.ov{position:absolute;inset:0;display:flex;flex-direction:column;padding:14px 12px 10px;background:linear-gradient(180deg,rgba(2,4,8,.72) 0%,rgba(2,4,8,.03) 28%,rgba(2,4,8,.1) 55%,rgba(2,4,8,.93) 100%)}
-.ovb{font-size:8.5px;font-weight:800;color:#fff;letter-spacing:.14em;text-shadow:0 1px 4px rgba(0,0,0,.9)}
-.ovsp{flex:1}
-.ovh{font-weight:900;line-height:1.04;letter-spacing:-.03em;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.85)}
-.ovs{font-size:8px;font-style:italic;color:rgba(255,255,255,.5);margin-top:2px}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:4%;background:linear-gradient(180deg,rgba(2,4,8,.94) 0%,rgba(2,4,8,.78) 20%,rgba(2,4,8,.22) 42%,rgba(2,4,8,.38) 60%,rgba(2,4,8,.78) 80%,rgba(2,4,8,.97) 100%)}
+.ovb{display:none}
+.ov-top{display:flex;flex-direction:column;max-width:68%}
+.ov-mid{display:flex;flex-direction:column;max-width:66%}
+.ov-logo{height:clamp(10px,2.8cqw,20px);width:auto;opacity:.88;margin-bottom:1.8%;flex-shrink:0}
+.ov-kicker{font-size:clamp(5px,1.2cqw,10px);font-weight:700;color:#8B5CF6;letter-spacing:.20em;text-transform:uppercase;margin-bottom:1.8%;flex-shrink:0}
+.ovh{font-weight:900;line-height:0.97;letter-spacing:-.04em;color:#fff;text-shadow:0 3px 36px rgba(0,0,0,.99);flex-shrink:0}
+.ov-impact{color:#8B5CF6;font-size:1.28em;display:block;line-height:0.96;letter-spacing:-.05em;margin-top:0.08em}
+.ov-sep{width:clamp(18px,4%,34px);height:2px;background:rgba(255,255,255,.50);margin:3.5% 0 0;flex-shrink:0}
+.ovsub{font-size:clamp(8px,2.0cqw,15px);font-weight:700;color:rgba(255,255,255,.90);letter-spacing:-.01em;line-height:1.30;white-space:pre-line;margin-bottom:1.5%;flex-shrink:0}
+.ov-sep2{width:clamp(14px,3%,26px);height:2px;background:rgba(255,255,255,.38);margin:2% 0;flex-shrink:0}
+.ovbody{font-size:clamp(6px,1.65cqw,12px);font-weight:400;color:rgba(255,255,255,.82);line-height:1.62;flex-shrink:0}
+.ov-push{display:none}
+.ovs{display:none}
 .ovc{display:none}
-.ovct{position:absolute;bottom:8%;right:6%;font-size:8px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:.04em;text-align:right;text-shadow:0 1px 6px rgba(0,0,0,.9)}
+.ovct{text-align:right;text-shadow:0 1px 12px rgba(0,0,0,.98);line-height:1.22;letter-spacing:-.01em;align-self:flex-end;flex-shrink:0}
+.ovct-v{font-size:clamp(9px,2.3cqw,18px);font-weight:800;color:#fff}
+.ovct-b{font-size:clamp(9px,2.3cqw,18px);font-weight:800;color:#8B5CF6}
+/* ── Layout variants ── */
+.ov[data-layout="titan"] .ov-impact{font-size:1.58em;letter-spacing:-.06em}
+.ov[data-layout="titan"] .ovsub{font-size:clamp(6px,1.5cqw,11px)}
+.ov[data-layout="titan"] .ovbody{font-size:clamp(5px,1.25cqw,9px)}
+.ov[data-layout="titan"] .ov-top{max-width:80%}
+.ov[data-layout="editorial"] .ov-impact{font-size:2.55em;letter-spacing:-.06em;line-height:.90}
+.ov[data-layout="editorial"] .ovsub{font-size:clamp(9px,2.7cqw,20px)}
+.ov[data-layout="editorial"] .ovbody{font-size:clamp(7px,2.1cqw,16px);line-height:1.50}
+.ov[data-layout="editorial"] .ov-top{max-width:94%}
+.ov[data-layout="editorial"] .ov-mid{max-width:88%}
+.ov[data-layout="punchy"] .ov-impact{font-size:1.07em;letter-spacing:-.03em}
+.ov[data-layout="punchy"] .ovsub{font-size:clamp(7px,1.9cqw,14px)}
+.ov[data-layout="punchy"] .ovbody{font-size:clamp(6px,1.55cqw,11px)}
 .ovtog{position:absolute;top:5px;right:5px;z-index:10;padding:2px 6px;border-radius:4px;background:rgba(4,6,12,.88);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.55);font-size:7.5px;font-family:var(--m);cursor:pointer;transition:all .14s}
 .ovtog:hover{border-color:rgba(255,255,255,.25);color:rgba(255,255,255,.8)}
 
@@ -950,8 +974,9 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
       <div style="font-size:8px;font-family:var(--m);color:var(--dm);letter-spacing:.1em;margin-bottom:4px">CONTEXTO DEL CLIENTE</div>
       <div id="gen-cl-txt" style="font-size:9px;color:var(--mt);line-height:1.5"></div>
     </div>
-    <div id="gen-refs-info" style="background:var(--pa);border:1px solid rgba(58,92,158,.14);border-radius:var(--rs);padding:.7rem;margin-bottom:.7rem;display:none">
-      <div style="font-size:8px;font-family:var(--m);color:var(--v3);letter-spacing:.1em;margin-bottom:5px">REFERENCIAS VISUALES ACTIVAS</div>
+    <div id="gen-refs-info" style="background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.30);border-radius:var(--rs);padding:.7rem;margin-bottom:.7rem;display:none">
+      <div style="font-size:8px;font-family:var(--m);color:#8B5CF6;letter-spacing:.1em;margin-bottom:4px;font-weight:700">● MOLDE VISUAL ACTIVO — GUÍA PRIMARIA</div>
+      <div style="font-size:8px;color:rgba(255,255,255,.55);margin-bottom:6px;line-height:1.5">Los prompts se construirán para generar imágenes en el mismo mundo estético que estas referencias.</div>
       <div id="gen-refs-imgs" style="display:flex;gap:5px;flex-wrap:wrap"></div>
     </div>
     <div class="gpbox" id="gpbox" style="display:none">
@@ -999,6 +1024,18 @@ body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;bac
   </div>
 </div>
 
+<div class="modal-bg" id="m-prev">
+  <div class="modal" style="max-width:min(600px,92vw);padding:1.2rem">
+    <div class="mh"><div class="mttl">Previsualización PNG</div><button class="mcls" onclick="closeM('m-prev')">×</button></div>
+    <div style="width:100%;display:flex;justify-content:center;margin:1rem 0">
+      <img id="prev-img" style="max-width:100%;max-height:70vh;object-fit:contain;border-radius:10px;box-shadow:0 8px 40px rgba(0,0,0,.7)">
+    </div>
+    <div class="mbtns">
+      <button class="mbtn-c" onclick="closeM('m-prev')">Cerrar</button>
+      <button class="mbtn-ok" id="prev-dl-btn">⬇ Descargar PNG</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -1238,6 +1275,8 @@ function renderGrid(posts){
   if(!posts||posts.length===0){grid.style.display='none';empty.style.display='flex';document.getElementById('stv').textContent=0;return;}
   grid.style.display='grid';empty.style.display='none';
   grid.innerHTML=posts.map((p,i)=>cardHTML(p,i)).join('');applyFilters();
+  // Auto-restore images saved in DB (24h persistence via img_src field)
+  posts.forEach(p=>{if(p.imgSrc){imgSrcs[p.id]={src:p.imgSrc,isUrl:true};showImg(p.id,p.imgSrc,true,p);}});
 }
 function cardHTML(p,idx){
   const td=TBDG[p.t]||'';const delay=(idx%12)*30;
@@ -1314,177 +1353,313 @@ async function buildRefCtx(){
   return{text,images:imgPool.slice(0,3)};
 }
 
+// Cache: ref analysis keyed by sorted ref IDs so it's not repeated per session
+const _refAnalysisCache = {};
+
+// Phase 1: Claude studies the reference images and extracts a visual DNA string.
+// Returns a text description used in every subsequent prompt generation call.
+async function analyzeRefs(refImages, refIds){
+  if(!refImages||refImages.length===0) return '';
+  const cacheKey=(refIds||[]).slice().sort().join(',');
+  if(_refAnalysisCache[cacheKey]) return _refAnalysisCache[cacheKey];
+
+  const content=[
+    ...refImages.map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),
+    {type:'text',text:`You are analyzing visual references for CLIENDER, a B2B AI automation brand. Extract the VISUAL DNA of these images — the precise aesthetic fingerprint that must be replicated across all generated content.
+
+Analyze and describe:
+1. FILM STOCK & GRAIN — texture, ISO feel, grain structure, whether it reads as Tri-X, HP5, or similar
+2. LIGHTING — key light direction, chiaroscuro ratio, shadow depth, fill presence or absence, quality (hard/diffused)
+3. TONAL REGISTER — shadow density, highlight roll-off, overall contrast curve, black point depth
+4. SUBJECT ARCHETYPE — type of figure, clothing era and quality, posture, emotional expression register
+5. COMPOSITION — subject placement (left/right/center), negative space distribution, framing tightness
+6. ATMOSPHERE — environment type, time of day implied, scale, emotional register (tension/calm/authority/urgency)
+7. WHAT MAKES IT SCROLL-STOPPING — the one element of cognitive dissonance or visual surprise
+
+Output: structured analysis, 180 words max, English. This will be injected into every image prompt to ensure visual consistency across the entire content calendar.`}
+  ];
+
+  try{
+    const r=await fetch(AI_PROXY+'/claude',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},
+      body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:250,messages:[{role:'user',content}]})
+    });
+    if(!r.ok) return '';
+    const dd=await r.json();
+    const analysis=dd.content?.[0]?.text?.trim()||'';
+    if(analysis) _refAnalysisCache[cacheKey]=analysis;
+    return analysis;
+  }catch{return '';}
+}
+
+// Phase 2 instruction: appended to each prompt generation call with the analyzed DNA
+function refInstruction(dna){
+  return `\n\n━━ VISUAL DNA — APPLY TO THIS PROMPT ━━
+${dna}
+
+DIRECTIVE: Your prompt must generate an image that belongs in the SAME VISUAL WORLD described above.
+Same lighting quality. Same grain and contrast register. Same archetype energy.
+The hook defines the CONCEPT. The visual DNA defines the AESTHETIC. Keep them both.
+Every image in this calendar must look like it came from the same photographer on the same shoot day — but each one captures a different decisive moment.`;
+}
+
 /* ══ GENERATE SINGLE PROMPT ══ */
 async function gP(id){
   const p=await getPost(id);if(!p)return;
   const btn=document.getElementById('bgp-'+id),pt=document.getElementById('pt-'+id);
-  btn.disabled=true;pt.innerHTML='<span class="ganim">⟳ Generando…</span>';dot(id,'sl');
+  btn.disabled=true;dot(id,'sl');
   const clCtx=await buildClientCtx(),refCtx=await buildRefCtx();
-  const sys=buildSys(clCtx,refCtx.text);
-  let uc=buildUC(p);
-  if(refCtx.images.length>0){uc=[...refCtx.images.map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:buildUC(p)+'\nInspírate en el estilo de las referencias visuales para el FONDO.'}];}
+  // Phase 1: analyze refs if any
+  let dna='';
+  if(refCtx.images.length>0){
+    pt.innerHTML='<span class="ganim">⟳ Analizando referencias…</span>';
+    dna=await analyzeRefs(refCtx.images,[...selRefs]);
+  }
+  pt.innerHTML='<span class="ganim">⟳ Generando prompt…</span>';
+  const sys=buildSys(clCtx, dna||refCtx.text);
+  // Phase 2: generate prompt using analyzed DNA as context (text only — images already consumed)
+  const ucText=buildUC(p)+(dna?refInstruction(dna):'');
   try{
-    const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:280,system:sys,messages:[{role:'user',content:uc}]})});
+    const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:300,system:sys,messages:[{role:'user',content:ucText}]})});
     if(!r.ok){toast('Error: '+r.statusText,'terr');dot(id,'er');btn.disabled=false;return;}
     const dd=await r.json();const txt=dd.content?.[0]?.text?.trim()||fbP(p,clCtx);
     pt.textContent=txt;pt.dataset.prompt=txt;
-    // Save prompt via API
     try{await fetch('/api/calendars/'+activeCal+'/posts/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:txt})});}catch{}
   }catch{const fb=fbP(p,clCtx);pt.textContent=fb;pt.dataset.prompt=fb;}
   dot(id,'si');btn.disabled=false;toast('Prompt listo ✓','tok');
 }
 
 function buildSys(clCtx,refTxt){
-  return`You are a creative director for CLIENDER — a disruptive AI/automation agency. Generate image prompts for AI image generators following the CLIENDER visual system EXACTLY.
+  return`You are the chief image director for CLIENDER, a B2B AI automation brand. You write master-level image prompts for KIE.AI that produce images indistinguishable from award-winning documentary photography. Every prompt must make someone stop mid-scroll.
 
-CLIENDER VISUAL SYSTEM — NON-NEGOTIABLE:
-• Black and white TOTAL — zero saturation, fully desaturated
-• Documentary, vintage or archival aesthetic — NEVER clean stock photography
-• Dark overlay: #0D0D0D at 65% opacity across the full image
-• Subject positioned center-right or lower-right
-• Generous empty space in the LEFT THIRD for text overlay
-• High contrast: deep shadows, bright highlights, visible film grain
-• Cinematic and editorial mood — raw, unposed, real-world atmosphere
-• NO text, NO watermarks, NO logos, NO color, NO studio lighting, NO generic corporate aesthetics
+━━ MANDATORY PROMPT ARCHITECTURE (follow this sentence structure exactly) ━━
 
-The image must AMPLIFY the message through cultural symbols and metaphors — NOT illustrate it literally. Think documentary film, press photography, archival footage.
+SENTENCE 1 — PHOTOGRAPHIC SETUP:
+Always start with: "RAW photo,"
+Then: camera body + lens + aperture + physical lighting rig (describe the hardware and geometry, never use lighting style names like "Rembrandt" or "chiaroscuro" — describe the actual bulb, its position, and the shadow it casts)
+Example: "RAW photo, Leica M11 Monochrom with 35mm Summilux-M f/1.4 wide open, a single bare 150W tungsten bulb suspended from above-left at 60°, no reflector, no fill light, casting a hard shadow that cuts diagonally across the scene."
 
-OUTPUT: 2-3 dense descriptive sentences in English only. No JSON, no title, no explanation.
+SENTENCE 2 — SUBJECT:
+The iconic archetype in extraordinary detail — clothing fiber, expression, body posture — performing an incongruous action. The cognitive dissonance between WHO they are and WHAT they are doing is what stops the scroll.
+Example: "A 1987 Wall Street power broker in a chalk-stripe double-breasted Brioni suit with slicked-back hair stands completely still at a vintage payphone booth, briefcase upright at his feet, expression of cold controlled authority, as blurred modern figures sprint past him clutching smartphones."
+
+SENTENCE 3 — OBJECT + COMPOSITION:
+The one symbolic object that bridges the archetype world and the business message. Then state composition explicitly.
+Example: "He holds a manila folder stamped 'Q3 PIPELINE' against the payphone, subject positioned in right vertical third, generous copy space to the left — open dark sidewalk, zero visual clutter in the text zone."
+
+SENTENCE 4 — ENVIRONMENT:
+Specific setting, time of day, weather, architectural or landscape context that makes the image feel real and narratively loaded.
+Example: "Pre-dawn financial district, wet cobblestones reflecting amber streetlamps, fog rolling between glass towers, the kind of stillness that exists at 5:47am before the city wakes."
+
+SENTENCE 5 — TECHNICAL CLOSER (always verbatim):
+"Pushed Ilford HP5 at ISO 3200 — pronounced coarse silver grain visible in shadow zones, compressed highlights, crushed deep blacks. Completely desaturated pure black and white. No text, no logos, no watermarks anywhere in the image."
+
+━━ ARCHETYPE LIBRARY (always invent fresh variations, never repeat) ━━
+• 1987 Wall Street broker — chalk-stripe Brioni, payphone, briefcase, surrounded by modern chaos
+• Film noir private detective — water-stained fedora, belted gabardine trench, rain-slicked alley, cigarette
+• Cold War NASA controller — white short-sleeve Oxford, skinny black tie, slide rule, mission board covered in calculations
+• Yakuza underboss — immaculate Savile Row pinstripe, doing tedious administrative spreadsheet work alone
+• Victorian butler in white cotton gloves — managing a brutalist Soviet concrete warehouse
+• Professional boxer — cauliflower ear, satin shorts, taped hands — signing enterprise contracts at mahogany desk
+• Chess grandmaster — rumpled linen suit, opponent's chair toppled and empty, game won, forgotten cigarette still smoking
+• Feudal samurai in full kamon lacquered armor — at glass-and-steel boardroom, hands on open laptop
+• Marathon runner in soaked three-piece suit — mile 25, 100m gap ahead, face of absolute calm
+• Lone black sheep in coarse winter wool — standing motionless as entire white flock moves the opposite direction
+• Cold War military general — reviewing a city map whose tactical pins are labeled as sales territories
+• Surgeon in full scrubs and nitrile gloves — studying a customer journey funnel on a lightbox instead of an X-ray
+• 1940s switchboard operator — headset on, pencil behind ear, both hands moving at overloaded lit-up board
+• Gladiator in a perfectly fitted modern business suit — arms folded, absolute stillness in a trading floor panic
+• Lone astronaut in EVA suit — seated at corner café table, two espressos, reading newspaper, utterly relaxed
+
+━━ NON-NEGOTIABLE LAWS ━━
+• Zero saturation — pure monochrome, no warmth, no color drift
+• Subject in right vertical third or center-right — never centered, never left
+• Left third: deep shadow, dark wall, open sky, empty floor — the text must read cleanly over it
+• The image must survive a 65% dark overlay — extreme contrast, crisp whites, crushed blacks
+• Every noun must be hyper-specific — not "a man in a suit" but "a 52-year-old in a chalk-stripe double-breasted Brioni with a Windsor knot and a visible collar pin"
+• No generic stock photo energy — no artificial smiles, no posed looks, no studio backgrounds, no clean gray seamless
+
+OUTPUT: One dense paragraph, 5 sentences following the architecture above. English only. No headers, no lists, no explanations.
 ${clCtx?'\nCLIENT CONTEXT:\n'+clCtx:''}
-${refTxt?'\nVISUAL REFERENCES:\n'+refTxt:''}`;
+${refTxt?`\n━━ ACTIVE VISUAL REFERENCES — THESE DEFINE THE TARGET AESTHETIC ━━\n${refTxt}\nYour prompt must produce an image that belongs in the exact same visual world as these references: same grain quality, same lighting geometry, same tonal register, same archetype energy. References are the target output, not optional inspiration.`:''}`;
 }
 
 const ANGLE_SCENES={
-  'SALES 01':{ // Dolor — Leads perdidos
-    Dolor:'exhausted businessman in dark suit sitting on office floor surrounded by ringing phones nobody answers, dramatic low-key lighting, B&W, shallow depth of field',
-    Miedo:'sprint race where one runner stops to check phone while others accelerate ahead, motion blur on runners, sharp on distracted figure, B&W',
-    Resultado:'confident executive standing alone in spotlight while empty chairs surround a meeting table, victorious posture, dramatic lighting, B&W',
-    Prueba:'two businesspeople signing a contract across a desk, close handshake shot from above, sharp details, B&W with dramatic shadows',
-    Deseo:'business professional walking through large glass doors into bright light, silhouette, cinematic B&W'
+  'SALES 01':{
+    Dolor:'hyperrealistic B&W photograph, a lone black sheep with coarse winter wool standing completely motionless in a field as the entire white flock moves away in the opposite direction, staring directly into the lens with unsettling calm, ground-level shot, Kodak Tri-X grain, harsh raking side light, vast empty meadow, subject occupying right half, left third completely empty, Magnum Photos documentary style, no color, no studio',
+    Miedo:'hyperrealistic B&W photograph, a 1980s Wall Street power broker in a tailored chalk-stripe suit frozen at a vintage payphone booth, briefcase at his feet, while blurred figures sprint past him with modern smartphones, expression of controlled panic, single tungsten streetlamp overhead, Rembrandt triangle on his face, left third empty, Leica M candid street photography style, film grain heavy',
+    Resultado:'hyperrealistic B&W photograph, a film noir detective in belted trench coat and water-stained fedora standing at the edge of a rain-slicked cobblestone alley, case file folder closed under his arm, expression of quiet satisfaction, single gas lamp behind creating long shadow forward, medium format compression, subject positioned center-right, left third dark and empty, Ilford HP5 grain, cinematic depth of field',
+    Prueba:'hyperrealistic B&W photograph, a chess grandmaster in a rumpled linen suit leaning back with arms folded, the game board in mid-play position but the chair across the table is toppled — opponent conceded and fled, thin smoke still rising from a forgotten ashtray beside the board, single overhead tungsten lamp, Cartier-Bresson documentary composition, left third completely unoccupied, ultra-sharp board detail',
+    Deseo:'hyperrealistic B&W photograph, a single suited figure walking away from camera down an empty pre-dawn city boulevard, all other figures in the far background moving the exact opposite direction, wet road reflecting overhead lights, dramatic receding one-point perspective, rim light from rising sun behind subject, Leica 35mm reportage style, left third open sky, grainy and atmospheric'
   },
-  'SALES 02':{ // Miedo — Velocidad
-    Dolor:'businessman frozen mid-step watching competitor sprint past him blurred, cinematic B&W, dramatic contrast',
-    Miedo:'empty restaurant table being cleared while competitor gets seated and served, narrative B&W photography',
-    Resultado:'person crossing a finish line alone, tape breaking, crowd cheering in blurred background, B&W motion',
-    Prueba:'two identical alarm clocks side by side, one smashed and one pristine, dramatic product photography B&W',
-    Deseo:'executive running through airport terminal, purposeful motion blur, cinematic B&W, dramatic lighting'
+  'SALES 02':{
+    Dolor:'hyperrealistic B&W photograph, a professional boxer in full ring gear — satin shorts, taped hands, cauliflower ear — seated at a modest school desk filling out administrative paperwork alone in an empty gymnasium, single overhead fluorescent bar casting hard downward shadow, expression of focused absurdity, left side of frame completely empty, medium format depth, Ilford HP5 film grain, no color',
+    Miedo:'hyperrealistic B&W photograph, a relay runner in soaked business suit frozen mid-stride at the baton exchange point, hand outstretched, the incoming runner already far gone — the exchange was missed, blurred competitors in background, motion blur on the runner, sharp panic on the standing figure\'s face, stadium lights creating harsh top-down chiaroscuro, left third empty, cinematic 2.35:1 feel',
+    Resultado:'hyperrealistic B&W photograph, a Cold War NASA mission controller in white short-sleeve shirt and skinny black tie, slide rule in hand, standing before a wall-sized mission map covered in hand-drawn trajectories, confident relaxed posture, room full of empty desks — he is the last one because he already confirmed success, warm tungsten overhead, archival 1960s aesthetic, Kodak Tri-X grain, left third open',
+    Prueba:'hyperrealistic B&W photograph, a marathon runner in a completely soaked business suit with tie flapping, leading the race by a hundred meters at mile 25, empty track ahead of him, a sea of runners far behind in soft focus, expression of absolute certainty not triumph, side angle shot, motion blur on the runners behind, razor sharp on the leader, Leica street photography feel, left third of frame empty',
+    Deseo:'hyperrealistic B&W photograph, a young tech founder type in a dark hoodie sprinting through a vast empty international airport terminal at 5am, single carry-on roller behind him, motion blur on his stride, terminal lights creating pools of light and dark, Hasselblad medium format perspective, his face calm and decisive not frantic, left third completely unoccupied, film grain visible, cinematic depth'
   },
-  'SALES 03':{ // Resultado — Agenda llena
-    Dolor:'empty calendar pinned to wall in dark office, single light beam illuminating it, dramatic B&W',
-    Miedo:'person sitting at empty desk while phone sits silent, contemplative mood, editorial B&W',
-    Resultado:'business calendar completely covered in handwritten appointments and sticky notes, overhead flat lay, B&W',
-    Prueba:'executive pointing at metrics on a screen, colleagues reacting with surprise and satisfaction, B&W editorial',
-    Deseo:'confident professional reviewing fully booked calendar on phone, slight smile, window light, editorial B&W'
+  'SALES 03':{
+    Dolor:'hyperrealistic B&W photograph, a film noir private investigator at a cluttered metal desk buried under dozens of unanswered message slips and ringing telephone receivers, single swinging bulb overhead creating harsh circular light pool, shadows consuming the periphery, expression of quiet overwhelm, vintage 1950s detective agency, Weegee tabloid photography style, left third entirely dark, Kodak Tri-X grain, no color',
+    Miedo:'hyperrealistic B&W photograph, a lone waiter in a formal black uniform clearing a table meticulously set for twelve — untouched glasses, folded napkins, candles burned low — a single chair pushed in hard, all other chairs empty, one table across the restaurant still active and loud in soft background blur, window light raking across the empty table, narrative B&W, left third open, medium format feel',
+    Resultado:'hyperrealistic B&W photograph, a Cold War military general in full dress uniform standing before a massive tactical operations board, every line and pin precisely placed, posture radiating command, room behind him staffed by focused operators at vintage consoles, single column of bright overhead light on the general, everything else in shadow, Yousuf Karsh portrait power, left third free, ultra-sharp medal detail',
+    Prueba:'hyperrealistic B&W photograph, a vintage telephone switchboard operator — headset, pencil behind ear — handling a board lit up entirely, both hands moving with practiced precision, dozens of active lines, expression of total control under pressure, warm tungsten light from above, background operators visible in atmospheric blur, 1940s archival editorial style, Magnum Photos composition, left third unoccupied',
+    Deseo:'hyperrealistic B&W photograph, a symphony conductor at the climax of a performance, both arms raised wide, baton in one hand, full orchestra visible in deep background blur, single spotlight creating a halo effect on the conductor, expression of absolute commanding authority, Carnegie Hall architectural grandeur, Leica M telephoto compression, left third of frame pure dark, Ilford Delta grain'
   },
-  'SALES 04':{ // Dolor — Seguimiento
-    Dolor:'long row of unanswered message notifications on smartphone screen in dark room, dramatic close-up, B&W',
-    Miedo:'person watching money literally fall from their hands to the ground in slow motion freeze, B&W dramatic',
-    Resultado:'salesperson reviewing a thick stack of completed deals, satisfied expression, office environment, B&W',
-    Prueba:'whiteboard showing follow-up sequence numbers 1 through 7 with checkmarks, hand holding marker, B&W',
-    Deseo:'business professional confidently closing laptop after final sale, relaxed posture, warm editorial B&W'
+  'SALES 04':{
+    Dolor:'hyperrealistic B&W photograph, a suited man standing in driving rain on an empty pavement outside a glass-walled conference room, watching a meeting proceed without him through the rain-streaked glass, coat soaked, expression of detached calm that masks urgency, strong single street lamp creating reflections on wet ground, documentary street photography, left third of frame completely empty, Leica 28mm, film grain',
+    Miedo:'hyperrealistic B&W photograph, a chess king piece photographed in extreme macro close-up, standing alone on a board surrounded by fallen pieces from both sides, game technically over but unclaimed, dramatic raking side light creating long piece-shaped shadow, polished board surface reflecting the chaos, tabletop documentary macro, left side of frame empty negative space, Kodak Tri-X grain, ultra-sharp',
+    Resultado:'hyperrealistic B&W photograph, a film noir private detective at his desk in a dim office, closing a thick case file with a deliberate satisfied motion, a wall of solved cases stacked neatly behind him floor to ceiling, single desk lamp cone of light on the file, the rest in deep shadow, expression of earned calm, 1950s detective agency aesthetic, Weegee editorial style, left third empty and dark',
+    Prueba:'hyperrealistic B&W photograph, a scoreboard chalked on a brick warehouse wall — seven consecutive marks, all checked — a lone figure in a quality suit standing beside it with arms crossed, not celebrating, just confirming, industrial ambient light from a high window, grain and texture in the brick, vintage documentary B&W, Cartier-Bresson geometry, left third open, subject right of frame',
+    Deseo:'hyperrealistic B&W photograph, a single lean figure in a perfectly tailored modern suit walking the exact center line of an empty pre-dawn city boulevard, long shadow stretching behind, buildings framing a vanishing point ahead, early light creating a silver halo on his shoulders, shot from low wide angle creating dramatic scale, Leica 21mm, left third completely open sky, Kodak grain, cinematic'
   },
-  'SALES 05':{ // Prueba — Casos reales
-    Dolor:'client frustrated at their desk surrounded by papers and tools that aren\'t working, B&W editorial',
-    Miedo:'group of identical-looking professionals at a conference, one person standing visibly different, B&W',
-    Resultado:'before/after split composition: chaotic messy left half, organized clean right half, B&W dramatic',
-    Prueba:'executive presenting chart to boardroom with impressive upward trend, engaged audience, B&W editorial',
-    Deseo:'team celebrating around a table, genuine joy and high-fives, candid moment, editorial B&W photography'
+  'SALES 05':{
+    Dolor:'hyperrealistic B&W photograph, a scientist in a worn lab coat standing before a long workbench of failed experiments — broken equipment, crumpled notes, exhausted test tubes — looking intently at the single lit flask that finally worked, single focused beam from an overhead lamp illuminating only that flask, rest of lab in near darkness, archival 1950s research lab feel, Kodak Tri-X grain, left third empty',
+    Miedo:'hyperrealistic B&W photograph, a single white chess piece — queen — standing upright in the center of a board strewn with fallen black pieces, all opponents toppled but game somehow not called, extreme macro, raking side light, sharp grain in polished ivory texture, deep shadows between fallen pieces, drama in stillness, left side of frame negative space, Leica macro, no color',
+    Resultado:'hyperrealistic B&W photograph, a 1969 NASA mission control room at the exact moment of success confirmation — engineers in white short-sleeve shirts and thin ties erupting in controlled celebration, some punching air, some gripping each other\'s shoulders, a sea of vintage terminals, American flags, mission charts on walls, overhead fluorescent lights, Kodak archival style, left third of foreground empty, Magnum documentary',
+    Prueba:'hyperrealistic B&W photograph, a tech founder type sitting cross-legged directly on a concrete warehouse floor, laptop balanced on knee, face illuminated only by screen light in a vast dark industrial space, surrounded by nothing — no furniture, just empty space and his data, expression of total focus, overhead industrial skylights creating pools of light elsewhere, candid B&W editorial, left third empty shadow',
+    Deseo:'hyperrealistic B&W photograph, a team of five astronauts in full EVA suits walking in formation down a long corridor toward a launch pad door, backlit by the blinding Florida dawn through the door ahead, slow confident stride, motion captured at peak of step, Leica M4 photojournalism feel, corridor framing creates natural left-third negative space, Kodak Tri-X grain, cinematic depth of field'
   },
-  'TECH 01':{ // Dolor — Dependencia SaaS
-    Dolor:'person trapped under a pile of subscription receipts and software boxes, dramatic editorial B&W',
-    Miedo:'multiple screens showing different apps all demanding payment notifications, overwhelmed user, B&W',
-    Resultado:'single clean laptop screen glowing in dark room, freedom and simplicity, dramatic B&W',
-    Prueba:'side-by-side: complex messy multi-app setup vs single clean screen, B&W editorial contrast',
-    Deseo:'professional working from laptop in minimalist space, total control and calm, editorial B&W'
+  'TECH 01':{
+    Dolor:'hyperrealistic B&W photograph, a suited executive with reading glasses pushed up his forehead staring at a desk buried under a storm of receipts, invoices, and subscription invoices — some mid-air from a desk fan — single overhead tungsten in the chaos, his expression resigned not panicked, editorial storytelling composition, Magnum Photos style, left third of frame dark wall, Ilford HP5 grain, no color',
+    Miedo:'hyperrealistic B&W photograph, a modern-day Gulliver figure — executive in a rumpled suit — depicted pinned to the ground by dozens of tiny ropes labeled with software logos, lying flat on a polished office floor, shot from directly above as an aerial documentary, chiaroscuro hard light from high window, symbolic surrealism grounded in photorealism, left third completely unoccupied from above, ultra-sharp',
+    Resultado:'hyperrealistic B&W photograph, a lone developer in a dark hoodie standing in front of a single illuminated screen in an otherwise completely pitch-black vast room, screen glow is the only light source creating dramatic front-lit portrait, expression relaxed and in control, surrounding darkness emphasizing the clarity of the solution, Leica M monochrome style, left third pure darkness, no grain necessary',
+    Prueba:'hyperrealistic B&W photograph, two adjacent desks photographed side by side: left desk buried in tangled cables, multiple monitors, stacked hardware, post-it chaos; right desk has a single clean laptop, one plant, white space — the contrast speaks for itself, overhead architectural light, tightly composed split-frame documentary, Bauhaus graphic feel in B&W, left third of total frame empty wall space',
+    Deseo:'hyperrealistic B&W photograph, a lone programmer in a dark tech hoodie working at a single MacBook laptop in the center of a vast empty aircraft hangar at night, the hangar doors slightly open letting in a sliver of moonlight, scale between human and space is dramatic, phone and coffee as the only other objects, Leica wide angle, left third pure empty concrete floor, Kodak Tri-X grain, cinematic'
   },
-  'TECH 02':{ // Miedo — IA competencia
-    Dolor:'businessperson watching competitor\'s rocket launch while standing with a bicycle, editorial B&W',
-    Miedo:'athlete running against robotic competitor with clear speed advantage, dramatic B&W motion',
-    Resultado:'executive at the front of a pack while others fall behind, clear leader, cinematic B&W',
-    Prueba:'split scene: one professional with AI tools crushing metrics, other struggling manually, B&W',
-    Deseo:'person and AI interface working in perfect harmony, futuristic but grounded, editorial B&W'
+  'TECH 02':{
+    Dolor:'hyperrealistic B&W photograph, a businessman in a quality suit standing beside an old-fashioned bicycle watching a competitor ride an oversized rocket past him on an empty industrial road, shot at ground level for maximum scale contrast, the rocket trail a motion blur, the cyclist perfectly still and conflicted, surreal but photorealistic in style, left third empty road, Kodak Tri-X grain, no color',
+    Miedo:'hyperrealistic B&W photograph, a sprinter frozen at the starting block in perfect false-start tension, looking sideways at the adjacent lane where the finish-line tape is already broken — someone already finished before he started, empty stadium behind, overhead arc lights creating hard shadows on the track, archival athletics photography, Leica M candid, left third of frame empty track, film grain',
+    Resultado:'hyperrealistic B&W photograph, a lone marathon leader at the front of a massive race with a hundred-meter gap, all other runners visible only as a blur of faces and arms far behind, taken from a low following moto angle, his expression effortless and composed, road ahead completely empty, motion blur on the pack, sharp on the leader, Leica 50mm, left third pure empty road, Kodak grain, cinematic',
+    Prueba:'hyperrealistic B&W photograph, a modern gladiator archetype — a man in a perfectly fitted suit, shirtsleeves rolled, tie loosened — standing with arms crossed and expression completely calm in the center of a trading floor where everyone around him is in visible panic, phones ringing, papers flying, he is the still point, documentary B&W, Cartier-Bresson decisive moment, left third empty foreground',
+    Deseo:'hyperrealistic B&W photograph, a human chess player — scholarly, rumpled tweed, wire glasses — studying the board across from an empty leather chair, the AI\'s last move notation written on a small slip beside the board, the human is smiling slightly because he sees the winning line, single desk lamp, warm tungsten in otherwise dark library, Leica M portrait feel, left third unlit shelves'
   },
-  'TECH 03':{ // Dolor — Tareas repetitivas
-    Dolor:'worker pushing same large boulder up hill like Sisyphus, dramatic editorial B&W, symbolic',
-    Miedo:'rows of identical workers doing identical repetitive motions, factory line metaphor, B&W editorial',
-    Resultado:'single automated machine doing work of many, efficiency visualized, dramatic industrial B&W',
-    Prueba:'stopwatch close-up next to stack of papers representing hours wasted, B&W product editorial',
-    Deseo:'professional relaxing confidently while machines work in background, freedom, editorial B&W'
+  'TECH 03':{
+    Dolor:'hyperrealistic B&W photograph, a modern Sisyphus — a man in a business suit, tie loosened, jacket creased — pushing the same large boulder up a hill with a battered laptop bag strapped to his back, shot at golden hour equivalence in B&W, long shadows, the hill steep, expression of grim determination, symbolic but photographically real, Leica wide, left third empty sky, Ilford grain, no color',
+    Miedo:'hyperrealistic B&W photograph, a factory assembly line of identical workers in matching suits performing the exact same repetitive gesture in perfect synchronization, shot from a raised angle down the line which extends to vanishing point, Fritz Lang Metropolis aesthetic but hyperreal, overhead industrial lighting creating even pools of shadow between each worker, left third empty foreground floor, Kodak grain',
+    Resultado:'hyperrealistic B&W photograph, a single large industrial mechanical lever dominating the frame, one human hand just releasing it with a calm deliberate motion, behind him through a misted factory window the work it controls is happening at scale, bokeh factory blur, hard directional side light on the hand and lever, Hasselblad industrial documentary feel, left third empty wall, ultra-sharp lever texture',
+    Prueba:'hyperrealistic B&W photograph, a senior executive in suspenders and shirtsleeves tilted back in a leather chair, feet on the corner of a massive mahogany desk, completely at ease, while through floor-to-ceiling windows behind him automated systems work visibly — servers blinking, machines moving — he is calm because the automation does it, Karsh portrait power, left third window light, Kodak Tri-X',
+    Deseo:'hyperrealistic B&W photograph, a professional in a high-quality linen suit leaning back in an Eames-style chair in a beautifully empty minimalist office, feet gently crossed on the desk, single architectural plant beside him, everything completed — the screens are off, the inbox is zero, single beam of afternoon light across the desk, expression of earned peace, Leica M, left third pure wall, ultra-sharp'
   },
-  'TECH 04':{ // Deseo — IA propia
-    Dolor:'generic robot serving multiple different businesses, commoditized, editorial B&W',
-    Miedo:'business without AI watching competitors race ahead with clear advantage, dramatic B&W',
-    Resultado:'custom AI assistant interface glowing on screen, executive impressed, dramatic B&W editorial',
-    Prueba:'custom-branded AI answering customer queries 24/7, screens showing activity at night, B&W',
-    Deseo:'executive and personalized AI working as partners, future-forward editorial B&W photography'
+  'TECH 04':{
+    Dolor:'hyperrealistic B&W photograph, a generic-looking service robot holding a serving tray, simultaneously serving coffee to a dozen clients who are all wearing completely different costumes and hats — absurdist surrealism, grounded in documentary photographic style, overhead single light creating sharp shadows below the costumes, the robot expression permanently neutral, Weegee tabloid editorial, left third empty, B&W grain',
+    Miedo:'hyperrealistic B&W photograph, a 1940s telephone switchboard operator — headset, pencil behind ear, jacket sleeves rolled — facing a switchboard where every single light is blinking simultaneously, both hands in motion but clearly insufficient for the volume, face showing controlled professional overwhelm, warm archival overhead light, vintage editorial authenticity, Magnum Photos style, left third empty shadow, Ilford grain',
+    Resultado:'hyperrealistic B&W photograph, a tech founder in a quality dark suit standing with arms folded in front of a massive server room rack corridor that extends to the horizon, servers active and blinking in the bokeh behind him, expression of quiet ownership, single cold ceiling light creating dramatic downward chiaroscuro, industrial corridor symmetry, Leica 28mm, left third empty rack detail, film grain',
+    Prueba:'hyperrealistic B&W photograph, a night security camera POV shot of an empty open-plan office at 3am — desks unoccupied, chairs empty — but every AI terminal is active with data, screens glowing, processes running autonomously with zero human presence, CCTV fisheye lens feel but hyperrealistic, cold blue-white screen glow is only light, documentary evidence aesthetic, left third dark empty desks',
+    Deseo:'hyperrealistic B&W photograph, a craftsman in his late 50s, wire glasses, rolled sleeves, worn leather apron, making the final calibration on a custom-built precision machine in a workshop lit by a single tungsten pendant, tools laid out with surgical order, sawdust and metal shavings on the floor, the machine is clearly built for one specific purpose, Salgado documentary warmth, left third empty workshop shadow'
   },
-  'TECH 05':{ // Resultado — Desarrollo
-    Dolor:'developer buried under technical debt and legacy code printouts, frustrated, editorial B&W',
-    Miedo:'slow construction site with single worker while competition builds skyscraper at speed, B&W',
-    Resultado:'MVP product launching to excited users, team celebration, genuine emotion, editorial B&W',
-    Prueba:'whiteboard with timeline showing compressed delivery: week 1 to week 4 done, B&W editorial',
-    Deseo:'sleek product on screen, team proud in background blurred, achievement moment, editorial B&W'
+  'TECH 05':{
+    Dolor:'hyperrealistic B&W photograph, a software developer surrounded by floor-to-ceiling walls of printed code pages pinned like wallpaper in a dark basement, the printed text visible in detail, him sitting at the center of it looking at one screen in concentrated frustration, single monitor glow, overhead bare bulb, oppressive tunnel of paper, Weegee editorial style, left third empty code wall, Kodak grain',
+    Miedo:'hyperrealistic B&W photograph, a lone construction worker on a cleared site watching through a fence as an adjacent plot constructs a glass skyscraper in dramatic visible time-compression implied by the incomplete scaffolding, shot from behind the worker for scale, the skyscraper dominating the right of frame, the worker\'s hard hat in the left third as negative space anchor, Leica 28mm street, film grain',
+    Resultado:'hyperrealistic B&W photograph, a team of NASA engineers in white shirts and ties standing at a launch control room console moments before ignition, a collective posture of focused pre-launch tension, the launch visible through a massive window in the background, everything lit by the orange pre-ignition glow filtered to B&W, archival 1969 NASA photographic aesthetic, Magnum Photos, left third console foreground',
+    Prueba:'hyperrealistic B&W photograph, a clean whiteboard covered in a 30-day project timeline with every milestone checked off in green marker shown as B&W gradient, a lone project lead standing with one hand on the board, back slightly turned to camera, stepping away from a completed work, expression not pride but satisfaction, conference room architectural light, Leica candid, left third empty whiteboard space',
+    Deseo:'hyperrealistic B&W photograph, a young founder — early 30s, dark clothing, tired but focused eyes — holding up a finished product device to a ray of natural light from a high factory window in an otherwise dim warehouse, the light beam picking out every detail of the object, first version complete, warehouse scale and emptiness around him emphasizes significance, Leica M, left third empty shadow, grain'
   },
-  'BRAND 01':{ // Identidad de marca
-    Dolor:'generic faceless crowd of identical suits, one figure standing apart with identity, B&W editorial',
-    Miedo:'brand being lost in noise of competing messages, visual chaos, editorial B&W',
-    Resultado:'single distinctive figure commanding attention in crowd, magnetic presence, editorial B&W',
-    Prueba:'loyal customers returning, warmth and recognition in interaction, B&W street photography style',
-    Deseo:'iconic brand moment: product and person in perfect visual harmony, aspirational B&W editorial'
+  'BRAND 01':{
+    Dolor:'hyperrealistic B&W photograph, a figure in a distinctive textured coat standing completely still in the center of a stream of hundreds of identically suited commuters all rushing past in blur, he faces the camera, they face away, the only still point in a river of motion, long exposure blur on the crowd, sharp on the subject, Cartier-Bresson decisive moment, Leica 35mm, left third flowing crowd blur',
+    Miedo:'hyperrealistic B&W photograph, a single figure with a megaphone standing at the center of Times Square equivalent density of advertising — billboards, signs, noise — overwhelmed by the visual cacophony, shot from above, the figure becomes a small dark point in the visual noise, aerial documentary, city texture absorbs the frame, subject tiny but central, left third slightly quieter, Kodak Tri-X grain',
+    Resultado:'hyperrealistic B&W photograph, a single performer on a vast stage with a single spotlight from directly above creating a perfect circle of light, the 3,000-seat auditorium entirely in darkness behind them, the scale between the lit figure and the dark empty house is staggering, theatrical documentary B&W, Karsh portrait quality of the lit subject, left third pure black auditorium, no color',
+    Prueba:'hyperrealistic B&W photograph, a loyal old Shiba Inu dog sitting at perfect attention at the exact same spot on a station platform, the same train doors opening as always, waiting for the same returning person, platform empty except for this one dog, winter light raking from the side, documentary animal portraiture, Leica 90mm, deep grain, left third empty platform tile, no color',
+    Deseo:'hyperrealistic B&W photograph, a single iconic figure in their signature environment holding one defining object — the image that needs no caption — shot in intimate close-up with shallow depth, Karsh-quality lighting, single source hard side light, leather or linen texture visible in fabric, steel in the object, expression of absolute ownership of their craft, Hasselblad medium format, left third bokeh'
   },
-  'BRAND 02':{ // Social proof
-    Dolor:'empty venue that should be full, unused product, missed potential, dramatic B&W',
-    Miedo:'reviews being ignored while customers leave, narrative B&W photography',
-    Resultado:'crowd of satisfied customers giving standing ovation, genuine emotion, editorial B&W',
-    Prueba:'testimonial moment: customer telling friend about experience, authentic candid B&W',
-    Deseo:'brand ambassador moment: person proudly using product, organic authentic B&W editorial'
+  'BRAND 02':{
+    Dolor:'hyperrealistic B&W photograph, an enormous empty concert stadium — 60,000 seats, all vacant — with one lone figure standing on the stage center, shot from high in the stands to maximize the devastating scale of emptiness, architectural grandeur of the space, single spotlight on the performer, the absence of audience is the subject, Leica super-wide, left third empty seating, Kodak Tri-X grain, no color',
+    Miedo:'hyperrealistic B&W photograph, an elegant waiter in white gloves removing a completely untouched three-course meal from a formal restaurant table — wine poured, candles burned down, napkin folded and never opened — he does this methodically while at the far end of the restaurant one table is loud with laughter, single candle light, French bistro atmosphere, Leica 50mm, left third dark empty tables',
+    Resultado:'hyperrealistic B&W photograph, a packed auditorium audience captured at the exact midpoint of a standing ovation — half risen, half rising, a wave of human approval frozen in time, shot from the stage facing out, hundreds of faces in motion, energy palpable, overhead house lights, documentary B&W, Cartier-Bresson decisive moment, left third of foreground empty stage floor, no color',
+    Prueba:'hyperrealistic B&W photograph, two strangers on a rain-wet city pavement, one has grabbed the other\'s arm to show something on a cracked phone screen, the second person\'s face is at the exact moment of genuine surprise and delight, completely candid, shot at hip level with a wide lens, documentary street photography, Leica M rangefinder style, left third empty pavement, Kodak grain, no color',
+    Deseo:'hyperrealistic B&W photograph, a person walking down a busy urban sidewalk holding a product or object, three or four people nearby turning their head involuntarily to look — not because the person is famous, but because the object demands attention — shot at a wide candid angle, organic street energy, Vivian Maier observational style, left third foreground blur of passersby, Ilford HP5 grain'
   },
-  'EDU 01':{ // Educación — Tips
-    Dolor:'professional making obvious mistake that has expensive consequences, dramatic B&W editorial',
-    Miedo:'person ignoring road sign leading to obvious danger, metaphorical B&W photography',
-    Resultado:'mentor sharing insight with eager student, knowledge transfer moment, editorial B&W',
-    Prueba:'expert with credentials and experience visible in environment, authority, editorial B&W',
-    Deseo:'person having breakthrough insight, lightbulb moment, dramatic editorial B&W lighting'
+  'EDU 01':{
+    Dolor:'hyperrealistic B&W photograph, a surgeon in scrubs and gloves leaning over a bright lightbox studying what turns out to be a business customer journey map instead of an X-ray, the moment of realization on his face that the problem is in the process not the patient, strong clinical overhead light creating stark facial shadows, medical drama meets business metaphor, Leica M, left third empty lightbox glow',
+    Miedo:'hyperrealistic B&W photograph, a mountaineer in full expedition gear standing at a fork in an icy trail, one path has a clear WARNING sign partially buried in snow which he is definitively ignoring, shot from low behind him as he strides toward the wrong path, the mountain looming, mist obscuring consequences, archival expedition photography, Kodak Tri-X grain, left third empty trail, no color',
+    Resultado:'hyperrealistic B&W photograph, an aged master craftsman — white hair, calloused hands, eye lines of decades — placing a specific tool deliberately into a younger apprentice\'s hands in a workshop lit by a single high window, the act of transfer weighted with knowledge, shot at medium distance to capture both faces, Salgado documentary warmth translated to pure B&W, left third empty workshop wall',
+    Prueba:'hyperrealistic B&W photograph, a university professor at a massive chalkboard dense with equations, turning dramatically to face the class, pointer in hand, at the exact moment a student in the front row has their jaw drop in understanding — the eureka on their face is the subject — shallow focus on the student\'s face, professor in background sharp enough, classroom ambient light, Leica 50mm',
+    Deseo:'hyperrealistic B&W photograph, a scientist in a dim laboratory at the precise moment before breakthrough — eye pressed to a microscope eyepiece, one hand adjusting the focus dial, every muscle in their face concentrated, the adjacent slide and lab notebook suggesting months of work leading to this second, single focused desk lamp, everything else in darkness, intimate documentary, Leica M, left third dark lab bench'
   },
-  'EDU 02':{ // Educación — Errores
-    Dolor:'professional realizing expensive mistake too late, hands on head, dramatic B&W editorial',
-    Miedo:'mistake spreading like dominos falling, cause and effect visual metaphor, B&W editorial',
-    Resultado:'person stopping domino effect at last moment, prevention, dramatic B&W editorial',
-    Prueba:'case study: error vs correct approach side by side, educational editorial B&W',
-    Deseo:'professional confidently avoiding pitfall others fall into, composed expert, editorial B&W'
+  'EDU 02':{
+    Dolor:'hyperrealistic B&W photograph, a poker player at a felt table caught at the precise millisecond he realizes he turned his cards face-up too early — cards splayed, opponent\'s eyes widening, the point of no return visible on his face — extreme close-up on the face and the revealed cards, green felt saturated to grey, casino atmospheric top-light, Leica 50mm, left third empty felt, Kodak grain, no color',
+    Miedo:'hyperrealistic B&W photograph, the first domino in a massive serpentine chain — hundreds visible in the composition — caught in the exact millisecond it tips, the hand that pushed it already withdrawn and blurred, the rest of the chain perfectly still about to become chaos, extreme macro, hard side light, grain in the domino surface, cinematic sense of consequence, Leica macro, left third empty table',
+    Resultado:'hyperrealistic B&W photograph, a single large hand in a white sleeve pressing gently against the first domino in a massive chain, stopping the cascade at the last possible instant, the chain behind stretching to infinity in razor-sharp detail, the hand the decisive element, dramatic side light, macro foreground with deep-focus chain behind, Hasselblad precision, left third empty table space, no color',
+    Prueba:'hyperrealistic B&W photograph, aerial drone shot of a forest trail junction — the worn correct path clear and obvious, the overgrown wrong path visible and identifiably problematic — one lone figure at the exact decision point but already choosing correctly and stepping onto the right path, long shadows from late sun, aerial topographic B&W, Leica aerial style, left third canopy, Kodak grain',
+    Deseo:'hyperrealistic B&W photograph, a navigator — officer\'s jacket, compass in hand, nautical chart on the table — pointing decisively at the correct route on a map while four or five other figures crowd around in confusion, his certainty is the subject, strong directional side light from a porthole equivalent, old expedition aesthetic, Karsh portrait quality on the navigator, left third empty sea chart'
   },
-  'PROMO 01':{ // Oferta / Lanzamiento
-    Dolor:'person missing limited opportunity, door closing on them, dramatic B&W editorial',
-    Miedo:'countdown clock with urgency, person rushing to decide, dramatic B&W photography',
-    Resultado:'product launch moment, excitement and reveal, crowd reaction, editorial B&W',
-    Prueba:'early adopter success story, first person with new solution, editorial B&W documentary',
-    Deseo:'exclusive access moment, VIP treatment, aspirational opportunity, editorial B&W'
+  'PROMO 01':{
+    Dolor:'hyperrealistic B&W photograph, a man in a quality overcoat pressing both hands against the glass of just-closed station doors, watching the last train of the night pull away, condensation on the glass between him and the train, platform behind completely empty, overhead platform lights creating hard downward shadows, expression of calm regret not panic, B&W street documentary, Leica 28mm, left third empty platform, grain',
+    Miedo:'hyperrealistic B&W photograph, a massive digital countdown billboard in an empty nighttime city street showing 00:03:27 remaining, a lone overcoated figure standing in the street staring up at it, shot from ground level with dramatic upward angle, billboard light the only illumination creating theatrical uplighting on his face, cinematic B&W, Leica 21mm wide, left third dark storefront, Ilford grain',
+    Resultado:'hyperrealistic B&W photograph, a heavy velvet stage curtain beginning to rise from the bottom, only three feet of opening visible yet, the stage beyond in complete darkness and anticipation, shot from audience perspective at floor level, the texture of the velvet overwhelming in detail, footlights just beginning to illuminate the stage edges, theatrical B&W documentary, Leica 24mm, left third curtain fold, Kodak grain',
+    Prueba:'hyperrealistic B&W photograph, a lone young person sitting cross-legged on cold pavement outside a dark storefront at 4am, the only person in line before the crowds arrive, streetlamp overhead, collar up against cold, thermos in hand, phone dim, expression of committed patience not obsession, urban documentary B&W, Leica M street, left third empty locked storefront doors, Kodak Tri-X grain',
+    Deseo:'hyperrealistic B&W photograph, a white-gloved doorman at the entrance of an exclusive venue unclasping a velvet rope specifically for one single arriving person — not a celebrity, just someone who clearly belongs — the door behind open and glowing, shot at ground level from the street, the doorman\'s gesture deliberate and welcoming, editorial portrait B&W, Karsh-quality light on the faces, left third empty sidewalk'
+  },
+  'VIRAL 01':{
+    Dolor:'hyperrealistic B&W documentary photograph, extreme close-up of two hands on a corporate conference table — one in a worn cotton sleeve pushing a stack of paper reports across the table, the other in a crisp French-cuffed shirt pushing a single open laptop back — the moment of confrontation between eras, knuckles visible, wedding rings, cufflinks, dramatic raking side light, Leica 50mm macro, left third empty table surface, Kodak Tri-X grain, no color',
+    Miedo:'hyperrealistic B&W photograph, a man in a rumpled suit standing dead still at the center of a fast-moving train station concourse, dozens of commuters in motion blur streaming past him in all directions, he holds a folded newspaper with a headline visible but unreadable, expression of a person who just realized the world changed while he was reading yesterday\'s news, Cartier-Bresson decisive moment, left third empty floor, Ilford HP5 grain',
+    Resultado:'hyperrealistic B&W photograph, a lone operator in dark tech clothing seated in an empty open-plan office at 3am, every other desk vacant, but his three screens active with dashboards, his face lit only by the blue-white screen glow in the surrounding dark, calm not frantic, the emptiness around him signals systems running without human hands, Leica M candid, left third pure darkness, Kodak Tri-X grain',
+    Prueba:'hyperrealistic B&W photograph, a relay race baton exchange frozen at the millisecond of perfect handoff — the giving hand releasing, the receiving hand clenching, both runners in full extension, motion blur on their bodies but razor-sharp focus on the baton itself, stadium lights overhead, the single object of transfer the entire narrative, Leica 135mm telephoto, left third empty track, Ilford grain, no color',
+    Deseo:'hyperrealistic B&W photograph, a founder type — early 40s, dark turtleneck, wire-rim glasses — standing at a floor-to-ceiling window of a skyscraper at dawn, city below in atmospheric haze, he holds a single printed sheet of paper, his back to camera, the scale of the city vs. one human with one decision, Hasselblad medium format wide, left third pure dark interior, Kodak grain, cinematic'
+  },
+  'VIRAL 02':{
+    Dolor:'hyperrealistic B&W photograph, a split composition: a medieval scribe hunched over a candlelit manuscript vs. the same desk lit only by a single modern laptop — not two photos, one continuous B&W frame, same desk angle, dramatic chiaroscuro, the contrast between eras told through light quality alone, Magnum Photos archival composition, left third empty negative space, Ilford Delta grain, no color',
+    Miedo:'hyperrealistic B&W photograph, a figure in formal business attire walking alone on one side of a steel-and-glass footbridge, on the other side of the same bridge a second figure in identical attire riding an electric scooter with a laptop bag, shot from the middle of the bridge below, both moving in the same direction, the gap between them the entire story, Leica 21mm, left third bridge railing, Kodak grain',
+    Resultado:'hyperrealistic B&W photograph, a butcher shop scale — one side piled with crumpled paper invoices, receipts, manual ledgers — the other side with a single USB drive, the scale tipped dramatically toward the paper pile, documentary still life, extreme detail in the paper textures, single overhead tungsten light, Weegee editorial style, left third empty counter, ultra-sharp grain, no color',
+    Prueba:'hyperrealistic B&W photograph, a lone person walking confidently out of frame-right while seven other identical silhouettes walk into frame-left, all wearing identical suits in a corporate corridor, the one walking away slightly ahead and in sharp focus, the others in motion blur — the moment of divergence, Leica 35mm street, overhead fluorescent strip lighting, left third empty corridor, Kodak Tri-X, no color',
+    Deseo:'hyperrealistic B&W photograph, a chess board mid-game, but the white pieces are conventional chess pieces and the black pieces are replaced with tiny human figurines in business suits in chaotic positions — some fallen, some running — the white king stands untouched at center board, extreme macro, single directional raking light, polished board reflection, Leica macro, left third empty board space, grain'
+  },
+  'VIRAL 03':{
+    Dolor:'hyperrealistic B&W documentary photograph, an early-morning market stall vendor — worn hands, heavy coat, breath visible in cold air — counting coins from a tin box on a wooden crate, city waking up behind in blur, expression of practiced resignation, documentary social realism, Sebastião Salgado emotional weight translated to urban commerce, left third empty street cobblestone, Ilford HP5 grain, no color',
+    Miedo:'hyperrealistic B&W photograph, a fire alarm pull station on a blank institutional wall, one hand — a sleeve visible, presumably a decision-maker — hovering inches away but not pulling it, extreme close-up of hand and alarm box, dramatic single side light from a corridor window, the decision unmade is the entire narrative, Leica 50mm, left third empty wall, ultra-sharp alarm texture, Kodak grain',
+    Resultado:'hyperrealistic B&W photograph, a fighter pilot in full flight gear and helmet standing completely relaxed on an aircraft carrier deck, arms crossed, while ground crew in the background are in urgent pre-flight motion — he is calm because the preparation is done and the outcome already certain, Leica 35mm photojournalism, harsh deck light, left third open ocean horizon, Ilford HP5 grain, no color',
+    Prueba:'hyperrealistic B&W photograph, a bank vault door half-open, framing the figure of a person in a good suit standing in the vault opening with arms crossed, vault contents merely organised papers not money, expression of someone who knows exactly what\'s in there and how much it\'s worth, vintage financial institution architecture, Karsh portrait quality of the central figure, left third empty vault door, grain',
+    Deseo:'hyperrealistic B&W photograph, an empty stage at a massive outdoor festival, dawn light raking across it, a single microphone stand in center stage, miles of empty field in front, one roadie in the distance checking a cable in the far background, the scale of potential vs. the stillness before, Leica 21mm wide, left third empty field, Kodak Tri-X grain, cinematic depth'
+  },
+  'VIRAL 04':{
+    Dolor:'hyperrealistic B&W documentary photograph, a late-night restaurant kitchen after service — stainless surfaces gleaming, one chef still in whites leaning against a prep counter with arms crossed, the controlled exhaustion on his face of someone who runs the operation alone, ambient overhead fluorescent kitchen light, documentary realism, left third empty pass-through window, Ilford HP5 grain, no color, no studio',
+    Miedo:'hyperrealistic B&W photograph, a single chess clock with one side having 00:00:00 and the other still running, photographed in extreme close-up, the timer the entire frame, polished brass buttons, heavy graphite dial numerals, soft focus background of an empty chess table, raking side light creating clock hand shadows, Leica 90mm macro, left third empty clock face, ultra-sharp Kodak grain',
+    Resultado:'hyperrealistic B&W photograph, a man in his late 50s in a linen suit seated at a wooden desk in a study lined floor-to-ceiling with solved case folders — each one labelled and closed — reading a single new sheet of paper just handed to him, expression of immediate pattern recognition, single desk lamp, rest of room in deep shadow, Yousuf Karsh portrait quality, left third empty desk surface, grain',
+    Prueba:'hyperrealistic B&W photograph, a jockey alone on a thoroughbred racehorse crossing the finish line with no other horse visible in any direction — already won by so much the competition is not in frame — shot from a low lateral angle, motion blur on the horse, sharp on the jockey\'s face of complete composure, turf texture in foreground, Leica 400mm telephoto compression, left third empty track, film grain',
+    Deseo:'hyperrealistic B&W photograph, a winemaker in his 70s — linen shirt, soil on his hands — holding a single wine glass to the light of a cellar window, appraising a vintage through the B&W rendered clarity of the liquid, barrels stacked to the ceiling behind in soft focus, single window beam the only light, expression of total earned expertise, Hasselblad medium format, left third cellar shadow, Ilford grain'
+  },
+  'VIRAL 05':{
+    Dolor:'hyperrealistic B&W photograph, a single desk covered in coloured sticky notes — the colours rendered as grey tones showing their different weights — a lone worker standing before it with marker in hand but the expression of someone who has just realized sticky notes are not a system, shot from behind the worker to show the full wall of chaos, office ambient light, Leica 28mm, left third empty wall space, Kodak grain',
+    Miedo:'hyperrealistic B&W photograph, a figure in a tailored overcoat running alongside a departing overnight train, hand outstretched toward the door handle, train already moving, the platform behind him empty, this is the last train, shot at low angle to emphasize speed and scale, motion blur on the train, sharp on his desperate measured stride, Leica 24mm, left third empty platform lights, Ilford grain',
+    Resultado:'hyperrealistic B&W photograph, a shipping container port at dawn — cranes, stacked containers, machinery — one person in a hard hat and suit standing at a high vantage point overlooking the entire operation, back to camera, arms behind back, the scale of what one decision can move, Leica wide panoramic feel, dawn light creating long container shadows, left third pure sky, Kodak Tri-X grain, no color',
+    Prueba:'hyperrealistic B&W photograph, a single large thermometer mounted on a concrete industrial wall showing a number at the very top of its range, a figure in shirtsleeves standing below it looking up with arms crossed and an expression of someone who predicted this exactly three months ago, industrial ambient light, documentary directness, Leica 35mm, left third empty concrete wall, ultra-sharp grain',
+    Deseo:'hyperrealistic B&W photograph, the back of a person in an impeccably tailored dark suit walking away down a long empty marble corridor of a grand institution — ministry, palace, or court — the doors at the far end just opening for them as if the building itself is yielding, receding perspective, overhead chandelier creating pools of light down the corridor, Leica 21mm, left third empty corridor floor, grain'
   }
 };
 
 function buildUC(p){
   const angleScenes=ANGLE_SCENES[p.a]||ANGLE_SCENES['SALES 01'];
-  const scene=angleScenes[p.t]||angleScenes['Dolor']||'dramatic B&W documentary photograph, vintage archival feel, real human subject representing the post message symbolically';
-  return`Instagram post image prompt — CLIENDER visual system.
-Angle: ${p.a} | Emotional type: ${p.t}
-Hook: "${p.hook.replace(/\n/g,' ')}"
-${p.v?'Visual concept: '+p.v:''}
+  const scene=angleScenes[p.t]||angleScenes['Dolor']||'RAW photo, Leica M11 Monochrom, 35mm f/1.4 wide open, single bare tungsten bulb from above-left, no fill. A lone suited figure in an unexpected context, subject right-of-center, copy space to the left, pushed Ilford HP5 ISO 3200 grain, completely desaturated, no text no logos.';
+  return`CLIENDER image prompt — ${p.a} / ${p.t}
+Hook text: "${p.hook.replace(/\n/g,' ')}"
+${p.v?'Visual concept override: '+p.v+'\n':''}
 Scene reference: ${scene}
 
-Generate a complete image prompt following the CLIENDER system:
-- Dramatic black and white documentary photograph, fully desaturated
-- Dark overlay #0D0D0D at 65% opacity
-- Subject center-right or lower-right, generous empty space on the left third for text
-- Film grain, high contrast shadows and highlights, raw unposed feeling
-- Cultural symbol or metaphor — NOT literal illustration
-- No text, no watermarks, no studio lighting, no clean stock aesthetics
+Write a 5-sentence KIE.AI image prompt following this MANDATORY structure:
 
-Output: 2-3 dense descriptive sentences in English only. Ready to use as an image generation prompt.`;
+S1 (Camera + lighting): Start with "RAW photo," then name the camera, lens, aperture. Describe the lighting rig physically — location of the light source, wattage or type, angle from subject, shadow geometry. Never use style names like "Rembrandt" or "dramatic lighting."
+
+S2 (Subject): Name the exact archetype — specific era, clothing fiber and cut, expression, one distinctive body detail — performing an incongruous action that creates cognitive dissonance. The mismatch between WHO they are and WHAT they are doing is the scroll-stopper.
+
+S3 (Object + composition): Name the ONE symbolic object that bridges the archetype world and the business message of the hook. Then explicitly state: "subject in right vertical third, generous copy space to the left" and describe what fills that left zone (shadow, wall, open sky, empty floor — never a busy background).
+
+S4 (Setting): Specific environment — name the room or location, time of day, weather, one architectural or atmospheric detail that makes it cinematic and narratively specific.
+
+S5 (Technical closer): Always end with — "Pushed Ilford HP5 at ISO 3200 — pronounced coarse silver grain, compressed highlights, crushed deep blacks, completely desaturated pure black and white, no text no logos no watermarks in the image."
+
+CRITICAL RULES:
+— Every noun must be hyper-specific. Not "a man in a suit" but "a 54-year-old in a chalk-stripe double-breasted Brioni with a spread collar and Windsor knot."
+— The symbolic object must connect the archetype's world to the hook's business message directly.
+— The image must survive a 65% dark overlay — extreme tonal contrast is non-negotiable.
+— No artificial smiles, no posed looks, no studio backgrounds, no generic stock energy.
+
+Output: One dense paragraph, exactly 5 sentences. English only.`;
 }
 function fbP(p,ctx){
   const angleScenes=ANGLE_SCENES[p.a]||ANGLE_SCENES['SALES 01'];
   const scene=angleScenes[p.t]||angleScenes['Dolor'];
-  return`${scene}, dark indigo-violet overlay (#0d0820 tint), upper-left composition space for headline text, no text no watermarks no logos, hyperrealistic photographic quality, cinematic chiaroscuro lighting, high contrast B&W, professional editorial photography style, 4:5 portrait format.`;
+  return`${scene} Subject contrast extreme to survive 65% dark overlay. No text, no watermarks, no logos in image. 4:5 portrait aspect ratio.`;
 }
 
 /* ══ GENERATE ALL PROMPTS ══ */
@@ -1508,24 +1683,45 @@ async function startGenAll(){
   document.getElementById('gpbox').style.display='block';
   const fillEl=document.getElementById('gpfill'),pctEl=document.getElementById('gp-pct'),lblEl=document.getElementById('gp-lbl'),logEl=document.getElementById('glog');
   const clCtx=await buildClientCtx(),refCtx=await buildRefCtx();
-  const sys=buildSys(clCtx,refCtx.text);
+
+  // ── FASE 1: analizar referencias una sola vez ──────────────────────────────
+  let dna='';
+  if(refCtx.images.length>0){
+    lblEl.innerHTML='<b>Fase 1:</b> Analizando ADN visual de las referencias…';
+    logEl.innerHTML+='<span style="color:#8B5CF6">◈</span> Extrayendo ADN visual de '+refCtx.images.length+' referencia'+(refCtx.images.length>1?'s':'')+'…<br>';
+    dna=await analyzeRefs(refCtx.images,[...selRefs]);
+    if(dna){
+      logEl.innerHTML+='<span style="color:#8B5CF6">✓</span> ADN visual extraído — se aplicará a todos los prompts.<br><br>';
+    } else {
+      logEl.innerHTML+='<span style="color:var(--er)">!</span> No se pudo analizar las referencias — continuando con sistema de prompts base.<br><br>';
+    }
+    logEl.scrollTop=logEl.scrollHeight;
+  }
+
+  // ── FASE 2: generar prompts con el ADN como contexto ──────────────────────
+  const sys=buildSys(clCtx, dna||refCtx.text);
+  const usedImgArchetypes=[];
   for(let i=0;i<posts.length;i++){
     const p=posts[i];const pct=Math.round((i/posts.length)*100);
     fillEl.style.width=pct+'%';pctEl.textContent=pct+'%';
-    lblEl.innerHTML=`Generando ${i+1}/${posts.length}: <b>${p.hook.replace(/\n/g,' ').slice(0,35)}</b>`;
-    let uc=buildUC(p);
-    if(refCtx.images.length>0){uc=[...refCtx.images.slice(0,1).map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:buildUC(p)+'\nInspírate en el estilo visual de la referencia.'}];}
+    lblEl.innerHTML=`Fase 2 — Prompt ${i+1}/${posts.length}: <b>${p.hook.replace(/\n/g,' ').slice(0,35)}</b>`;
+    const antiRepeat=usedImgArchetypes.length>0
+      ?`\n\nARQUETIPOS YA USADOS EN ESTE CALENDARIO (NO REPITAS NINGUNO — inventa uno completamente diferente):\n${usedImgArchetypes.map((a,j)=>`${j+1}. ${a}`).join('\n')}`
+      :'';
+    const ucText=buildUC(p)+(dna?refInstruction(dna):'')+antiRepeat;
     try{
-      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:260,system:sys,messages:[{role:'user',content:uc}]})});
+      const r=await fetch(AI_PROXY+'/claude',{method:'POST',headers:{'Content-Type':'application/json','x-claude-key':getClaudeKey()},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:350,system:sys,messages:[{role:'user',content:ucText}]})});
       if(!r.ok){logEl.innerHTML+='<span style="color:var(--er)">✕</span> '+esc(p.hook.replace(/\n/g,' ').slice(0,38))+' (HTTP '+r.status+')<br>';dot(p.id,'er');continue;}
       const dd=await r.json();const txt=dd.content?.[0]?.text?.trim()||fbP(p,clCtx);
       const ptEl=document.getElementById('pt-'+p.id);if(ptEl){ptEl.textContent=txt;ptEl.dataset.prompt=txt;}
-      // Save prompt via API
+      // Track archetype used: first 70 chars after "RAW photo,"
+      const arcSnippet=txt.replace(/^RAW photo,?\s*/i,'').slice(0,70);
+      if(arcSnippet) usedImgArchetypes.push(arcSnippet);
       try{await fetch('/api/calendars/'+activeCal+'/posts/'+p.id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:txt})});}catch{}
       dot(p.id,'si');
       logEl.innerHTML+='<span style="color:var(--ok)">✓</span> '+esc(p.hook.replace(/\n/g,' ').slice(0,42))+'<br>';
     }catch(e){logEl.innerHTML+='<span style="color:var(--er)">✕</span> '+esc(p.hook.replace(/\n/g,' ').slice(0,38))+' (error)<br>';}
-    logEl.scrollTop=logEl.scrollHeight;await W(320);
+    logEl.scrollTop=logEl.scrollHeight;await W(280);
   }
   fillEl.style.width='100%';pctEl.textContent='100%';lblEl.textContent='¡Todos los prompts generados!';
   document.getElementById('gen-done').style.display='block';
@@ -1534,11 +1730,14 @@ async function startGenAll(){
 }
 
 /* ══ GENERATE IMAGE (KIE.AI) ══ */
+const CLIENDER_NEG='colorful, bright colors, studio lighting, clean background, generic stock photo, happy poses, corporate look, glossy, smooth, artificial lighting, text, watermark, color photography';
 function buildKieBody(m,prompt,fmtKey){
   let ar=KIE_AR[fmtKey]||'1:1';
   if(m==='gpt-image-2-text-to-image')ar=GPT_AR_MAP[ar]||ar;
   const inp={prompt,aspect_ratio:ar,resolution:'1K'};
-  /* nano-banana-pro: pass selected reference images as image_input */
+  if(m!=='gpt-image-2-text-to-image'){
+    inp.negative_prompt=CLIENDER_NEG;
+  }
   if(m==='nano-banana-pro'){
     const refs=getRefs().filter(r=>selRefs.has(r.id)&&r.base64&&r.mimeType).slice(0,4);
     if(refs.length)inp.image_input=refs.map(r=>'data:'+r.mimeType+';base64,'+r.base64);
@@ -1583,23 +1782,89 @@ async function pollKie(id,taskId,btn,n=0){
 
 /* ══ SHOW IMAGE ══ */
 const OVS={};
-async function showImg(id,src,isUrl){
-  const p=await getPost(id);if(!p)return;
+function detectTextSide(visual){
+  const v=(visual||'').toLowerCase();
+  // Only flip when subject/person is explicitly positioned on the left
+  // "empty left third for text" must NOT trigger this — that refers to the text area, not the subject
+  if(/\bsubject\b.{0,60}\b(center.?left|lower.?left)\b/.test(v))return'right';
+  if(/\b(center.?left|lower.?left)\b.{0,60}\bsubject\b/.test(v))return'right';
+  if(/positioned\s+(center.?left|lower.?left)\b/.test(v))return'right';
+  return'left';
+}
+function richBodyHtml(raw){
+  return (raw||'').split('\n\n')[0].split('\n').filter(Boolean).map(ln=>
+    ln.replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]))
+      .replace(/\[([^\]]+)\]/g,'<span style="color:#8B5CF6;font-weight:700">$1</span>')
+  ).join('<br>');
+}
+function richLineHtml(raw){
+  return (raw||'').split('\n').filter(Boolean).map(ln=>
+    ln.replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]))
+      .replace(/\[([^\]]+)\]/g,'<span style="color:#8B5CF6;font-weight:800">$1</span>')
+  ).join('<br>');
+}
+const TIPO_KICKER={Dolor:'PROBLEMA REAL',Miedo:'RIESGO',Resultado:'RESULTADO',Prueba:'PRUEBA REAL',Deseo:'VISIÓN'};
+const ANGLE_PREFIX={SALES:'VENTAS',TECH:'TECH',BRAND:'MARCA',EDU:'EDUCACIÓN',PROMO:'PROMO',VIRAL:'VIRAL'};
+function getKicker(p){
+  const aType=(p.a||'').split(' ')[0];
+  const aLabel=ANGLE_PREFIX[aType]||aType||'IA';
+  const tLabel=TIPO_KICKER[p.t]||'IA';
+  return aLabel+' · '+tLabel;
+}
+// 4 layout archetypes — rotate by post ID so each post looks different
+// dramatic: hook massive, impact +30%, sub/body compact
+// titan:    hook ultra-huge (2–3 word hero), impact +58%, rest tiny
+// editorial: hook restrained, impact BREAKS frame at 2.6×, sub/body prominent
+// punchy:   hook large, impact same size (raw/uniform weight), body small
+const LAYOUTS=['dramatic','titan','editorial','punchy'];
+function getLayout(id){const n=parseInt(id,10);return LAYOUTS[isNaN(n)?0:n%4];}
+async function showImg(id,src,isUrl,_post){
+  const p=_post||await getPost(id);if(!p)return;
   const area=document.getElementById('ia-'+id),fi=getFI();
   const hookLines=p.hook.split('\n');
-  const hookHtml=hookLines.map((l,i)=>i===hookLines.length-1?`<span style="color:#4a63f5">${l}</span>`:l).join('<br>');
-  const bodyHtml=p.body.split('\n\n').map(para=>'<p>'+para.replace(/\n/g,'<br>')+'</p>').join('');
-  const hs=fi.w>=fi.h?'clamp(12px,2.8vw,18px)':'clamp(16px,4.2vw,26px)';
+  const hookHtml=hookLines.map((l,i)=>
+    i===hookLines.length-1
+      ?`<span class="ov-impact">${esc(l)}</span>`
+      :`<span style="display:block">${esc(l)}</span>`
+  ).join('');
+  const bodyRich=richBodyHtml(p.body);
+  const layout=getLayout(id);
+  const HS_MAP={
+    dramatic:{L:'clamp(14px,6.2cqw,46px)', P:'clamp(24px,9.8cqw,72px)'},
+    titan:   {L:'clamp(18px,7.5cqw,56px)', P:'clamp(30px,13cqw,96px)'},
+    editorial:{L:'clamp(12px,5.0cqw,38px)',P:'clamp(16px,6.8cqw,50px)'},
+    punchy:  {L:'clamp(16px,6.8cqw,50px)', P:'clamp(26px,10.8cqw,80px)'},
+  };
+  const hm=HS_MAP[layout]||HS_MAP.dramatic;
+  const hs=fi.w>=fi.h?hm.L:hm.P;
   imgSrcs[id]={src,isUrl};
+  // Persist image URL to DB (only on new generation, not on auto-restore)
+  if(isUrl&&src&&!_post&&activeCal){
+    fetch('/api/calendars/'+activeCal+'/posts/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({img_src:src})}).catch(()=>{});
+    if(p){p.img_src=src;p.imgSrc=src;}
+  }
+  const txSide=detectTextSide(p.visual||p._prompt||'');
+  const ovAlignStyle=txSide==='right'?'align-items:flex-end;text-align:right':'';
+  const subBlock=p.sub?`<div class="ovsub">${richLineHtml(p.sub)}</div>`:'';
+  const kicker=getKicker(p);
   area.innerHTML=`<div class="pw" style="aspect-ratio:${fi.w}/${fi.h}">
 <img src="${src}" alt="" id="img-${id}" ${isUrl?'crossorigin="anonymous"':''}>
-<div class="ov" id="ov-${id}"><div class="ovb">CLIENDER</div><div class="ovsp"></div>
-<div class="ovh" style="font-size:${hs}">${hookHtml}</div><div class="ovs">${p.sub||''}</div>
-<div class="ovct">${p.cta||'Hablamos'} → <span style="color:#4a63f5">CLIENDER</span></div></div>
+<div class="ov" id="ov-${id}" data-layout="${layout}"${ovAlignStyle?` style="${ovAlignStyle}"`:''}>
+<div class="ov-top">
+<img src="/assets/images/cliender-logo-white.png" class="ov-logo" alt="CLIENDER">
+<div class="ov-kicker">${esc(kicker)}</div>
+<div class="ovh" style="font-size:${hs}">${hookHtml}</div>
+<div class="ov-sep"></div>
+</div>
+<div class="ov-mid">
+${subBlock}${p.sub?'<div class="ov-sep2"></div>':''}<div class="ovbody">${bodyRich}</div>
+</div>
+<div class="ovct"><div class="ovct-v">${esc(p.cta||'Empieza hoy')}</div><div class="ovct-b">→ CLIENDER</div></div>
+</div>
 <button class="ovtog" id="ovt-${id}" onclick="togOv('${id}')">texto ON</button></div>
 <div class="dl-row" style="margin-top:5px">
-<button class="bdl comp" onclick="dlComp('${id}')">↓ PNG compuesto</button>
-<button class="bdl raw" onclick="dlRaw('${id}')">↓ Solo fondo</button></div>`;
+<button class="bdl comp" onclick="previewComp('${id}')">👁 Ver PNG</button>
+<button class="bdl raw" onclick="dlRaw('${id}')">↓ Fondo</button></div>`;
   dot(id,'sd');GC++;document.getElementById('stg').textContent=GC;toast('¡Imagen creada! ✦','tok');
 }
 function togOv(id){OVS[id]=!OVS[id];document.getElementById('ov-'+id).style.display=OVS[id]?'none':'flex';document.getElementById('ovt-'+id).textContent=OVS[id]?'texto OFF':'texto ON';}
@@ -1610,41 +1875,199 @@ async function dlRaw(id){
   if(dd.isUrl){try{const r=await fetch(dd.src);const blob=await r.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=nm+'.jpg';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast('Descargado ✓','tok');}catch{window.open(dd.src,'_blank');}}
   else{const a=document.createElement('a');a.href=dd.src;a.download=nm+'.jpg';document.body.appendChild(a);a.click();document.body.removeChild(a);toast('Descargado ✓','tok');}
 }
-async function dlComp(id){
-  const dd=imgSrcs[id];if(!dd){toast('Genera la imagen primero','terr');return;}
-  const p=await getPost(id);if(!p)return;const fi=getFI();const W2=fi.px,H2=fi.py;
-  toast(`Exportando PNG ${W2}×${H2}…`,'tinfo');
+async function buildCompCanvas(id){
+  const dd=imgSrcs[id];if(!dd){toast('Genera la imagen primero','terr');return null;}
+  const p=await getPost(id);if(!p)return null;const fi=getFI();const W2=fi.px,H2=fi.py;
+  const layout=getLayout(id);
   const canvas=document.createElement('canvas');canvas.width=W2;canvas.height=H2;const ctx=canvas.getContext('2d');
   try{const img=await ldImg(dd.src,dd.isUrl);ctx.drawImage(img,0,0,W2,H2);}catch{ctx.fillStyle='#14181E';ctx.fillRect(0,0,W2,H2);}
-  const gr=ctx.createLinearGradient(0,0,0,H2);gr.addColorStop(0,'rgba(2,4,8,.74)');gr.addColorStop(.30,'rgba(2,4,8,.04)');gr.addColorStop(.58,'rgba(2,4,8,.12)');gr.addColorStop(1,'rgba(2,4,8,.93)');
+  // 3-zone gradient: dark top (hook) → open middle (photo breathes) → dark bottom (CTA)
+  const gr=ctx.createLinearGradient(0,0,0,H2);
+  gr.addColorStop(0,'rgba(2,4,8,.94)');gr.addColorStop(.20,'rgba(2,4,8,.78)');
+  gr.addColorStop(.40,'rgba(2,4,8,.22)');gr.addColorStop(.58,'rgba(2,4,8,.38)');
+  gr.addColorStop(.78,'rgba(2,4,8,.78)');gr.addColorStop(1,'rgba(2,4,8,.97)');
   ctx.fillStyle=gr;ctx.fillRect(0,0,W2,H2);
-  const pd=Math.round(W2*.065);ctx.textBaseline='top';
-  ctx.font='800 '+Math.round(W2*.022)+'px Syne,sans-serif';ctx.fillStyle='#ffffff';ctx.fillText('CLIENDER',pd,pd);
-  const lines=p.hook.split('\n');const hkSz=Math.round(W2*(fi.w>=fi.h?.058:.074));
-  ctx.font='900 '+hkSz+'px Syne,sans-serif';ctx.shadowColor='rgba(0,0,0,.8)';ctx.shadowBlur=24;
-  const cardH=0,ctaH=Math.round(H2*.04),subH=Math.round(H2*.027),gap=Math.round(H2*.012);
-  let hy=H2-pd*1.6-ctaH-gap-subH-gap-lines.length*hkSz*1.1;
-  lines.forEach((l,i)=>{
-    ctx.fillStyle=i===lines.length-1?'#4a63f5':'#ffffff';
-    ctx.fillText(l,pd,hy);hy+=hkSz*1.1;
-  });ctx.shadowBlur=0;
-  const sy=hy+gap;ctx.font='italic 400 '+Math.round(W2*.019)+'px Syne,sans-serif';ctx.fillStyle='rgba(255,255,255,.5)';ctx.fillText(p.sub||'',pd,sy);
-  // CTA bottom-right — CLIENDER style: "Hablamos → " white + "CLIENDER" purple
-  const ctaSz = Math.round(W2*.021);
-  ctx.font = '700 '+ctaSz+'px Syne,sans-serif';
+  // Left-side gradient — text always readable regardless of subject position
+  const gL=ctx.createLinearGradient(0,0,W2*0.65,0);
+  gL.addColorStop(0,'rgba(2,4,8,.78)');gL.addColorStop(1,'rgba(2,4,8,0)');
+  ctx.fillStyle=gL;ctx.fillRect(0,0,W2,H2);
+  const PJF='"Plus Jakarta Sans",sans-serif';
+  // All measurements derived from 1080×1350 reference images (sales.png / 33.png / 35.png)
+  const pd =Math.round(W2*.037);  // ~40px left/right margin
+  const pdT=Math.round(H2*.028);  // ~38px top margin
+  const pdB=Math.round(H2*.036);  // ~49px bottom margin
+  ctx.textBaseline='top';
+  // Detect text side from visual prompt — subject left → text right, else left
+  const txSideC=detectTextSide(p.visual||p._prompt||'');
+  const isRight=txSideC==='right';
+  const txX=isRight?W2-pd:pd; // text anchor: right edge or left edge
+  const sepW=Math.round(W2*.033);
+  const sepX=isRight?txX-sepW:txX;
+  // Helper: draw line with [accent] segments, handles isRight alignment
+  function drawRich(ctx,line,y,defColor){
+    const parts=line.split(/\[([^\]]*)\]/);
+    const totalW=parts.reduce((s,pt)=>s+ctx.measureText(pt).width,0);
+    let cx=isRight?txX-totalW:txX;
+    ctx.textAlign='left';
+    parts.forEach((part,i)=>{
+      if(!part)return;
+      ctx.fillStyle=i%2===1?'#8B5CF6':defColor;
+      ctx.fillText(part,cx,y);
+      cx+=ctx.measureText(part).width;
+    });
+  }
+  function fillLine(text,y){
+    const x=isRight?txX-ctx.measureText(text).width:txX;
+    ctx.fillText(text,x,y);
+  }
+  // CLIENDER logo — use pre-made white PNG (pure white text, transparent bg, no filter tricks)
+  const logoH=Math.round(H2*.042);
+  let logoOffset=Math.round(logoH*1.55);
+  try{
+    const logoImg=await ldImg('/assets/images/cliender-logo-white.png',false);
+    const logoW=Math.round(logoImg.width*(logoH/logoImg.height));
+    ctx.globalAlpha=0.92;
+    ctx.drawImage(logoImg,isRight?W2-pd-logoW:pd,pdT,logoW,logoH);
+    ctx.globalAlpha=1;
+  }catch{}
+  // Kicker label — small purple uppercase tag below logo
+  const kickerText=getKicker(p);
+  const kickerSz=Math.round(W2*.013);
+  ctx.font='700 '+kickerSz+'px '+PJF;
+  ctx.fillStyle='#8B5CF6';
+  ctx.letterSpacing='1px';
+  fillLine(kickerText.toUpperCase(),pdT+logoOffset);
+  logoOffset+=Math.round(kickerSz*2.4);
+  ctx.letterSpacing='0px';
+  // Hook — white lines at base size, last (impact) line 1.30× bigger in purple
+  const lines=p.hook.split('\n');
+  const whiteLines=lines.slice(0,-1);
+  const impactLine=lines[lines.length-1];
+  const HK_BASE={
+    dramatic:{L:{3:.112,5:.095,x:.080},P:{3:.134,5:.118,x:.100}},
+    titan:   {L:{3:.140,5:.120,x:.100},P:{3:.162,5:.142,x:.120}},
+    editorial:{L:{3:.088,5:.075,x:.062},P:{3:.105,5:.090,x:.076}},
+    punchy:  {L:{3:.120,5:.103,x:.086},P:{3:.140,5:.124,x:.104}},
+  };
+  const HK_MAXW={dramatic:.65,titan:.80,editorial:.90,punchy:.68};
+  const IMP_MULT={dramatic:1.30,titan:1.58,editorial:2.55,punchy:1.07};
+  const bkSet=(HK_BASE[layout]||HK_BASE.dramatic)[fi.w>=fi.h?'L':'P'];
+  const maxHkW=Math.round(W2*(HK_MAXW[layout]||.65));
+  const avgWords=lines.reduce((s,l)=>s+l.trim().split(/\s+/).length,0)/lines.length;
+  const hkBase=avgWords<=3?bkSet[3]:avgWords<=5?bkSet[5]:bkSet.x;
+  let hkSz=Math.round(W2*hkBase);
+  ctx.font='900 '+hkSz+'px '+PJF;
+  // Shrink to fit white lines
+  while(hkSz>16&&whiteLines.length>0&&Math.max(...whiteLines.map(l=>ctx.measureText(l).width))>maxHkW){hkSz-=2;ctx.font='900 '+hkSz+'px '+PJF;}
+  const impSz=Math.round(hkSz*(IMP_MULT[layout]||1.30));
+  ctx.shadowColor='rgba(0,0,0,.96)';ctx.shadowBlur=28;
+  let hy=pdT+logoOffset;
+  // Draw white lines
+  ctx.font='900 '+hkSz+'px '+PJF;
+  ctx.fillStyle='#ffffff';
+  whiteLines.forEach(l=>{fillLine(l,hy);hy+=Math.round(hkSz*1.0);});
+  // Draw impact line — 1.30× size, purple
+  ctx.font='900 '+impSz+'px '+PJF;
+  ctx.fillStyle='#8B5CF6';
+  fillLine(impactLine,hy);
+  hy+=Math.round(impSz*0.98);
   ctx.shadowBlur=0;
-  const ctaLabel = (p.cta||'Hablamos') + ' → ';
-  const brandName = 'CLIENDER';
-  const ctaLabelW = ctx.measureText(ctaLabel).width;
-  const brandW = ctx.measureText(brandName).width;
-  const totalW = ctaLabelW + brandW;
-  const ctaX = W2 - pd - totalW;
-  const ctaY = H2 - pd;
-  ctx.fillStyle = 'rgba(255,255,255,.92)';
-  ctx.fillText(ctaLabel, ctaX, ctaY);
-  ctx.fillStyle = '#4a63f5';
-  ctx.fillText(brandName, ctaX + ctaLabelW, ctaY);
-  canvas.toBlob(blob=>{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`cliender-${id}-${fi.label.replace(':','x')}-${W2}x${H2}.png`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast(`PNG ${W2}×${H2} listo ✓`,'tok');},'image/png');
+  // Separator 1 — closes zone A (hook area)
+  hy+=Math.round(H2*.012);
+  ctx.fillStyle='rgba(255,255,255,.55)';
+  ctx.fillRect(sepX,hy,sepW,2);
+  const zoneAEnd=hy+Math.round(H2*.014);
+
+  // ── Zone B: sub + body — distributed proportionally in the remaining space ──
+  const SUB_MULT={dramatic:.022,titan:.015,editorial:.028,punchy:.019};
+  const BODY_MULT={dramatic:.018,titan:.013,editorial:.021,punchy:.016};
+  const subSzCalc=Math.round(W2*(SUB_MULT[layout]||.022));const bodySzCalc=Math.round(W2*(BODY_MULT[layout]||.018));
+  const ctaSz=Math.round(W2*.028);const ctaLH=Math.round(ctaSz*1.30);
+  const ctaZoneStart=H2-pdB-ctaLH*2-Math.round(H2*.045);
+  // Pre-calculate zone B height to center it between zone A and CTA
+  const subLinesSrc=p.sub?p.sub.split('\n').filter(Boolean):[];
+  const bodyLinesSrc=(p.body||'').split('\n\n')[0].split('\n').filter(Boolean).slice(0,4);
+  let zoneBH=0;
+  if(subLinesSrc.length) zoneBH+=subLinesSrc.length*Math.round(subSzCalc*1.40)+Math.round(H2*.010)+2+Math.round(H2*.014);
+  zoneBH+=bodyLinesSrc.length*Math.round(bodySzCalc*1.60);
+  // Position zone B: 50% into the gap between zone A end and CTA zone start
+  const gap=ctaZoneStart-zoneBH-zoneAEnd;
+  hy=zoneAEnd+Math.round(Math.max(gap*0.42,Math.round(H2*.02)));
+
+  // Draw sub
+  if(subLinesSrc.length){
+    const subSz=subSzCalc;
+    ctx.font='700 '+subSz+'px '+PJF;
+    ctx.shadowColor='rgba(0,0,0,.92)';ctx.shadowBlur=20;
+    subLinesSrc.forEach(sl=>{
+      drawRich(ctx,sl,hy,'rgba(255,255,255,.94)');
+      hy+=Math.round(subSz*1.40);
+    });
+    ctx.shadowBlur=0;
+    // Separator 2 — after sub
+    hy+=Math.round(H2*.010);
+    ctx.fillStyle='rgba(255,255,255,.55)';
+    ctx.fillRect(sepX,hy,sepW,2);
+    hy+=Math.round(H2*.014);
+  }
+  // Body
+  const bodySz=bodySzCalc;
+  ctx.font='400 '+bodySz+'px '+PJF;
+  const bMaxW=W2*0.62;
+  const bodyMaxY=ctaZoneStart;
+  for(const bl of bodyLinesSrc){
+    if(hy>bodyMaxY)break;
+    const tokens=bl.split(/(\[[^\]]*\])/);
+    let ln='',linesDone=0;
+    const flushLine=(t)=>{
+      if(hy>bodyMaxY)return;
+      drawRich(ctx,t,hy,'rgba(255,255,255,.88)');
+      hy+=Math.round(bodySz*1.58);linesDone++;
+    };
+    for(const tok of tokens){
+      const candidate=ln?ln+tok:tok;
+      const plain=candidate.replace(/\[([^\]]*)\]/g,'$1');
+      if(ctx.measureText(plain).width>bMaxW&&ln){flushLine(ln);ln=tok;}
+      else ln=candidate;
+      if(linesDone>=4)break;
+    }
+    if(ln&&linesDone<4)flushLine(ln);
+  }
+  // CTA — always bottom-right corner (absolute position)
+  ctx.font='800 '+ctaSz+'px '+PJF;
+  const rawCta=p.cta||'Empieza hoy';
+  const ctaVerb=rawCta.length>20?rawCta.slice(0,18)+'…':rawCta;const ctaBrand='→ CLIENDER';
+  const verbW=ctx.measureText(ctaVerb).width;const brandW2=ctx.measureText(ctaBrand).width;
+  const ctaY=H2-pdB-ctaLH;
+  ctx.shadowColor='rgba(0,0,0,.92)';ctx.shadowBlur=14;
+  ctx.fillStyle='rgba(255,255,255,.95)';ctx.fillText(ctaVerb,W2-pd-verbW,ctaY);
+  ctx.fillStyle='#8B5CF6';ctx.fillText(ctaBrand,W2-pd-brandW2,ctaY+ctaLH);
+  ctx.shadowBlur=0;
+  return{canvas,fi,id};
+}
+async function previewComp(id){
+  toast('Renderizando…','tinfo');
+  const result=await buildCompCanvas(id);if(!result)return;
+  const{canvas,fi,id:rid}=result;
+  const dataUrl=canvas.toDataURL('image/png');
+  document.getElementById('prev-img').src=dataUrl;
+  const dlBtn=document.getElementById('prev-dl-btn');
+  dlBtn.onclick=()=>{
+    const a=document.createElement('a');a.href=dataUrl;
+    a.download=`cliender-${rid}-${fi.label.replace(':','x')}-${fi.px}x${fi.py}.png`;
+    a.click();toast(`PNG ${fi.px}×${fi.py} descargado ✓`,'tok');
+  };
+  openM('m-prev');
+}
+async function dlComp(id){
+  const result=await buildCompCanvas(id);if(!result)return;
+  const{canvas,fi,id:rid}=result;
+  canvas.toBlob(blob=>{
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');
+    a.href=url;a.download=`cliender-${rid}-${fi.label.replace(':','x')}-${fi.px}x${fi.py}.png`;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    URL.revokeObjectURL(url);toast(`PNG ${fi.px}×${fi.py} listo ✓`,'tok');
+  },'image/png');
 }
 function ldImg(src,isUrl){return new Promise((res,rej)=>{const img=new Image();if(isUrl)img.crossOrigin='anonymous';img.onload=()=>res(img);img.onerror=()=>rej(new Error('img load error'));img.src=src;});}
 function rRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
@@ -2252,14 +2675,17 @@ ${clCtxS||'Sin cliente — tono CLIENDER: directo, urgente, retador.'}
 ${studioPrompt?'\nINSTRUCCIONES: '+studioPrompt:''}
 
 ━━━ ESTRUCTURA FIJA DEL COPY ━━━
-hook: Setup — el problema o pregunta provocadora (2-3 líneas cortas, dolor directo)
-sub: Línea de impacto — el diferenciador o giro clave (una línea)
-body: 2-3 párrafos persuasivos AL público. SIEMPRE incluye plazo concreto (En 15 días / En 30 días). Marca en MAYÚSCULAS.
-cta: Verbo → CLIENDER
-visual: Prompt inglés — B&W documentary, dark overlay #0D0D0D 65%, subject center-right, empty left third for text, film grain, no studio, no stock. Cultural metaphor, NOT literal. Mín. 25 palabras.
+hook: 3 líneas cortas separadas por \\n. Pregunta provocadora o afirmación de impacto. Última línea = giro (se renderiza en púrpura). Máx. 5 palabras por línea.
+sub: EXACTAMENTE 2 líneas separadas por \\n. Línea 1: diagnóstico o reacción emocional. Línea 2: consecuencia o promesa directa. Máx. 7 palabras por línea.
+body: 1-2 líneas con datos. Usa [texto] para resaltar en morado números o stats clave. Máx. 70 chars por línea. Incluye plazo concreto (En 15 / 30 días). Marca en MAYÚSCULAS.
+cta: Verbo + sustantivo. MÁXIMO 3 palabras. Sin "→ CLIENDER".
+visual: Prompt inglés — 4-5 frases densas. Incluir: hyperrealistic Bvisual: Prompt inglés — iconic character, B&W documentary, dark overlay 65%, subject center-right, left third free for text, film grain, no studio, no stock. Mín. 25 palabras.W photographic image + Kodak Tri-X 400 grain + chiaroscuro side lighting + [arquetipo icónico en situación incongruente, ropa específica y objeto simbólico] + left third empty + subject center-right + Leica/Hasselblad feel + Magnum Photos style + no text no logos. Mín. 40 palabras.
 
 TONO: directo, serio, levemente provocador. NUNCA amable ni suave.
-LEYES: body habla AL cliente, tema único por post.`;
+LEYES: body habla AL cliente, tema único por post.
+
+JSON exacto sin markdown:
+{"posts":[{"hook":"línea1\\nlínea2\\ngiro","sub":"diagnóstico.\\nConsecuencia o promesa.","body":"Dato con [número clave] en la frase.","cta":"Verbo","visual":"english prompt"}]}`;
 
   const TEMAS_S={
     'Dolor':   ['el error más costoso antes de resolverlo','la señal de alerta que ignoran','por qué el problema empeora','qué se pierde cada semana sin esto'],
@@ -2295,7 +2721,7 @@ LEYES: body habla AL cliente, tema único por post.`;
       return `── POST ${n} ──\nÁngulo: ${s.ang.label||s.ang.key} | Tipo: ${s.tipo}\nHook empieza con: "${s.opener}"\nTema exclusivo del body: ${s.tema}\nVisual: prompt inglés para ${s.ang.label||s.ang.key} + "${s.tema}"`;
     }).join('\n\n');
 
-    const msg=`Genera EXACTAMENTE ${batch.length} posts de Instagram distintos.\n\n${specsS}\n\nDIFERENCIACIÓN OBLIGATORIA:\n• Cada body desarrolla su propio tema exclusivo — sin repetir ideas.\n• Hook empieza EXACTAMENTE con la frase indicada.\n• Visual: prompt detallado en inglés, mín. 20 palabras, diferente por post.\n• CTA variado: mezcla directos, suaves y conversacionales.\n• Nombre de la marca en MAYÚSCULAS en el body.\n\nJSON exacto sin markdown:\n{"posts":[{"hook":"l1\\nl2\\nl3","sub":"subtítulo","body":"párrafo1\\n\\npárrafo2","cta":"texto","visual":"english prompt"}]}`;
+    const msg=`Genera EXACTAMENTE ${batch.length} posts de Instagram distintos.\n\n${specsS}\n\nDIFERENCIACIÓN OBLIGATORIA:\n• Cada body desarrolla su propio tema exclusivo — sin repetir ideas.\n• Hook empieza EXACTAMENTE con la frase indicada.\n• Visual: prompt detallado en inglés, mín. 20 palabras, diferente por post.\n• CTA variado: mezcla directos, suaves y conversacionales.\n• Nombre de la marca en MAYÚSCULAS en el body.\n\nJSON exacto sin markdown:\n{"posts":[{"hook":"línea1\\nlínea2\\ngiro","sub":"diagnóstico.\\nConsecuencia o promesa.","body":"Dato con [número clave] en la frase.","cta":"texto","visual":"english prompt"}]}`;
 
     try{
       const r=await fetch(AI_PROXY+'/claude',{
@@ -2479,6 +2905,11 @@ const DEFAULT_ANGLES = [
   {key:'EDU 01',   label:'Educación — Tips',          desc:'Posts educativos con consejos prácticos del sector',                  sel:false},
   {key:'EDU 02',   label:'Educación — Errores',       desc:'Posts sobre errores comunes y cómo evitarlos',                       sel:false},
   {key:'PROMO 01', label:'Oferta / Lanzamiento',      desc:'Posts de promoción directa o lanzamiento de producto',                sel:false},
+  {key:'VIRAL 01', label:'Viral — Contrarian',         desc:'Posts con postura provocadora que rompe la narrativa del sector',       sel:false},
+  {key:'VIRAL 02', label:'Viral — Antes vs Ahora',     desc:'Posts de transformación visual: proceso manual vs automatizado',        sel:false},
+  {key:'VIRAL 03', label:'Viral — Verdad incómoda',    desc:'Posts que dicen lo que nadie dice — generan saves y shares masivos',   sel:false},
+  {key:'VIRAL 04', label:'Viral — Prueba real',        desc:'Posts de demostración: evidencia visual concreta, sin retórica',       sel:false},
+  {key:'VIRAL 05', label:'Viral — Dolor con número',   desc:'Posts que monetizan el dolor: cifra concreta + solución CLIENDER',     sel:false},
 ];
 
 function renderAnglesGrid(preClientId){
@@ -2581,21 +3012,31 @@ async function saveCalWithAI(){
 
   const refCtx = await buildRefCtx();
 
+  // Fase 1: analizar referencias visuales una sola vez
+  let calDna='';
+  if(refCtx.images.length>0){
+    logEl&&(logEl.innerHTML+='<span style="color:#8B5CF6">◈</span> Analizando ADN visual de referencias…<br>');
+    calDna=await analyzeRefs(refCtx.images,[...selRefs]);
+    logEl&&(logEl.innerHTML+=calDna
+      ?'<span style="color:#8B5CF6">✓</span> ADN visual extraído — se aplicará a todos los posts.<br><br>'
+      :'<span style="color:var(--er)">!</span> Sin análisis de referencias — usando sistema base.<br><br>');
+  }
+
+  const refVisualCtx = calDna
+    ? `\n━━ ADN VISUAL DE REFERENCIAS (aplícalo al campo "visual" de cada post) ━━\n${calDna}\nCada campo "visual" debe generar una imagen en este mismo registro estético pero con concepto único.`
+    : (refCtx.text ? '\nREFERENCIAS VISUALES: '+refCtx.text : '');
+
   const sys = `Eres el agente de contenido de CLIENDER. Creas posts de Instagram disruptivos siguiendo el sistema de marca CLIENDER EXACTAMENTE.
 
 ${clCtx ? '━━━ MARCA (úsalo como base creativa, no lo copies literalmente) ━━━\n'+clCtx+'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━' : '⚠️ SIN CLIENTE — tono CLIENDER genérico: directo, urgente, retador.'}
-${extra ? '\nINSTRUCCIONES: '+extra : ''}${refCtx.text ? '\nREFERENCIAS VISUALES: '+refCtx.text : ''}
+${extra ? '\nINSTRUCCIONES: '+extra : ''}${refVisualCtx}
 
 ━━━ ESTRUCTURA FIJA DEL COPY ━━━
-hook: Setup — el problema o pregunta provocadora (corto, nombra el dolor directamente, 2-3 líneas con saltos \\n)
-sub: Línea de impacto — el diferenciador o giro clave de CLIENDER (una línea directa)
-body: 2-3 párrafos persuasivos que hablan AL público. SIEMPRE incluye un plazo concreto (En 15 días / En 30 días / En una semana). Nombre de la marca en MAYÚSCULAS.
-cta: Verbo de acción → CLIENDER (ej: "Actívalo → CLIENDER", "Empieza → CLIENDER")
-visual: Prompt en inglés — SISTEMA VISUAL CLIENDER:
-  · Dramatic black and white documentary photograph, fully desaturated, vintage archival feel
-  · Dark overlay #0D0D0D at 65% opacity, subject center-right or lower-right
-  · Generous empty left third for text overlay, film grain, high contrast
-  · Cultural symbol or metaphor — real human subjects, no studio lighting, no stock aesthetics
+hook: 3 líneas cortas separadas por \\n. Cada línea máx. 5 palabras. Pregunta provocadora o afirmación de impacto. Última línea = giro o respuesta (se renderiza en púrpura). Ej: "¿Cuánto llevas dejando\\nsobre la mesa cada mes\\nporque no automatizas?"
+sub: EXACTAMENTE 2 líneas separadas por \\n. Línea 1: reacción emocional o diagnóstico directo. Línea 2: consecuencia o promesa concreta. Máx. 7 palabras por línea. Ej: "No es mala suerte.\\nEs un error que puedes medir."
+body: 1-2 líneas con datos o hechos impactantes. Usa [texto] para resaltar en morado estadísticas, números o frases clave. Máx. 70 caracteres por línea. Ej: "La mayoría de negocios pierde [entre el 60-80%] de sus leads.\\nEn 15 días lo solucionamos con CLIENDER."
+cta: Verbo + sustantivo. MÁXIMO 3 palabras. Sin "→ CLIENDER". Ej: "Empieza hoy", "Ver demo", "Actívalo ya", "Automatiza esto"
+visual: Prompt en INGLÉS — 5 frases siguiendo ESTA ESTRUCTURA EXACTA: (1) Empieza con "RAW photo," + cámara + objetivo + apertura + descripción física del equipo de iluminación (posición del foco, tipo, ángulo, sombra que proyecta — nunca nombres de estilos de luz). (2) Arquetipo icónico ultra-específico (era, tejido y corte de ropa, expresión, detalle corporal) realizando una acción incongruente que crea disonancia cognitiva. (3) El UN objeto simbólico que une el mundo del arquetipo con el mensaje del hook, más "subject in right vertical third, generous copy space to the left" describiendo qué hay en esa zona izquierda. (4) Entorno específico: lugar, hora exacta, clima, detalle arquitectónico. (5) Cierre técnico siempre igual: "Pushed Ilford HP5 at ISO 3200 — pronounced coarse silver grain, compressed highlights, crushed deep blacks, completely desaturated pure black and white, no text no logos no watermarks in the image." Mín. 60 palabras. PROHIBIDO: colores, sonrisas, fondos de estudio, stock genérico.
 
 TONO: directo, serio, levemente provocador. NUNCA amable ni suave.
 LEYES: body habla AL cliente, tema único por post, visual mín. 25 palabras.`;
@@ -2603,13 +3044,68 @@ LEYES: body habla AL cliente, tema único por post, visual mín. 25 palabras.`;
   const TIPOS   = ['Dolor','Miedo','Resultado','Prueba','Deseo'];
   const HORAS   = ['09:00','11:00','13:00','15:00','17:00','19:00','21:00'];
 
-  // Unique content seed per tipo — each post gets a different specific angle to develop
+  // Unique content seed per tipo — 10 per type so 30-post calendars never repeat
   const TEMAS_TIPO = {
-    'Dolor':    ['el error más costoso que cometen antes de resolverlo','la señal de alerta que casi todos ignoran','por qué el problema empeora si no se actúa','qué se pierde cada semana sin esta solución','el punto de dolor que nadie menciona en voz alta'],
-    'Miedo':    ['qué pasa si lo pospones otro trimestre','el escenario que ningún empresario quiere','el riesgo real de seguir haciendo lo mismo','cómo la competencia ya está tomando ventaja','lo que se acumula silenciosamente con el tiempo'],
-    'Resultado':['el cambio concreto que ocurre en los primeros 30 días','cómo se mide el éxito en números reales','el primer resultado visible que notan los clientes','qué tiene de diferente la empresa que lo logró','el impacto directo en ingresos o tiempo'],
-    'Prueba':   ['un caso real de transformación con datos','la comparativa antes/después que habla sola','el número concreto que lo demuestra todo','lo que dicen los clientes que ya lo hicieron','la evidencia que elimina la duda'],
-    'Deseo':    ['cómo se verá el negocio cuando esto esté resuelto','la sensación de tener el control total','qué se puede hacer cuando el problema desaparece','el estado ideal al que llegan los mejores clientes','la libertad que da tener este sistema funcionando'],
+    'Dolor':    [
+      'el error más costoso que cometen antes de resolverlo',
+      'la señal de alerta que casi todos ignoran',
+      'por qué el problema empeora cuanto más se espera',
+      'qué se pierde cada semana sin esta solución',
+      'el punto de dolor que nadie menciona en voz alta',
+      'cuánto dinero sale por el desagüe cada mes por este problema',
+      'el coste oculto que no aparece en ningún informe financiero',
+      'la rutina que destruye horas y nadie se atreve a cuestionar',
+      'qué pasa cuando el equipo asume que "así son las cosas"',
+      'el proceso manual que frena el crecimiento sin que nadie lo vea',
+    ],
+    'Miedo':    [
+      'qué pasa si lo pospones otro trimestre completo',
+      'el escenario que ningún empresario quiere visualizar',
+      'el riesgo real de seguir haciendo exactamente lo mismo',
+      'cómo la competencia ya está tomando ventaja ahora mismo',
+      'lo que se acumula silenciosamente con el tiempo sin solución',
+      'el momento en que ya es demasiado tarde para reaccionar',
+      'qué dirás cuando te pregunten por qué no lo hiciste antes',
+      'la ventana de oportunidad que se cierra mientras lo piensas',
+      'lo que pierdes cada día que no automatizas este proceso',
+      'el cliente que ya se fue con quien sí se movió primero',
+    ],
+    'Resultado':[
+      'el cambio concreto que ocurre en los primeros 30 días',
+      'cómo se mide el éxito en números reales y verificables',
+      'el primer resultado visible que notan los clientes desde fuera',
+      'qué tiene de diferente la empresa que ya lo implementó',
+      'el impacto directo en ingresos o tiempo recuperado',
+      'qué ocurre cuando el equipo deja de hacer tareas repetitivas',
+      'cómo cambia la conversación con los clientes cuando funciona',
+      'el antes y el después en cifras que hablan por sí solas',
+      'qué pueden hacer ahora que no podían hacer antes',
+      'el ROI real que justifica la decisión en pocas semanas',
+    ],
+    'Prueba':   [
+      'un caso real de transformación con datos concretos',
+      'la comparativa antes/después que habla sola sin interpretación',
+      'el número exacto que lo demuestra sin necesidad de convencer',
+      'lo que dicen los clientes que ya lo implementaron',
+      'la evidencia específica que elimina la duda de raíz',
+      'el dato que convence incluso al más escéptico de la sala',
+      'cómo quedó el proceso después de 30 días con el sistema',
+      'la métrica que nadie esperaba mejorar y que mejoró igual',
+      'el testimonio que resume todo lo que no cabe en un post',
+      'el caso que más se parece a tu situación actual',
+    ],
+    'Deseo':    [
+      'cómo se verá el negocio cuando esto esté completamente resuelto',
+      'la sensación de tener el control total de los procesos',
+      'qué se puede hacer con el tiempo recuperado cada semana',
+      'el estado ideal al que llegan los mejores clientes en 60 días',
+      'la libertad que da tener este sistema funcionando solo',
+      'cómo sería un lunes por la mañana con todo automatizado',
+      'qué pasa cuando dejas de apagar fuegos y empiezas a crecer',
+      'la versión del negocio que querías cuando empezaste todo esto',
+      'lo que hace posible el sistema cuando quitas la fricción',
+      'tomar decisiones con datos en lugar de con intuición',
+    ],
   };
 
   // 30 openers — forced first word per post slot, cycling
@@ -2643,6 +3139,10 @@ LEYES: body habla AL cliente, tema único por post, visual mín. 25 palabras.`;
   // Generate in batches of 10 — Sonnet sees all posts in a batch at once → can't repeat
   const BATCH = 10;
   let totalGenerated = 0;
+  // Cross-batch anti-repeat memory
+  const usedHooks = [];
+  const usedArchetypes = [];
+  const usedCtas = [];
 
   for(let bi = 0; bi < allSpecs.length; bi += BATCH){
     const batch = allSpecs.slice(bi, bi + BATCH);
@@ -2661,25 +3161,38 @@ Tipo emocional: ${s.tipo}
 Hora publicación: ${s.hora}
 Hook — primera línea OBLIGATORIA empieza con: "${s.opener}"
 Tema exclusivo del body: ${temaSeed}
-Visual — prompt en inglés específico para: ${s.tipo} + ${s.angle.label} + "${temaSeed}"`;
+Visual — arquetipo único distinto a los ya usados. Específico para: ${s.tipo} + ${s.angle.label} + "${temaSeed}"`;
     }).join('\n\n');
 
-    const batchPrompt = `Genera EXACTAMENTE ${batch.length} posts de Instagram para este calendario de contenido. Cada post tiene un tema exclusivo — si dos posts se parecen en el body, lo has hecho mal.
+    const alreadyUsedBlock = usedHooks.length > 0
+      ? `\n\n━━ YA GENERADOS EN LOTES ANTERIORES — PROHIBIDO REPETIR ━━
+HOOKS YA USADOS (no reutilices estas ideas ni estas palabras clave):
+${usedHooks.map((h,i)=>`${i+1}. ${h.replace(/\n/g,' ')}`).join('\n')}
+${usedArchetypes.length>0?`\nARQUETIPOS VISUALES YA USADOS (inventa uno diferente para cada visual de este lote):\n${usedArchetypes.map((a,i)=>`${i+1}. ${a}`).join('\n')}`:''}
+${usedCtas.length>0?`\nCTAs YA USADOS (no repitas ninguno):\n${[...new Set(usedCtas)].join(', ')}`:''}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+      : '';
 
-${specsBlock}
+    const batchPrompt = `Genera EXACTAMENTE ${batch.length} posts de Instagram para este calendario. REGLA ABSOLUTA: ningún post puede parecerse a otro en hook, body, CTA ni arquetipo visual.
 
-DIFERENCIACIÓN OBLIGATORIA:
-• El body de cada post desarrolla SU PROPIO "Tema exclusivo" — no repitas ideas entre posts.
-• El hook EMPIEZA EXACTAMENTE con la frase indicada (copia esas palabras exactas como primera línea).
-• El visual es un prompt detallado en inglés (mín. 20 palabras) diferente para cada post, específico al tema.
-• El CTA varía: mezcla directos ("Escríbenos hoy"), suaves ("¿Te suena familiar?") y conversacionales ("¿Cuánto te cuesta esto?").
+${specsBlock}${alreadyUsedBlock}
+
+DIFERENCIACIÓN OBLIGATORIA (cada punto incumplido invalida el post):
+• El body de cada post desarrolla SU PROPIO "Tema exclusivo" — si dos posts tienen ideas similares en el body, fallaste.
+• El hook EMPIEZA EXACTAMENTE con la frase indicada (copia esas palabras exactas como primera línea del hook).
+• El visual usa UN ARQUETIPO DIFERENTE por post — nunca el mismo personaje, situación ni objeto simbólico en dos posts.
+• El CTA es diferente en CADA post — no uses el mismo CTA dos veces en el lote ni repitas los ya usados.
 • La MARCA aparece en MAYÚSCULAS dentro del body de cada post.
+• El sub de cada post tiene una voz diferente: no empieces todos con "No es..." ni con la misma estructura.
 
 FORMATO DE RESPUESTA — JSON exacto sin markdown, sin explicaciones:
-{"posts":[{"hook":"línea1\\nlínea2\\nlínea3","sub":"subtítulo corto","body":"párrafo1\\n\\npárrafo2","cta":"texto del cta","visual":"detailed english image generation prompt"}]}`;
+{"posts":[{"hook":"línea1\\nlínea2\\ngiro en púrpura","sub":"diagnóstico directo.\\nConsecuencia o promesa.","body":"Dato o hecho con [número o stat clave] en la oración.\\nEn 15 días lo solucionamos con MARCA.","cta":"Verbo corto","visual":"RAW photo, [cámara+lente+apertura], [descripción física del foco], [arquetipo único+ropa+acción incongruente], [objeto simbólico], subject right vertical third copy space left, [entorno específico], pushed Ilford HP5 ISO 3200 coarse grain crushed blacks completely desaturated no text no logos."}]}`;
 
+    const refSuffix = refCtx.images.length>0
+      ? `\n\nREFERENCIA VISUAL ACTIVA: Las imágenes adjuntas son el MOLDE ESTÉTICO. El campo "visual" de cada post debe generar imágenes en ese mismo mundo visual: mismo tipo de fotografía, misma atmósfera, misma calidad de luz y grano. No describas lo que ves en la referencia — extrae su REGISTRO ESTÉTICO y aplícalo al concepto de cada post.`
+      : '';
     const msgContent = (refCtx.images.length > 0)
-      ? [...refCtx.images.slice(0,1).map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:batchPrompt}]
+      ? [...refCtx.images.slice(0,2).map(img=>({type:'image',source:{type:'base64',media_type:img.mimeType,data:img.base64}})),{type:'text',text:batchPrompt+refSuffix}]
       : batchPrompt;
 
     try{
@@ -2736,6 +3249,17 @@ FORMATO DE RESPUESTA — JSON exacto sin markdown, sin explicaciones:
         logEl.innerHTML+=`<span style="color:var(--wn)">⚠</span> Lote ${bi/BATCH+1} — 0 posts parseados. Respuesta: ${esc(rawTxt.slice(0,200))}<br>`;
         logEl.scrollTop=logEl.scrollHeight; continue;
       }
+
+      // Accumulate used content for cross-batch anti-repeat
+      results.forEach(p=>{
+        if(p.hook) usedHooks.push(p.hook);
+        if(p.cta)  usedCtas.push(p.cta);
+        if(p.visual){
+          // Extract archetype hint: first 80 chars of visual after "RAW photo,"
+          const arc=p.visual.replace(/^RAW photo,?\s*/i,'').slice(0,80);
+          if(arc) usedArchetypes.push(arc);
+        }
+      });
 
       // Group posts by angle for bulk save
       const byAngle = {};
@@ -2802,16 +3326,16 @@ ${clCtx}
 ━━━━━━━━━━━━
 
 ESTRUCTURA FIJA:
-hook: 3 líneas — setup del problema o pregunta provocadora. Corto, nombra el dolor directamente.
-sub: Línea de impacto — el diferenciador o giro clave de CLIENDER (una línea).
-body: 2 párrafos persuasivos que hablan AL cliente. INCLUYE plazo concreto (En 15 días / En 30 días). Marca en MAYÚSCULAS.
-cta: Verbo de acción → CLIENDER
-visual: Prompt inglés B&W documentary — dark overlay #0D0D0D 65%, subject center-right, empty left third for text, film grain, high contrast, no studio, no stock. Cultural metaphor NOT literal. Mín. 25 palabras.
+hook: 3 líneas cortas separadas por \\n. Pregunta provocadora o afirmación de impacto. Última línea = giro (se renderiza en púrpura). Máx. 5 palabras por línea. Ej: "¿Cuánto llevas dejando\\nsobre la mesa cada mes\\nporque no automatizas?"
+sub: EXACTAMENTE 2 líneas separadas por \\n. Línea 1: diagnóstico o reacción emocional. Línea 2: consecuencia o promesa directa. Máx. 7 palabras por línea. Ej: "No es mala suerte.\\nEs un error que puedes medir."
+body: 1-2 líneas con datos impactantes. Usa [texto] para resaltar en morado números, porcentajes o frases clave. Máx. 70 chars por línea. Ej: "La mayoría de negocios pierde [entre el 60-80%] de sus leads.\\nEn 15 días lo solucionamos con CLIENDER."
+cta: Verbo + sustantivo. MÁXIMO 3 palabras. Sin "→ CLIENDER". Ej: "Empieza hoy", "Ver demo", "Actívalo ya"
+visual: Prompt in English — 4-5 dense sentences. Include: hyperrealistic Bvisual: Prompt inglés — iconic character in unexpected situation, B&W documentary, dark overlay #0D0D0D 65%, subject center-right, empty left third, film grain, high contrast, no studio, no stock. Min 25 words.W photographic image + Kodak Tri-X 400 grain + chiaroscuro single-source lighting + [specific iconic archetype in incongruous context, specific clothing and symbolic object] + left third empty for text + subject center-right + Leica/Hasselblad feel + Magnum Photos editorial style + no text no logos. Min 40 words.
 
 TONO: directo, serio, levemente provocador. NUNCA amable ni suave.
 
 Responde SOLO JSON válido sin markdown:
-{"hora":"10:00","tipo":"${tipo}","hook":"línea1\\nlínea2\\nlínea3","sub":"subtítulo corto","body":"párrafo 1\\n\\npárrafo 2","cta":"Verbo → CLIENDER","visual":"detailed english B&W documentary image prompt"}`;
+{"hora":"10:00","tipo":"${tipo}","hook":"línea1\\nlínea2\\ngiro en púrpura","sub":"diagnóstico directo.\\nConsecuencia o promesa.","body":"Dato con [número o stat] en la frase.\\nEn 15 días lo solucionamos con CLIENDER.","cta":"Verbo corto","visual":"detailed english B&W documentary image prompt"}`;
 
   const refCtx=await buildRefCtx();
   let content=`Escribe un post de Instagram para ángulo "${angle}", tipo psicológico "${tipo}". Genera solo el JSON.`;
