@@ -102,7 +102,11 @@ router.get('/:id/docs', optionalAuth, async (req, res) => {
     const client = await pool.query('SELECT id FROM clients WHERE id = $1 AND user_id = $2', [req.params.id, req.user.userId]);
     if (client.rows.length === 0) return res.status(404).json({ error: 'Client not found' });
 
-    const result = await pool.query('SELECT id, client_id, name, mime_type, analysis, position, created_at FROM client_docs WHERE client_id = $1 ORDER BY position', [req.params.id]);
+    const full = req.query.full === '1';
+    const cols = full
+      ? 'id, client_id, name, mime_type, base64, analysis, position, created_at'
+      : 'id, client_id, name, mime_type, analysis, position, created_at';
+    const result = await pool.query(`SELECT ${cols} FROM client_docs WHERE client_id = $1 ORDER BY position`, [req.params.id]);
     res.json(result.rows);
   } catch (err) {
     console.error(err);
